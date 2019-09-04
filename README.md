@@ -1,2 +1,2 @@
 # EVD-ARAS-Project
-EVD - AR Assembly Support Projecct
+EVD - AR Assembly Support Project
