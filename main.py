@@ -8,8 +8,9 @@ import numpy as np
 import cv2
 import argparse
 import time
+import recognise
 
-def inrangeLego(mat):
+def inrange_lego(mat):
     hsvMat = cv2.cvtColor(mat, cv2.COLOR_BGR2HSV)
     return cv2.inRange(hsvMat, np.array([0, 80, 0]), np.array([255, 130, 255]))
 
@@ -28,7 +29,7 @@ def main():
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
         image = frame.array
-        inrange_image = inrangeLego(image)
+        inrange_image = inrange_lego(image)
 
         # show the frame
         image = cv2.resize(image, dsize=(853, 480))
@@ -43,16 +44,17 @@ def main():
         if key == ord("q"):
             break
 
-def testMain(imagePath):
+def test_main(imagePath):
     image = cv2.imread(imagePath)
-    cv2.imshow("Test image", image)
-    cv2.waitKey()
+    cv2.imshow("Output image", recognise.filter_bricks(image))
+    while cv2.waitKey(100) != ord("q"):
+        pass
 
 parser = argparse.ArgumentParser(description='Guidance assistant for building LEGO buildings')
 parser.add_argument('--testImage', required=False, help='Run the detection algorithm on a still image')
 
 args = parser.parse_args()
 if args.testImage:
-    testMain(args.testImage)
+    test_main(args.testImage)
 else:
     main()
