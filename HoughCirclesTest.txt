@@ -1,0 +1,35 @@
+void MainWindow::on_pb_42_clicked()
+{
+    Mat src;
+    Mat output;
+    src = imread("c:\\Users\\Nick\\OneDrive\\Documents\\School\\EVD1\\testshot_2.jpg",IMREAD_GRAYSCALE);
+    if(!src.data) {
+       ui->statusBar->showMessage(QString("Could not open image!"),0);
+    }
+    else {
+	// Create a window
+        namedWindow("Original image", WINDOW_AUTOSIZE);
+        moveWindow("Original image", 100, 100);
+        // Create a window
+        namedWindow("Output image", WINDOW_AUTOSIZE);
+        moveWindow("Output image", 600, 100);
+        imshow("Original image",src);
+
+        GaussianBlur( src, src, Size(3, 3), 2, 2 );
+
+        vector<Vec3f> circles;
+        HoughCircles(src,circles,HOUGH_GRADIENT,1,20,70,8,10,12);
+        for( size_t i = 0; i < circles.size(); i++ )
+        {
+           Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+           int radius = cvRound(circles[i][2]);
+           // circle center
+           circle( src, center, 3, Scalar(0,255,0), -1, 8, 0 );
+           // circle outline
+           circle( src, center, radius, Scalar(0,0,255), 3, 8, 0 );
+         }
+
+        // Show the image
+        imshow("Output image",src);
+}
+}
