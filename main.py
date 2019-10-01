@@ -9,6 +9,7 @@ import cv2
 import argparse
 import time
 import recognise
+import util
 
 def inrange_lego(mat):
     hsvMat = cv2.cvtColor(mat, cv2.COLOR_BGR2HSV)
@@ -46,7 +47,8 @@ def main():
 
 def test_main(imagePath):
     image = cv2.imread(imagePath)
-    cv2.imshow("Output image", recognise.filter_bricks(image))
+    cv2.imshow("Output image", util.fit_display(recognise.filter_bricks(image)))
+    cv2.imshow("Output image 2", util.fit_display(recognise.find_bricks_by_color(image)[1]))
     while cv2.waitKey(100) != ord("q"):
         pass
 
