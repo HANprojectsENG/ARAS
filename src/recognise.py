@@ -32,3 +32,17 @@ def filter_bricks(bgrImage):
                 cv2.cvtColor(filter_brick_color(hsvImage, member), cv2.COLOR_GRAY2BGR))
 
     return colorBrickImage
+
+def find_bricks_by_color(bgrImage):
+    hsvImage = cv2.cvtColor(bgrImage, cv2.COLOR_BGR2HSV)
+    displayImage = cv2.cvtColor((bgrImage * 0.5).astype(np.uint8), cv2.COLOR_BGR2HSV)
+    bricks = []
+
+    for member in list(BrickColor):
+        filteredBrickImage = filter_brick_color(hsvImage, member)
+        contours = cv2.findContours(filteredBrickImage, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
+        color = (COLOR_RANGES[member][0] + COLOR_RANGES[member][1]) / 2
+        cv2.drawContours(displayImage, contours[0], -1, tuple(map(int, color)), 10)
+        bricks.append((member, contours))
+
+    return (bricks, cv2.cvtColor(displayImage, cv2.COLOR_HSV2BGR))
