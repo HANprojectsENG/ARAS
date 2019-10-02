@@ -12,6 +12,13 @@ import time
 import recognise
 import util
 
+MARKER_CORNER_IDX = {
+    41: 1,
+    42: 1,
+    43: 3,
+    44: 3
+}
+
 def main():
     # initialize the camera and grab a reference to the raw camera capture
     captureResolution = (1640, 1232)
@@ -37,9 +44,9 @@ def main():
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
 
         dispImage = image.copy()
-        for markerCorners in corners:
+        for (idx, markerCorners) in enumerate(corners):
             cv2.drawContours(dispImage, markerCorners.astype(int), -1, (255, 0, 0), 5)
-            cv2.circle(dispImage, tuple(map(int, markerCorners[0][0])), 25, (0, 0, 255), cv2.FILLED)
+            cv2.circle(dispImage, tuple(map(int, markerCorners[0][MARKER_CORNER_IDX[int(ids[idx])]])), 25, (0, 0, 255), cv2.FILLED)
 
         # show the frame
         cv2.imshow("Frame", util.fit_display(dispImage))
