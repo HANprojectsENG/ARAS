@@ -37,7 +37,9 @@ def main():
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
 
         dispImage = image.copy()
-        cv2.drawContours(dispImage, corners, -1, (255, 0, 0), 5)
+        for markerCorners in corners:
+            cv2.drawContours(dispImage, markerCorners.astype(int), -1, (255, 0, 0), 5)
+            cv2.circle(dispImage, tuple(map(int, markerCorners[0][0])), 25, (0, 0, 255), cv2.FILLED)
 
         # show the frame
         cv2.imshow("Frame", util.fit_display(dispImage))
