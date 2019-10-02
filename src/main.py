@@ -46,7 +46,7 @@ def main():
             break
 
 def test_main(imagePath):
-    image = cv2.imread(imagePath)
+    image = util.white_balance(cv2.imread(imagePath))
     cv2.imshow("Output image", util.fit_display(recognise.filter_bricks(image)))
     cv2.imshow("Output image 2", util.fit_display(recognise.find_bricks_by_color(image)[1]))
     while cv2.waitKey(100) != ord("q"):
