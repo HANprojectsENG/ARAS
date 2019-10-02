@@ -6,21 +6,22 @@ except ImportError:
     print("Failed to load PiCamera. Expect errors when trying to read from the camera.")
 import numpy as np
 import cv2
+import cv2.aruco as aruco
 import argparse
 import time
 import recognise
 import util
 
-def inrange_lego(mat):
-    hsvMat = cv2.cvtColor(mat, cv2.COLOR_BGR2HSV)
-    return cv2.inRange(hsvMat, np.array([0, 80, 0]), np.array([255, 130, 255]))
-
 def main():
     # initialize the camera and grab a reference to the raw camera capture
+    captureResolution = (1640, 1232)
     camera = PiCamera()
-    camera.resolution = (1920, 1080)
-    camera.framerate = 30
-    rawCapture = PiRGBArray(camera, size=(1920, 1080))
+    camera.resolution = captureResolution
+    camera.framerate = 15
+    camera.iso = 100
+    camera.meter_mode = "matrix"
+    camera.awb_mode = "fluorescent"
+    rawCapture = PiRGBArray(camera, size=captureResolution)
 
     # allow the camera to warmup
     time.sleep(0.1)
@@ -30,11 +31,14 @@ def main():
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
         image = frame.array
-        inrange_image = inrange_lego(image)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
+        parameters =  aruco.DetectorParameters_create()
+        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        dispImage = aruco.drawDetectedMarkers(image, corners)
 
         # show the frame
-        image = cv2.resize(image, dsize=(853, 480))
-        cv2.imshow("Frame", image)
+        cv2.imshow("Frame", util.fit_display(dispImage))
         #cv2.imshow("Frame2", inrange_image)
         key = cv2.waitKey(1) & 0xFF
 
