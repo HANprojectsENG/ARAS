@@ -35,7 +35,9 @@ def main():
         aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
         parameters =  aruco.DetectorParameters_create()
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
-        dispImage = aruco.drawDetectedMarkers(image, corners)
+
+        dispImage = image.copy()
+        cv2.drawContours(dispImage, corners, -1, (255, 0, 0), 5)
 
         # show the frame
         cv2.imshow("Frame", util.fit_display(dispImage))
