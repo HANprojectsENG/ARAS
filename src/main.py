@@ -40,7 +40,9 @@ def main():
             cv2.circle(dispImage, playfieldCorner, 25, (0, 0, 255), cv2.FILLED)
 
         # show the frame
-        cv2.imshow("Frame", util.fit_display(dispImage))
+        # cv2.imshow("Frame", util.fit_display(dispImage))
+        cv2.imshow("Playfield", util.fit_display(
+            util.cut_out_image(dispImage, playfieldCorners, (1000, 1000))))
         #cv2.imshow("Frame2", inrange_image)
         key = cv2.waitKey(1) & 0xFF
 
@@ -69,11 +71,8 @@ def test_main(imagePath):
             arucoIds[idx]), corner, cv2.FONT_HERSHEY_SIMPLEX, 10, (255, 0, 0), 4)
     cv2.imshow("Output image", util.fit_display(displayImage))
 
-    outputSize = (1000, 1000)
-    M = cv2.getPerspectiveTransform(
-        np.array(playfieldCorners, dtype=np.float32), util.size_to_corners(outputSize))
-    warpedImage = cv2.warpPerspective(image, M, outputSize)
-    cv2.imshow("Output image 2", util.fit_display(warpedImage))
+    cv2.imshow("Output image 2", util.fit_display(
+        util.cut_out_image(image, playfieldCorners, (1000, 1000))))
     while cv2.waitKey(100) != ord("q"):
         pass
 

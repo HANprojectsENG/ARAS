@@ -33,3 +33,10 @@ def size_to_corners(size):
         [0, size[1]]
     ],
         dtype=np.float32)
+
+
+def cut_out_image(image, playfieldCorners, destSize):
+    M = cv2.getPerspectiveTransform(
+        np.array(playfieldCorners, dtype=np.float32), size_to_corners(destSize))
+    warpedImage = cv2.warpPerspective(image, M, destSize)
+    return warpedImage
