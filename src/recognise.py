@@ -1,6 +1,7 @@
 import numpy as np
 from enum import Enum
 import cv2
+import cv2.aruco as aruco
 
 class BrickColor(Enum):
     ORANGE = 106
@@ -15,6 +16,13 @@ COLOR_RANGES = {
     BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 192, 255])),
     BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255])),
     BrickColor.RED: (np.array([160, 162, 96]), np.array([180, 255, 255]))
+}
+
+MARKER_CORNER_IDX = {
+    41: 1,
+    42: 1,
+    43: 3,
+    44: 3
 }
 
 def filter_brick_color(hsvImage, color):
@@ -46,3 +54,22 @@ def find_bricks_by_color(bgrImage):
         bricks.append((member, contours))
 
     return (bricks, cv2.cvtColor(displayImage, cv2.COLOR_HSV2BGR))
+
+def find_aruco_markers(grayImage):
+    aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
+    parameters =  aruco.DetectorParameters_create()
+    corners, ids, rejectedImgPoints = aruco.detectMarkers(grayImage, aruco_dict, parameters=parameters)
+    return (corners, ids, rejectedImgPoints)
+
+def aruco_to_playfield_corners(corners, ids):
+    playfieldCorners = []
+
+    for idx, markerCorners in enumerate(corners):
+        playfieldCorners.append(tuple(map(int, markerCorners[0][MARKER_CORNER_IDX[int(ids[idx])]])))
+
+    return playfieldCorners
+
+def get_playfield_corners_by_aruco(grayImage):
+    corners, ids, rejectedImgPoints = find_aruco_markers(grayImage)
+    playfieldCorners = aruco_to_playfield_corners(corners, ids)
+    return playfieldCorners

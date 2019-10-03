@@ -6,18 +6,10 @@ except ImportError:
     print("Failed to load PiCamera. Expect errors when trying to read from the camera.")
 import numpy as np
 import cv2
-import cv2.aruco as aruco
 import argparse
 import time
 import recognise
 import util
-
-MARKER_CORNER_IDX = {
-    41: 1,
-    42: 1,
-    43: 3,
-    44: 3
-}
 
 def main():
     # initialize the camera and grab a reference to the raw camera capture
@@ -38,15 +30,12 @@ def main():
         # grab the raw NumPy array representing the image, then initialize the timestamp
         # and occupied/unoccupied text
         image = frame.array
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
-        parameters =  aruco.DetectorParameters_create()
-        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
 
         dispImage = image.copy()
-        for (idx, markerCorners) in enumerate(corners):
-            cv2.drawContours(dispImage, markerCorners.astype(int), -1, (255, 0, 0), 5)
-            cv2.circle(dispImage, tuple(map(int, markerCorners[0][MARKER_CORNER_IDX[int(ids[idx])]])), 25, (0, 0, 255), cv2.FILLED)
+        playfieldCorners = recognise.get_playfield_corners_by_aruco(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
+
+        for playfieldCorner in playfieldCorners:
+            cv2.circle(dispImage, playfieldCorner, 25, (0, 0, 255), cv2.FILLED)
 
         # show the frame
         cv2.imshow("Frame", util.fit_display(dispImage))
@@ -63,7 +52,10 @@ def main():
 def test_main(imagePath):
     image = util.white_balance(cv2.imread(imagePath))
     cv2.imshow("Output image", util.fit_display(recognise.filter_bricks(image)))
-    cv2.imshow("Output image 2", util.fit_display(recognise.find_bricks_by_color(image)[1]))
+    displayImage = recognise.find_bricks_by_color(image)[1]
+    playfieldCorners = recognise.get_playfield_corners_by_aruco(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
+    cv2.drawContours(displayImage, np.array([playfieldCorners], dtype=np.int32), -1, (0, 0, 255), 5)
+    cv2.imshow("Output image 2", util.fit_display(displayImage))
     while cv2.waitKey(100) != ord("q"):
         pass
 
