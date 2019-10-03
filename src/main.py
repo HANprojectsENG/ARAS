@@ -11,6 +11,7 @@ import time
 import recognise
 import util
 
+
 def main():
     # initialize the camera and grab a reference to the raw camera capture
     captureResolution = (1640, 1232)
@@ -32,7 +33,8 @@ def main():
         image = frame.array
 
         dispImage = image.copy()
-        playfieldCorners = recognise.get_playfield_corners_by_aruco(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
+        playfieldCorners = recognise.get_playfield_corners_by_aruco(
+            cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
 
         for playfieldCorner in playfieldCorners:
             cv2.circle(dispImage, playfieldCorner, 25, (0, 0, 255), cv2.FILLED)
@@ -49,18 +51,37 @@ def main():
         if key == ord("q"):
             break
 
+
 def test_main(imagePath):
     image = util.white_balance(cv2.imread(imagePath))
-    cv2.imshow("Output image", util.fit_display(recognise.filter_bricks(image)))
+    # cv2.imshow("Output image", util.fit_display(recognise.filter_bricks(image)))
     displayImage = recognise.find_bricks_by_color(image)[1]
-    playfieldCorners = recognise.get_playfield_corners_by_aruco(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
-    cv2.drawContours(displayImage, np.array([playfieldCorners], dtype=np.int32), -1, (0, 0, 255), 5)
-    cv2.imshow("Output image 2", util.fit_display(displayImage))
+    arucoCorners, arucoIds, rejectedCorners = recognise.find_aruco_markers(
+        cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
+    playfieldCorners = recognise.aruco_to_playfield_corners(
+        arucoCorners, arucoIds)
+    cv2.drawContours(displayImage, np.array(
+        [playfieldCorners], dtype=np.int32), -1, (0, 0, 255), 5)
+    for idx, corner in enumerate(playfieldCorners):
+        cv2.putText(displayImage, str(idx), corner,
+                    cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 4)
+        cv2.putText(displayImage, str(
+            arucoIds[idx]), corner, cv2.FONT_HERSHEY_SIMPLEX, 10, (255, 0, 0), 4)
+    cv2.imshow("Output image", util.fit_display(displayImage))
+
+    outputSize = (1000, 1000)
+    M = cv2.getPerspectiveTransform(
+        np.array(playfieldCorners, dtype=np.float32), util.size_to_corners(outputSize))
+    warpedImage = cv2.warpPerspective(image, M, outputSize)
+    cv2.imshow("Output image 2", util.fit_display(warpedImage))
     while cv2.waitKey(100) != ord("q"):
         pass
 
-parser = argparse.ArgumentParser(description='Guidance assistant for building LEGO buildings')
-parser.add_argument('--testImage', required=False, help='Run the detection algorithm on a still image')
+
+parser = argparse.ArgumentParser(
+    description='Guidance assistant for building LEGO buildings')
+parser.add_argument('--testImage', required=False,
+                    help='Run the detection algorithm on a still image')
 
 args = parser.parse_args()
 if args.testImage:
