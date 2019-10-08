@@ -71,8 +71,10 @@ def test_main(imagePath):
             arucoIds[idx]), corner, cv2.FONT_HERSHEY_SIMPLEX, 10, (255, 0, 0), 4)
     cv2.imshow("Output image", util.fit_display(displayImage))
 
+    cutOutImage = util.cut_out_image(image, playfieldCorners, (1000, 1000))
+    util.draw_dot_matrix(cutOutImage, (48, 48), (5, 0), (1010, 1012))
     cv2.imshow("Output image 2", util.fit_display(
-        util.cut_out_image(image, playfieldCorners, (1000, 1000))))
+        cutOutImage))
     while cv2.waitKey(100) != ord("q"):
         pass
 

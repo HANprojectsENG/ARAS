@@ -40,3 +40,15 @@ def cut_out_image(image, playfieldCorners, destSize):
         np.array(playfieldCorners, dtype=np.float32), size_to_corners(destSize))
     warpedImage = cv2.warpPerspective(image, M, destSize)
     return warpedImage
+
+def draw_dot_matrix(image, dots_size, destination_pos, destination_size):
+    for j in range(dots_size[1]):
+        for i in range(dots_size[0]):
+            cv2.circle(
+                    image,
+                    (int(destination_pos[0] + i / dots_size[0] * destination_size[0]),
+                     int(destination_pos[1] + j / dots_size[1] * destination_size[1])),
+                    2,
+                    (255, 0, 0),
+                    -1)
+
