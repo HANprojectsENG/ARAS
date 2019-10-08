@@ -1,0 +1,46 @@
+@startuml
+title AR Assembly Support system activity diagram
+
+partition "Main thread init" {
+	(*) --> "Turn on camera and do calibration" as a1
+	a1 --> "Take a picture and detect the baseplate markers" as a2
+	a2 --> "Crop the image conceptually" as a3
+	a3 --> "Calculate the 3D grid" as a4
+	a4 --> "Calibrate the projector" as a5
+}
+
+partition "Main thread loop" {
+	a5 -right-> "Load last state" as c1
+	c1 --> "Load next step" as c2
+	c2 --> "Check next step" as c3
+	c3 --> if "Step already executed?" then
+		->[yes] "Next state check" as c8
+	else
+		-->[no] "Project next step" as c4
+	endif
+	c4 --> "Wait for hand detection" as c5
+	c5 --> "Turn off projector" as c6
+	c6 --> "Check next step" as c7
+	c7 --> if "Step already executed?" then
+		-->[yes] c8
+	else
+		->[no] c4
+	endif
+	c8 --> if "Step was last step?" then
+		-->[yes] (*)
+	else
+		->[no] c1
+	endif
+}
+
+partition "Second thread" {
+	a2 --> "Detect the baseplate markers on the last frame" as b1
+	if "Positions changed?" then
+		->[yes <<interrupt>>] a2
+	else
+		->[no] b1
+	endif
+}
+
+
+@enduml
