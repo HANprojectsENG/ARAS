@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import coordinates
 
 MAX_DISPLAY_WIDTH = 960
 MAX_DISPLAY_HEIGHT = 960
@@ -42,12 +43,14 @@ def cut_out_image(image, playfieldCorners, destSize):
     return warpedImage
 
 def draw_dot_matrix(image, dots_size, destination_pos, destination_size):
+    matrix = coordinates.calculate_nub_coordinate_matrix(destination_pos, destination_size)
+    layer = 2
+
     for j in range(dots_size[1]):
         for i in range(dots_size[0]):
             cv2.circle(
                     image,
-                    (int(destination_pos[0] + i / dots_size[0] * destination_size[0]),
-                     int(destination_pos[1] + j / dots_size[1] * destination_size[1])),
+                    (matrix[layer, j, i, 0], matrix[layer, j, i, 1]),
                     2,
                     (255, 0, 0),
                     -1)

@@ -72,7 +72,7 @@ def test_main(imagePath):
     cv2.imshow("Output image", util.fit_display(displayImage))
 
     cutOutImage = util.cut_out_image(image, playfieldCorners, (1000, 1000))
-    util.draw_dot_matrix(cutOutImage, (48, 48), (5, 0), (1010, 1012))
+    util.draw_dot_matrix(cutOutImage, (48, 48), (4, 0), (992, 994))
     cv2.imshow("Output image 2", util.fit_display(
         cutOutImage))
     while cv2.waitKey(100) != ord("q"):
