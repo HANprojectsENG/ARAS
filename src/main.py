@@ -10,6 +10,7 @@ import argparse
 import time
 import recognise
 import util
+import projection
 
 
 def main():
@@ -73,7 +74,7 @@ def test_main(imagePath):
 
     cutOutImage = util.cut_out_image(image, playfieldCorners, (1000, 1000))
     util.draw_dot_matrix(cutOutImage, (48, 48), (4, 0), (992, 994))
-    cv2.imshow("Output image 2", util.fit_display(
+    projection.show_image_fullscreen(util.fit_display(
         cutOutImage))
     while cv2.waitKey(100) != ord("q"):
         pass
