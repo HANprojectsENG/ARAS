@@ -42,16 +42,17 @@ def cut_out_image(image, playfieldCorners, destSize):
     warpedImage = cv2.warpPerspective(image, M, destSize)
     return warpedImage
 
+
 def draw_dot_matrix(image, dots_size, destination_pos, destination_size):
-    matrix = coordinates.calculate_nub_coordinate_matrix(destination_pos, destination_size)
-    layer = 2
+    matrix = coordinates.calculate_nub_coordinate_matrix(
+        destination_pos, destination_size)
+    layer = 4
 
     for j in range(dots_size[1]):
         for i in range(dots_size[0]):
             cv2.circle(
-                    image,
-                    (matrix[layer, j, i, 0], matrix[layer, j, i, 1]),
-                    2,
-                    (255, 0, 0),
-                    -1)
-
+                image,
+                (matrix[layer, j, i, 0], matrix[layer, j, i, 1]),
+                2,
+                (255, 0, 0),
+                -1)
