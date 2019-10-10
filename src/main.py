@@ -1,4 +1,5 @@
 # import the necessary packages
+# :)
 try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
