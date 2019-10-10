@@ -22,7 +22,14 @@ def init():
     cameraDevice.awb_mode = "fluorescent"
 
     # allow the camera to warmup
-    time.sleep(0.1)
+    time.sleep(2)
+
+    # Now fix the values
+    cameraDevice.shutter_speed = cameraDevice.exposure_speed
+    cameraDevice.exposure_mode = 'off'
+    g = cameraDevice.awb_gains
+    cameraDevice.awb_mode = 'off'
+    cameraDevice.awb_gains = g
 
 def capture():
     rawCapture = PiRGBArray(cameraDevice, size=CAPTURE_RESOLUTION)
