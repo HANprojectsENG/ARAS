@@ -1,0 +1,8 @@
+@startuml
+
+Assembler --> (UC1 Read instructions)
+Assembler --> (UC2 Assemble product)
+Operator --> (UC3 Load new models)
+Operator --> (UC4 Choose current model)
+
+@enduml
