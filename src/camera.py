@@ -1,3 +1,4 @@
+import time
 try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
@@ -6,29 +7,36 @@ except ImportError:
 
 CAPTURE_RESOLUTION = (1640, 1232)
 
-camera = None
+cameraDevice = None
 
 
 def init():
+    global cameraDevice
     # initialize the camera and grab a reference to the raw camera capture
     captureResolution = (1640, 1232)
-    camera = PiCamera()
-    camera.resolution = CAPTURE_RESOLUTION
-    camera.framerate = 15
-    camera.iso = 100
-    camera.meter_mode = "matrix"
-    camera.awb_mode = "fluorescent"
+    cameraDevice = PiCamera()
+    cameraDevice.resolution = CAPTURE_RESOLUTION
+    cameraDevice.framerate = 15
+    cameraDevice.iso = 100
+    cameraDevice.meter_mode = "matrix"
+    cameraDevice.awb_mode = "fluorescent"
 
     # allow the camera to warmup
-    time.sleep(0.1)
+    time.sleep(2)
 
+    # Now fix the values
+    cameraDevice.shutter_speed = cameraDevice.exposure_speed
+    cameraDevice.exposure_mode = 'off'
+    g = cameraDevice.awb_gains
+    cameraDevice.awb_mode = 'off'
+    cameraDevice.awb_gains = g
 
 def capture():
-    rawCapture = PiRGBArray(camera, size=captureResolution)
-    camera.capture(rawCapture, format="bgr", use_video_port=True)
+    rawCapture = PiRGBArray(cameraDevice, size=CAPTURE_RESOLUTION)
+    cameraDevice.capture(rawCapture, format="bgr", use_video_port=True)
 
     # grab the raw NumPy array representing the image, then initialize the timestamp
     # and occupied/unoccupied text
-    image = frame.array
+    image = rawCapture.array
 
     return image

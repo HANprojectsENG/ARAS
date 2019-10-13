@@ -3,7 +3,6 @@ import numpy as np
 import os
 import cv2
 import argparse
-import time
 import recognise
 import util
 import projection
