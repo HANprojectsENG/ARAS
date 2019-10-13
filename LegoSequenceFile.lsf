@@ -1,0 +1,17 @@
+this is a test file only!
+Colors: ORANGE = 106 GREEN = 37 YELLOW = 24 BLUE = 23 RED = 21
+
+#### format is as described below. up to 28 total data points ####
+#### meaning pieces up to 12 nobs( 2 data nob) ex. 6x2 brick  ####
+
+layer. step. legosize(in nobs). color. posx1. posy1. posxn. posyn
+
+example layer 0
+0, 0, 4, 23, 12, 14, 12, 15, 13, 14, 13, 15
+0, 1, 6, 23, 12, 14, 12, 15, 13, 14, 13, 15, 8, 8, 6, 6
+example layer 1
+1, 0, 4, 23, 12, 14, 12, 15, 13, 14, 13, 15
+1, 1, 6, 23, 12, 14, 12, 15, 13, 14, 13, 15, 8, 8, 6, 6
+1, 1, 8, 23, 12, 14, 12, 15, 13, 14, 13, 15, 8, 8, 6, 6, 21, 33, 44, 33
+
+you get the point...
