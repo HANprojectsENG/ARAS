@@ -113,7 +113,7 @@ def parseLegoData(line, lineNumber):
                 stepArray = np.append( np.array([layer, step, legosize, color]) , np.asarray(coordinates) )
 
                 # add zeros at the end of list if list is not full, max arguments = 28 = single 2x6 lego brick
-                while totalArgs != 28:
+                while totalArgs != MAX_DATA_PER_LEGO:
                     stepArray = np.append(stepArray, 0)
                     totalArgs = totalArgs + 1
 
