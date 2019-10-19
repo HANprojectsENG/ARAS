@@ -90,3 +90,29 @@ def get_playfield_corners_by_aruco(grayImage):
     corners, ids, rejectedImgPoints = find_aruco_markers(grayImage)
     playfieldCorners = aruco_to_playfield_corners(corners, ids)
     return playfieldCorners
+
+def check_color(bgrImage):
+    #Check if color of brick is correct
+    hsv = cv2.cvtColor(bgrImage, cv2.COLOR_BGR2HSV) 
+    avg_color_per_row = np.average(hsv, axis=0)
+    avg_color = np.average(avg_color_per_row, axis=0)
+    int_avg_color = np.array(avg_color, dtype=np.uint8)
+
+    print(int_avg_color)
+    for member in list(BrickColor):
+        if compare_color(int_avg_color,COLOR_RANGES[member][0],COLOR_RANGES[member][1]):
+            return(member)
+    return("BrickColor.UNKNOWN")
+
+def compare_color(avg_color,COLOR_MIN,COLOR_MAX):
+    #Compare avg color of an area to expected color values
+    for i in range (0, 3):
+        if avg_color[i] < COLOR_MIN[i] or avg_color[i] > COLOR_MAX[i]:
+            return False
+    return True
+
+def crop_image(image,x1,y1,x2,y2):
+    #Crop image to rectangle from points x1,y1 to x2,y2
+    img = cv2.imread(image)
+    crop_img = img[y1:y2, x1:x2]
+    return crop_img
