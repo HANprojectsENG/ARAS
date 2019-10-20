@@ -176,7 +176,7 @@ def processManager(loadedSequence):
                             print("Loaded from last run. Last completed Step: " + str(Step) + " on Layer: " + str(Layer))
                             NextState = ProcessState.CHECK_NEXT_STEP
                         else:
-                            print("Error reading save file :/ ")
+                            print("Error reading save file in INIT :/")
                             break
 
             elif State == ProcessState.STARTING:
@@ -213,32 +213,27 @@ def processManager(loadedSequence):
                         file.write(str(Layer) + ", " + str(Step))
                 # Check next step
                 nextStep = Step + 1
-                # Load next step 
-                for i  in range(0,MAX_DATA_PER_LEGO):
-                    checkStep[i] = loadedSequence[Layer, nextStep, i]
-                # Check if next step  exists
-                if (checkStep[1] == nextStep):
-                    # Check if next step layer exists
-                    if (checkStep[0] == Layer):
-                        # Check next step data structure
-                        for i in range(0,(checkStep[2]*2)):
-                            if checkStep[4+i] == 0:
-                                print("Error checking step Coordinates in CHECK_NEXT_STEP")
-                                break
-                        # Everything ok, moving step index +1 for the main loop
-                        Step = Step + 1
-                        # Load current step to use later
-                        for i  in range(0,MAX_DATA_PER_LEGO):
-                            currentStep[i] = loadedSequence[Layer, Step, i]
-                        NextState = ProcessState.CHECK_CURRENT_STEP
-                    # Layer not found in this step, will increment Layer and check again
-                    else:
-                        Layer = Layer + 1
-                        if Layer == MAX_LAYERS:
-                            NextState = ProcessState.FINAL_STEP
-                        else:
-                            NextState = ProcessState.CHECK_NEXT_STEP
-                # Step not found, means we reached the end probably, will have to go to next layer
+                if nextStep != MAX_LEGO_PER_LAYER:
+                    # Load next step 
+                    for i  in range(0,MAX_DATA_PER_LEGO):
+                        checkStep[i] = loadedSequence[Layer, nextStep, i]
+                else:
+                    # Reached max step on layer, setting step to -1 will force to move to next layer
+                    checkStep[1] = -1
+                # Check if next step and layer exists
+                if (checkStep[1] == nextStep and checkStep[0] == Layer):
+                    # Check next step data structure
+                    for i in range(0,(checkStep[2]*2)):
+                        if checkStep[4+i] == 0:
+                            print("Error checking step Coordinates in CHECK_NEXT_STEP :/")
+                            break
+                    # Everything ok, moving step index +1 for the main loop
+                    Step = Step + 1
+                    # Load current step to use later
+                    for i  in range(0,MAX_DATA_PER_LEGO):
+                        currentStep[i] = loadedSequence[Layer, Step, i]
+                    NextState = ProcessState.CHECK_CURRENT_STEP
+                # Step or layer not found, means we reached the end probably, will have to go to next layer
                 # We set Step to -1 because its always incremented at the start of this state
                 else:
                     Step = -1
@@ -256,5 +251,5 @@ def processManager(loadedSequence):
                 break
 
     except Exception as e:
-        print ("oh no..Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
+        print ("oh no :/ Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
         print(e)
