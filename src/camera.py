@@ -31,6 +31,7 @@ def init():
     cameraDevice.awb_mode = 'off'
     cameraDevice.awb_gains = g
 
+
 def capture():
     rawCapture = PiRGBArray(cameraDevice, size=CAPTURE_RESOLUTION)
     cameraDevice.capture(rawCapture, format="bgr", use_video_port=True)

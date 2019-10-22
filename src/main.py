@@ -7,12 +7,10 @@ import recognise
 import util
 import projection
 import camera
+import vscodeargs
 
-#Set to True is using the superior VSCode for testing, False otherwise
-UsingVSCode = True
 
 def main(FilePath):
-    
     loadedSequence = util.openFile(filePath)
     try:
         camera.init()
@@ -24,7 +22,8 @@ def main(FilePath):
                 cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
 
             for playfieldCorner in playfieldCorners:
-                cv2.circle(dispImage, playfieldCorner, 25, (0, 0, 255), cv2.FILLED)
+                cv2.circle(dispImage, playfieldCorner,
+                           25, (0, 0, 255), cv2.FILLED)
 
             # show the frame
             cv2.imshow("Playfield", util.fit_display(
@@ -38,15 +37,15 @@ def main(FilePath):
             if key == ord("q"):
                 break
     except:
-        print ("Camera is gone :/")
+        print("Camera is gone :/")
 
 
-def test_main(imagePath, filePath):
+def test_main(imagePath, filePath, savePath):
     # Load files
     loadedSequence = util.openFile(filePath)
     image = util.white_balance(cv2.imread(imagePath))
-    # This is just for testing, don't look too much into it 
-    util.processManager(loadedSequence)
+    # This is just for testing, don't look too much into it
+    util.processManager(loadedSequence, savePath)
     # Start processing image
     displayImage = recognise.find_bricks_by_color(image)[1]
     # Try and find aruco codes
@@ -60,10 +59,10 @@ def test_main(imagePath, filePath):
             [playfieldCorners], dtype=np.int32), -1, (0, 0, 255), 5)
         for idx, corner in enumerate(playfieldCorners):
             cv2.putText(displayImage, str(idx), corner,
-                cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 4)
+                        cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 4)
             cv2.putText(displayImage, str(
                 arucoIds[idx]), corner, cv2.FONT_HERSHEY_SIMPLEX, 10, (255, 0, 0), 4)
-    
+
         # Cut image and draw dot matrix
         cutOutImage = util.cut_out_image(image, playfieldCorners, (1000, 1000))
         util.draw_dot_matrix(cutOutImage, (48, 48), (4, 0), (992, 994))
@@ -78,29 +77,26 @@ def test_main(imagePath, filePath):
     while cv2.waitKey(100) != ord("q"):
         pass
 
+
 # Parse user arguments
 parser = argparse.ArgumentParser(
     description='Guidance assistant for building LEGO buildings')
 parser.add_argument('--testImage', required=False,
                     help='Run the detection algorithm on a still image')
-parser.add_argument('--readFile', required=False,
-                    help='Read Lego file')
+parser.add_argument('--readFile', required=True,
+                    help='Lego model description file')
+parser.add_argument('--saveFile', required=False, default="Saved.gg",
+                    help='State save file path')
 
 args = parser.parse_args()
 
-# Don't you dare comment about this part, yes you know who.
-if UsingVSCode:
-    cwd = os.getcwd()
-    VisualStudioArgImage = cwd.replace("src", "testimages\\test-markers.jpg")
-    VisualStudioArgFile = cwd.replace("src", "LegoSequenceFile.lsf")
-    args.testImage = VisualStudioArgImage
-    args.readFile = VisualStudioArgFile
-
-# Do the thing
-if args.readFile is None:
-    args.readFile = 0
+# If using VS Code debugging, pass the arguments.
+if vscodeargs.UsingVSCode:
+    args.testImage = vscodeargs.VisualStudioArgImage
+    args.readFile = vscodeargs.VisualStudioArgFile
+    args.saveFile = vscodeargs.VisualStudioSaveFile
 
 if args.testImage:
-    test_main(args.testImage, args.readFile)
+    test_main(args.testImage, args.readFile, args.saveFile)
 else:
     main(args.readFile)
