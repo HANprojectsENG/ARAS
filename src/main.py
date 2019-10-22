@@ -7,7 +7,6 @@ import recognise
 import util
 import projection
 import camera
-import vscodeargs
 import lsfparser
 import statemachine
 
