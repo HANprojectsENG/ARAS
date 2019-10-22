@@ -8,10 +8,12 @@ import util
 import projection
 import camera
 import vscodeargs
+import lsfparser
+import statemachine
 
 
 def main(FilePath):
-    loadedSequence = util.openFile(filePath)
+    loadedSequence = lsfparser.openFile(filePath)
     try:
         camera.init()
         while True:
@@ -42,10 +44,10 @@ def main(FilePath):
 
 def test_main(imagePath, filePath, savePath):
     # Load files
-    loadedSequence = util.openFile(filePath)
+    loadedSequence = lsfparser.openFile(filePath)
     image = util.white_balance(cv2.imread(imagePath))
     # This is just for testing, don't look too much into it
-    util.processManager(loadedSequence, savePath)
+    statemachine.processManager(loadedSequence, savePath)
     # Start processing image
     displayImage = recognise.find_bricks_by_color(image)[1]
     # Try and find aruco codes
