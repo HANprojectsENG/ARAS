@@ -7,7 +7,6 @@ import coordinates
 from constants import MAX_DISPLAY_WIDTH, MAX_DISPLAY_HEIGHT
 
 
-
 def fit_display(image):
     while image.shape[0] > MAX_DISPLAY_HEIGHT or image.shape[1] > MAX_DISPLAY_WIDTH:
         image = cv2.pyrDown(image)
@@ -58,3 +57,12 @@ def draw_dot_matrix(image, dots_size, destination_pos, destination_size):
                 2,
                 (255, 0, 0),
                 -1)
+
+# See://stackoverflow.com/questions/4154969/how-to-map-numbers-in-range-099-to-range-1-01-0
+
+
+def map_number(val, src, dst):
+    """
+    Scale the given value from the scale of src to the scale of dst.
+    """
+    return ((val - src[0]) / (src[1] - src[0])) * (dst[1] - dst[0]) + dst[0]
