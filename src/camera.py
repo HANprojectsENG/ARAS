@@ -1,11 +1,10 @@
 import time
+from constants import CAPTURE_RESOLUTION
 try:
     from picamera.array import PiRGBArray
     from picamera import PiCamera
 except ImportError:
     print("Failed to load PiCamera. Expect errors when trying to read from the camera.")
-
-CAPTURE_RESOLUTION = (1640, 1232)
 
 cameraDevice = None
 
