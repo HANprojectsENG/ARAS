@@ -1,7 +1,7 @@
 import os
 
 # Set to True is using the inferior VSCode for testing, False otherwise
-UsingVSCode = False
+UsingVSCode = True
 
 cwd = os.getcwd()
 VisualStudioArgImage = cwd.replace("src", "testimages\\test-markers.jpg")
