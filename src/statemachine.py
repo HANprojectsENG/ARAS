@@ -1,6 +1,7 @@
 import util
 import pathlib
 import time
+import recognise
 import numpy as np
 from enum import Enum
 from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER
@@ -16,7 +17,7 @@ class ProcessState(Enum):
     CHECK_NEXT_STEP = 6
     FINAL_STEP = 7
 
-def processManager(loadedSequence, savePath):
+def processManager(loadedSequence, savePath, imagePath):
     #oh boi
     State = None
     NextState = ProcessState.INIT
@@ -60,8 +61,8 @@ def processManager(loadedSequence, savePath):
             elif State == ProcessState.CHECK_CURRENT_STEP:
                 print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
                 # basic idea of last check, change bool to move steps or not
-                completed = True
-                time.sleep(2)
+                completed = recognise.test_recognition_system(loadedSequence[Layer][Step], imagePath)
+                #time.sleep(2)
                 if completed:
                     NextState = ProcessState.CHECK_NEXT_STEP
                 else:
