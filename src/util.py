@@ -4,9 +4,8 @@ import time
 import numpy as np
 from enum import Enum
 import coordinates
+from constants import MAX_DISPLAY_WIDTH, MAX_DISPLAY_HEIGHT
 
-MAX_DISPLAY_WIDTH = 960
-MAX_DISPLAY_HEIGHT = 960
 
 
 def fit_display(image):
