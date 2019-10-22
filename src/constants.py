@@ -1,4 +1,4 @@
-MAX_LAYERS = 10
+MAX_LAYERS = 20
 MAX_LEGO_PER_LAYER = 50
 MAX_DATA_PER_LEGO = 28
 BAD_FILE_FORMAT_ERROR = 69
@@ -18,3 +18,6 @@ BASEPLATE_SIZE = (48, 48)  # Block units
 # Max size for image debug windows
 MAX_DISPLAY_WIDTH = 960
 MAX_DISPLAY_HEIGHT = 960
+
+# Camera capture resolution
+CAPTURE_RESOLUTION = (1640, 1232)

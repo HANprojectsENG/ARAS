@@ -1,6 +1,6 @@
 # import the necessary packages
 import numpy as np
-import os
+import pathlib
 import cv2
 import argparse
 import recognise
@@ -91,12 +91,6 @@ parser.add_argument('--saveFile', required=False, default="Saved.gg",
                     help='State save file path')
 
 args = parser.parse_args()
-
-# If using VS Code debugging, pass the arguments.
-if vscodeargs.UsingVSCode:
-    args.testImage = vscodeargs.VisualStudioArgImage
-    args.readFile = vscodeargs.VisualStudioArgFile
-    args.saveFile = vscodeargs.VisualStudioSaveFile
 
 if args.testImage:
     test_main(args.testImage, args.readFile, args.saveFile)
