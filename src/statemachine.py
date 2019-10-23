@@ -59,12 +59,12 @@ def processManager(loadedSequence, savePath, imagePath):
                 NextState = ProcessState.CHECK_CURRENT_STEP
         
             elif State == ProcessState.CHECK_CURRENT_STEP:
-                print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
+                #print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
                 # basic idea of last check, change bool to move steps or not
                 completed = recognise.recognition(loadedSequence[Layer][Step], imagePath)
                 #time.sleep(2)
-                while cv2.waitKey(100) != ord("n"):
-                    pass
+                #while cv2.waitKey(100) != ord("n"):
+                    #pass
                 if completed:
                     NextState = ProcessState.CHECK_NEXT_STEP
                 else:

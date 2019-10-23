@@ -28,6 +28,12 @@ BLOCK_UNIT_LENGTH = 0.008
 MAX_BLOCK_LAYERS = 20
 BASEPLATE_SIZE = (48, 48)  # Block units
 
+# Projection calibration
+PROJECTION_SIZE = (0.60, 0.40)  # Meters
+PROJECTION_OFFSET = (0.00, 0.00)  # Meters
+PROJECTOR_HEIGHT = 0.80  # Meters
+PROJECTOR_RESOLUTION = (854, 480)
+
 # Max size for image debug windows
 MAX_DISPLAY_WIDTH = 960
 MAX_DISPLAY_HEIGHT = 960
