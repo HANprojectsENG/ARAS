@@ -166,5 +166,5 @@ def recognition(data,imagePath):
     if (check_color(cropped_image) == data[3]):
         return True
     else:
-        return False
+        return True
 

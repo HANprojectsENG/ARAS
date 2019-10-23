@@ -28,7 +28,7 @@ def get_image(imagePath):
 
         # Cut image and draw dot matrix
         cutOutImage = util.cut_out_image(image, playfieldCorners, (1000, 1000))
-        util.draw_dot_matrix(cutOutImage, (48, 48), (4, 0), (992, 994))
+        #util.draw_dot_matrix(cutOutImage, (48, 48), (4, 0), (992, 994))
     except:
         # if aruco search-match-cut failed, just display main image
         cutOutImage = displayImage

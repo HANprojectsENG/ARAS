@@ -2,6 +2,7 @@ import util
 import pathlib
 import time
 import recognise
+import cv2
 import numpy as np
 from enum import Enum
 from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER
@@ -59,10 +60,12 @@ def processManager(loadedSequence, savePath, imagePath):
                 NextState = ProcessState.CHECK_CURRENT_STEP
         
             elif State == ProcessState.CHECK_CURRENT_STEP:
-                print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
+                #print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
                 # basic idea of last check, change bool to move steps or not
                 completed = recognise.recognition(loadedSequence[Layer][Step], imagePath)
                 #time.sleep(2)
+                while cv2.waitKey(100) != ord("n"):
+                    pass
                 if completed:
                     NextState = ProcessState.CHECK_NEXT_STEP
                 else:
