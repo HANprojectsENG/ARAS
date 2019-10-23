@@ -1,5 +1,7 @@
 import numpy as np
 from enum import Enum
+import analyze
+import coordinates
 import cv2
 import cv2.aruco as aruco
 
@@ -98,12 +100,10 @@ def check_color(bgrImage):
     avg_color_per_row = np.average(hsv, axis=0)
     avg_color = np.average(avg_color_per_row, axis=0)
     int_avg_color = np.array(avg_color, dtype=np.uint8)
-
-    print(int_avg_color)
     for member in list(BrickColor):
         if compare_color(int_avg_color, COLOR_RANGES[member][0], COLOR_RANGES[member][1]):
-            return(member)
-    return("BrickColor.UNKNOWN")
+            return(member.value)
+    return(0)
 
 
 def compare_color(avg_color, COLOR_MIN, COLOR_MAX):
@@ -113,9 +113,58 @@ def compare_color(avg_color, COLOR_MIN, COLOR_MAX):
             return False
     return True
 
+   
+def crop_image(image, pos_x1,pos_y1,pos_x2,pos_y2, destination_pos, destination_size):
+    if pos_x2 < pos_x1 or pos_y2 < pos_y1:
+        print("recognition error: bad data in sequence file cannot crop")
+    
+    #Create matrix 
+    matrix = coordinates.calculate_nub_coordinate_matrix(
+        destination_pos, destination_size)
+    layer = 0
 
-def crop_image(image, x1, y1, x2, y2):
-    # Crop image to rectangle from points x1,y1 to x2,y2
-    img = cv2.imread(image)
-    crop_img = img[y1:y2, x1:x2]
+    #Get Top left pixel coordinates of lego brick
+    coord_x1 = int(matrix[layer, pos_x1, pos_y1, 0] - 8)
+    coord_y1 = int(matrix[layer, pos_x1, pos_y1, 1] - 8)
+
+    #Get bottom right pixel coordinates of lego brick
+    coord_x2 = int(matrix[layer, pos_x2, pos_y2, 0] + 10)
+    coord_y2 = int(matrix[layer, pos_x2, pos_y2, 1] + 10)
+
+    #Crop image to the pixel boundries
+    crop_img = image[coord_y1:coord_y2, coord_x1:coord_x2]
     return crop_img
+
+def test_crop_image(image, x1, y1, x2, y2):
+    # Crop image to rectangle from points x1,y1 to x2,y2
+    crop_img = image[y1:y2, x1:x2]
+    return crop_img
+
+def test_cropping(cutOutImage):
+    #Test crop for specific brick
+    testimage = test_crop_image(cutOutImage,362,408,408,450)
+    print(check_color(testimage))
+    cv2.imshow("test image", testimage)
+
+
+
+def recognition(data,imagePath):
+    image = analyze.get_image(imagePath)
+    #layer. step. legosize(in nobs). color. posx1. posy1. posxn. posyn
+    print("Layer: " +
+                      str(data[0]) + " Step: " + str(data[1]) + " size: " + str(data[2]) + " color: " + str(data[3]) + " x1: " + str(data[4]) + " y1: " + str(data[5]) + "...")
+    
+    #crop image to the size of one lego brick from top left to bottom right stud                  
+    cropped_image = crop_image(image, data[4], data[5], data[((data[2] * 2) + 2)], data[((data[2] * 2) + 3)],(4, 0), (992, 994))
+
+    #Print color of brick
+    #test_cropping(image)
+    
+    print("Brick Color:" + str(check_color(cropped_image)))
+    cv2.imshow("test image", cropped_image)
+
+    if (check_color(cropped_image) == data[3]):
+        return True
+    else:
+        return False
+
