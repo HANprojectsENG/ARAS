@@ -61,7 +61,7 @@ def processManager(loadedSequence, savePath, imagePath):
             elif State == ProcessState.CHECK_CURRENT_STEP:
                 print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
                 # basic idea of last check, change bool to move steps or not
-                completed = recognise.test_recognition_system(loadedSequence[Layer][Step], imagePath)
+                completed = recognise.recognition(loadedSequence[Layer][Step], imagePath)
                 #time.sleep(2)
                 if completed:
                     NextState = ProcessState.CHECK_NEXT_STEP
