@@ -74,6 +74,8 @@ def test_main(imagePath, filePath, savePath):
     # Display final images
     cv2.imshow("Output image", util.fit_display(displayImage))
     projection.show_image_fullscreen(util.fit_display(cutOutImage))
+    # projection.show_image_fullscreen(
+    #     projection.create_block_outline_image(10, (30, 30), (4, 2)))
     # Wait for user to exit
     while cv2.waitKey(100) != ord("q"):
         pass
