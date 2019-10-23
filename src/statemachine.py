@@ -5,7 +5,7 @@ import recognise
 import cv2
 import numpy as np
 from enum import Enum
-from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER
+from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER, SAVE_FILE_READ_ERROR, CHECK_NEXT_STEP_COORDINATES_ERROR
 
 
 class ProcessState(Enum):
@@ -27,7 +27,6 @@ def processManager(loadedSequence, savePath, imagePath):
     currentStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     checkStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     try:
-        filePath = savePath
         while True:
             #check if loop should continue or not
             if LoopChecker() == False:
@@ -36,8 +35,8 @@ def processManager(loadedSequence, savePath, imagePath):
             # Initial state, only here once, at the beginning
             if State == ProcessState.INIT:
                 # Open save file if exists, create it otherwise
-                mode = 'r' if pathlib.Path(filePath).is_file() else 'w+'
-                with open(filePath, mode) as file:
+                mode = 'r' if pathlib.Path(savePath).is_file() else 'w+'
+                with open(savePath, mode) as file:
                     data = file.readline()
                     if data == '':
                         # No data on savefile, starting from 0
@@ -51,7 +50,7 @@ def processManager(loadedSequence, savePath, imagePath):
                             print("Loaded from last run. Last completed Step: " + str(Step) + " on Layer: " + str(Layer))
                             NextState = ProcessState.CHECK_NEXT_STEP
                         else:
-                            print("Error reading save file in INIT :/")
+                            print("Error Code" + str(SAVE_FILE_READ_ERROR))
                             break
 
             elif State == ProcessState.STARTING:
@@ -60,7 +59,7 @@ def processManager(loadedSequence, savePath, imagePath):
                 NextState = ProcessState.CHECK_CURRENT_STEP
         
             elif State == ProcessState.CHECK_CURRENT_STEP:
-                #print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
+                print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
                 # basic idea of last check, change bool to move steps or not
                 completed = recognise.recognition(loadedSequence[Layer][Step], imagePath)
                 #time.sleep(2)
@@ -86,7 +85,7 @@ def processManager(loadedSequence, savePath, imagePath):
             elif State == ProcessState.CHECK_NEXT_STEP:
                 # Before checking next step, save last step
                 if Step != -1:
-                    with open(filePath, 'w') as file:
+                    with open(savePath, 'w') as file:
                         file.write(str(Layer) + ", " + str(Step))
                 # Check next step
                 nextStep = Step + 1
@@ -102,7 +101,7 @@ def processManager(loadedSequence, savePath, imagePath):
                     # Check next step data structure
                     for i in range(0,(checkStep[2]*2)):
                         if checkStep[4+i] == 0:
-                            print("Error checking step Coordinates in CHECK_NEXT_STEP :/")
+                            print("Error Code" + str(CHECK_NEXT_STEP_COORDINATES_ERROR))
                             break
                     # Everything ok, moving step index +1 for the main loop
                     Step = Step + 1
@@ -122,13 +121,13 @@ def processManager(loadedSequence, savePath, imagePath):
 
             elif State == ProcessState.FINAL_STEP:
                 # We are done, erase savefile!
-                with open(filePath, 'w') as file:
+                with open(savePath, 'w') as file:
                     file.write('')
                 print("You reached the end :)")
                 break
 
     except Exception as e:
-        print ("oh no :/ Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
+        print ("Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
         print(e)
 
 def LoopChecker():
