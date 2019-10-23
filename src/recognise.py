@@ -115,18 +115,20 @@ def compare_color(avg_color, COLOR_MIN, COLOR_MAX):
 
    
 def crop_image(image, pos_x1,pos_y1,pos_x2,pos_y2, destination_pos, destination_size):
+    if pos_x2 < pos_x1 or pos_y2 < pos_y1:
+        print("recognition error: bad data in sequence file cannot crop")
     #Create matrix 
     matrix = coordinates.calculate_nub_coordinate_matrix(
         destination_pos, destination_size)
     layer = 0
 
     #Get Top left pixel coordinates of lego brick
-    coord_x1 = int(matrix[layer, pos_x1, pos_y1, 0])
-    coord_y1 = int(matrix[layer, pos_x1, pos_y1, 1])
+    coord_x1 = int(matrix[layer, pos_x1, pos_y1, 0] - 8)
+    coord_y1 = int(matrix[layer, pos_x1, pos_y1, 1] - 8)
 
     #Get bottom right pixel coordinates of lego brick
-    coord_x2 = int(matrix[layer, pos_x2, pos_y2, 0])
-    coord_y2 = int(matrix[layer, pos_x2, pos_y2, 1])
+    coord_x2 = int(matrix[layer, pos_x2, pos_y2, 0] + 10)
+    coord_y2 = int(matrix[layer, pos_x2, pos_y2, 1] + 10)
 
     #Crop image to the pixel boundries
     crop_img = image[coord_y1:coord_y2, coord_x1:coord_x2]
@@ -147,8 +149,8 @@ def test_recognition_system(data,imagePath):
     print("Layer: " +
                       str(data[0]) + " Step: " + str(data[1]) + " size: " + str(data[2]) + " color: " + str(data[3]) + " x1: " + str(data[4]) + " y1: " + str(data[5]) + "...")
     
-    #crop image to the size of one lego brick from top left to bottom right peg                  
-    testimage = crop_image(image, data[4], data[5], data[10], data[11],(4, 0), (992, 994))
+    #crop image to the size of one lego brick from top left to bottom right stud                  
+    testimage = crop_image(image, data[4], data[5], data[((data[2] * 2) + 2)], data[((data[2] * 2) + 3)],(4, 0), (992, 994))
 
     #Print color of brick
     print(check_color(testimage))
