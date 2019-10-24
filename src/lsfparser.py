@@ -1,6 +1,5 @@
-import os
 import numpy as np
-from constants import MAX_LAYERS, MAX_LEGO_PER_LAYER, MAX_DATA_PER_LEGO, BAD_FILE_FORMAT_ERROR
+from constants import MAX_LAYERS, MAX_LEGO_PER_LAYER, MAX_DATA_PER_LEGO, BAD_FILE_FORMAT_ERROR, EMPTY_FILE_LINE_WARNING
 
 
 def openFile(filePath):
@@ -10,6 +9,7 @@ def openFile(filePath):
                            MAX_DATA_PER_LEGO), dtype=np.uint32)
         index = np.zeros((MAX_LAYERS), dtype=np.uint8)
         errorFlag = False
+        print("Starting lsf file parser!")
         # Go over every line in the file
         for cnt, line in enumerate(file):
             LineData = parseLegoData(line, cnt)
@@ -17,11 +17,11 @@ def openFile(filePath):
             try:
                 # Check if parser parsed data or not
                 if LineData == BAD_FILE_FORMAT_ERROR:
-                    print("Error reading file!")
+                    print("Error Code " + str(BAD_FILE_FORMAT_ERROR))
                     errorFlag = True
                     break
                 elif LineData is None:
-                    print("Skipping line " + str(cnt+1))
+                    print("Warning Code " + str(EMPTY_FILE_LINE_WARNING) + " Line: " + str(cnt+1))
             except:
                 # Parser worked, now putting data into final array
                 currentLayer = LineData[0]
@@ -32,6 +32,7 @@ def openFile(filePath):
         if errorFlag:
             return -1
         else:
+            print("Parsing done!")
             return matrix
 
 

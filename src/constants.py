@@ -1,10 +1,23 @@
-MAX_LAYERS = 20
-MAX_LEGO_PER_LAYER = 50
-MAX_DATA_PER_LEGO = 28
-BAD_FILE_FORMAT_ERROR = 69
+######################### Error/Warning Codes #######################
+
+# lsfparser
+BAD_FILE_FORMAT_ERROR = 69  #lsf file has bad format - cannot be read properly
+EMPTY_FILE_LINE_WARNING = 70 #lsf line has empty line, skipping line
+
+# State machine
+SAVE_FILE_READ_ERROR = 71 #cannot read or write the save file
+CHECK_NEXT_STEP_COORDINATES_ERROR = 72 #coordinates don't much specified lego size
+
+#############################################################
+
+####################### Module Constants ####################
+
+# State machine constants
+MAX_LAYERS = 20 # Max layers the stame machine can go through, should be the same as MAX_BLOCK_LAYERS
+MAX_LEGO_PER_LAYER = 50 # Max amount of bricks allowed per layers
+MAX_DATA_PER_LEGO = 28 # Max data points per lego, 28 means 4 data points standard + 12 x/y coordinates, for up to a 2x6 lego piece
 
 # Constants used by the coordinates module
-
 CAMERA_HORIZONTAL_FOV = 62.2
 CAMERA_HORIZONTAL_FOV = 62.2,  # Degrees
 CAMERA_VERTICAL_FOV = 48.8,
@@ -27,3 +40,5 @@ MAX_DISPLAY_HEIGHT = 960
 
 # Camera capture resolution
 CAPTURE_RESOLUTION = (1640, 1232)
+
+#############################################################
