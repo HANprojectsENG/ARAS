@@ -110,7 +110,6 @@ def addToSingleArray(coordinates, rb):
         localArray[4+addToSingleArrayINDX] = xpos
         localArray[5+addToSingleArrayINDX] = ypos
         addToSingleArrayINDX = addToSingleArrayINDX + 2
-        app.setCheckBoxText(rb, str(SelectedLegoSize))
         SelectedLegoSize = SelectedLegoSize + 1
     else:
         print("oouuuff")
@@ -129,7 +128,6 @@ def removeFromSingleArray(coordinates, rb):
         maxDataREached = False
         localArray[4+addToSingleArrayINDX] = 0
         localArray[5+addToSingleArrayINDX] = 0
-        app.setCheckBoxText(rb, "  ")
         SelectedLegoSize = SelectedLegoSize - 1
     else:
         addToSingleArrayINDX = addToSingleArrayINDX + 2
@@ -244,14 +242,14 @@ def saveFile():
 
 
 app = gui("Lego Seq File Maker", "1000x900")
-app.setFont(9)
+app.setFont(15)
 
 app.startFrame("TOP", row=0, column=0)
 
 for x in range(11,36):
     for y in range(11,36):
         index = str(x) + "," + str(y)
-        app.addNamedCheckBox("  ", index, row=x, column=y)
+        app.addNamedCheckBox("", index, row=x, column=y)
         app.setCheckBoxChangeFunction(index, checkmarkStateChange)
 
 app.stopFrame()
