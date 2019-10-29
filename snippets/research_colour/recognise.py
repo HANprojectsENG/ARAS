@@ -25,6 +25,8 @@ COLOR_RANGES_HSV = {
     BrickColor.RED: (np.array([160, 162, 96]), np.array([180, 255, 255]))
 }
 
+HSV_MAX_DISTANCE = 50
+
 COLOR_RANGES_BGR = {
     BrickColor.ORANGE: (np.array([0, 30, 60]), np.array([30, 85, 255])),
     BrickColor.GREEN: (np.array([10, 20, 0]), np.array([128, 128, 5])),
@@ -32,6 +34,14 @@ COLOR_RANGES_BGR = {
     BrickColor.BLUE: (np.array([128, 0, 0]), np.array([255, 96, 32])),
     BrickColor.RED: (np.array([0, 0, 96]), np.array([76, 35, 255]))
 }
+
+BGR_MAX_DISTANCE = 30
+
+def calculate_euclidean_distance(image1, image2):
+    absdiffImage = cv2.absdiff(image1, image2)
+    normImage = np.linalg.norm(absdiffImage, axis=2)
+    return normImage
+
 
 def filter_brick_color(bgrImage, color, filterMethod):
     brickMask = None
@@ -41,32 +51,25 @@ def filter_brick_color(bgrImage, color, filterMethod):
             hsvImage, COLOR_RANGES_HSV[color][0], COLOR_RANGES_HSV[color][1])
     elif filterMethod == FilterMethod.HSV_EUCLIDEAN:
         hsvImage = cv2.cvtColor(bgrImage, cv2.COLOR_BGR2HSV)
+        expectedColor = (COLOR_RANGES_HSV[color][0] + COLOR_RANGES_HSV[color][1]) // 2
+        distImage = calculate_euclidean_distance(hsvImage, np.full(hsvImage.shape, expectedColor, dtype=np.uint8))
         brickMask = cv2.inRange(
-            hsvImage, COLOR_RANGES_HSV[color][0], COLOR_RANGES_HSV[color][1])
+            distImage, np.array([0]), np.array([HSV_MAX_DISTANCE]))
     elif filterMethod == FilterMethod.BGR:
         brickMask = cv2.inRange(
             bgrImage, COLOR_RANGES_BGR[color][0], COLOR_RANGES_BGR[color][1])
     elif filterMethod == FilterMethod.BGR_EUCLIDEAN:
+        expectedColor = (COLOR_RANGES_BGR[color][0] + COLOR_RANGES_BGR[color][1]) // 2
+        distImage = calculate_euclidean_distance(bgrImage, np.full(bgrImage.shape, expectedColor, dtype=np.uint8))
         brickMask = cv2.inRange(
-            bgrImage, COLOR_RANGES_BGR[color][0], COLOR_RANGES_BGR[color][1])
+            distImage, np.array([0]), np.array([BGR_MAX_DISTANCE]))
 
     return brickMask
 
 
-def filter_bricks(bgrImage, filterMethod):
-    colorBrickImage = np.zeros(hsvImage.shape, dtype=np.uint8)
-
-    for member in list(BrickColor):
-        divBy = np.array([255], dtype=np.uint8)
-        colorBrickImage += cv2.bitwise_and(
-            bgrImage,
-            cv2.cvtColor(filter_brick_color(hsvImage, member, filterMethod), cv2.COLOR_GRAY2BGR))
-
-    return colorBrickImage
-
-
 def find_bricks_by_color(bgrImage, filterMethod):
-    displayImage = (bgrImage * 0.5).astype(np.uint8)
+    displayImage = (bgrImage * 0.1).astype(np.uint8)
+    atopBgrImage = (bgrImage * 0.3).astype(np.uint8)
     bricks = []
 
     for member in list(BrickColor):
@@ -74,8 +77,11 @@ def find_bricks_by_color(bgrImage, filterMethod):
         contours = cv2.findContours(
             filteredBrickImage, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
         color = (COLOR_RANGES_BGR[member][0] + COLOR_RANGES_BGR[member][1]) / 2
+        displayImage += cv2.bitwise_and(
+            atopBgrImage,
+            cv2.cvtColor(filteredBrickImage, cv2.COLOR_GRAY2BGR))
         cv2.drawContours(
-            displayImage, contours[0], -1, tuple(map(int, color)), 10)
+            displayImage, contours[0], -1, tuple(map(int, color)), 2)
         bricks.append((member, contours))
 
     return (bricks, displayImage)
