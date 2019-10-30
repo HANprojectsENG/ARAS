@@ -1,6 +1,7 @@
 import numpy as np
 from enum import Enum
 import analyze
+import util
 import coordinates
 import cv2
 import cv2.aruco as aruco
@@ -146,7 +147,7 @@ def recognition(data,cropped_image, matrix):
             thickness = 2
             start_point = (coord_x1,coord_y1)
             end_point = (coord_x2,coord_y2)
-            cv2.imshow("failed", cv2.rectangle(cropped_image, start_point, end_point, color, thickness) )
+            cv2.imshow("failed", util.fit_display(cv2.rectangle(cropped_image, start_point, end_point, color, thickness)))
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
             print("expected:" + str(data[3]) + "\ndetected:" + str(result))
             return False
