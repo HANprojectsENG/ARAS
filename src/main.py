@@ -12,7 +12,7 @@ import lsfparser
 import statemachine
 
 
-def main(FilePath):
+def main(filePath):
     loadedSequence = lsfparser.openFile(filePath)
     try:
         camera.init()

@@ -30,6 +30,7 @@ def get_image(imagePath):
         cutOutImage = util.cut_out_image(image, playfieldCorners, (1000, 1000))
         #util.draw_dot_matrix(cutOutImage, (48, 48), (4, 0), (992, 994))
     except:
+        print("Failed to find all Aruco markers. Found ids:\n" + str(arucoIds))
         # if aruco search-match-cut failed, just display main image
         cutOutImage = displayImage
 
