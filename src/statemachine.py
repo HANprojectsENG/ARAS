@@ -17,8 +17,9 @@ class ProcessState(Enum):
     PROJECT_STEP = 3
     WAIT = 4
     PROJECTOR_OFF = 5
-    CHECK_NEXT_STEP = 6
-    FINAL_STEP = 7
+    CAPTURE = 6
+    CHECK_NEXT_STEP = 7
+    FINAL_STEP = 8
 
 def processManager(loadedSequence, savePath, imagePath):
     #oh boi
@@ -83,6 +84,11 @@ def processManager(loadedSequence, savePath, imagePath):
 
             elif State == ProcessState.PROJECTOR_OFF:
                 # Turn off projector / display black image
+                NextState = ProcessState.CAPTURE
+
+            elif State == ProcessState.CAPTURE:
+                # Take picture
+                cropped_image = analyze.get_image(imagePath)
                 NextState = ProcessState.CHECK_CURRENT_STEP
 
             elif State == ProcessState.CHECK_NEXT_STEP:
