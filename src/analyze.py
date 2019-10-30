@@ -2,6 +2,7 @@ import numpy as np
 import util
 import recognise
 import projection
+import camera
 from enum import Enum
 import cv2
 import cv2.aruco as aruco
@@ -9,7 +10,10 @@ import cv2.aruco as aruco
 
 
 def get_image(imagePath):
-    image = util.white_balance(cv2.imread(imagePath))
+    if imagePath == True:
+        image = util.white_balance(camera.capture())
+    else:
+        image = util.white_balance(cv2.imread(imagePath))
     #displayImage = recognise.find_bricks_by_color(image)[1]
     # Try and find aruco codes
     arucoCorners, arucoIds = recognise.find_aruco_markers(
