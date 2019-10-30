@@ -12,7 +12,7 @@ import lsfparser
 import statemachine
 
 
-def main(filePath):
+def main(filePath, savePath):
     loadedSequence = lsfparser.openFile(filePath)
     camera.init()
     statemachine.processManager(loadedSequence, savePath, True)
@@ -43,4 +43,4 @@ args = parser.parse_args()
 if args.testImage:
     test_main(args.testImage, args.readFile, args.saveFile)
 else:
-    main(args.readFile)
+    main(args.readFile, args.saveFile)
