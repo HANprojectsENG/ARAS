@@ -124,16 +124,18 @@ def recognition(data,cropped_image, matrix):
     #print("Layer: " + str(data[0]) + " Step: " + str(data[1]) + " size: " + str(data[2]) + " color: " + str(data[3]) + " x1: " + str(data[4]) + " y1: " + str(data[5]) + "...")
     
     layer = data[0]
+    print(int(matrix[layer,0,1,0]) - int(matrix[layer,0,0,0]))
+    distance_between_nubs = int(matrix[layer,0,1,0]) - int(matrix[layer,0,0,0])
     for i in range(0,data[2]):
         pos_x = data[2 * i + 4]
         pos_y = data[2 * i + 5]
         #Get Top left pixel coordinates of lego stud
-        coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - 2)
-        coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - 8)
+        coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - distance_between_nubs / 3)
+        coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - distance_between_nubs / 3)
 
         #Get bottom right pixel coordinates of lego stud
-        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + 18)
-        coord_y2 = int(matrix[layer, pos_x, pos_y, 1] + 14)
+        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + distance_between_nubs / 3)
+        coord_y2 = int(matrix[layer, pos_x, pos_y, 1] + distance_between_nubs / 3)
 
         #Crop image to the pixel boundries
         cropped_stud = cropped_image[coord_y1:coord_y2, coord_x1:coord_x2]
@@ -150,6 +152,26 @@ def recognition(data,cropped_image, matrix):
             cv2.imshow("failed", util.fit_display(cv2.rectangle(cropped_image, start_point, end_point, color, thickness)))
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
             print("expected:" + str(data[3]) + "\ndetected:" + str(result))
+
+            color2 = (0,0,0)
+            #color2 = COLOR_RANGES[BrickColor(data[3])][0]
+            #color2 = (int(COLOR_RANGES[BrickColor(data[3])][0][0]),int(COLOR_RANGES[BrickColor(data[3])][0][1]),int(COLOR_RANGES[BrickColor(data[3])][0][2]))
+            #print(int(COLOR_RANGES[BrickColor(data[3])][0][0]))
+            #print(int(COLOR_RANGES[BrickColor(data[3])][0][1]))
+            #print(int(COLOR_RANGES[BrickColor(data[3])][0][2]))
+
+            #Get Top left pixel coordinates of lego stud
+            coord2_x1 = int(matrix[layer, data[4], data[5], 0] - 2)
+            coord2_y1 = int(matrix[layer, data[4], data[5], 1] - 8)
+
+            #Get bottom right pixel coordinates of lego stud
+            coord2_x2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 0] + 18)
+            coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + 14)
+
+            start2 = (coord2_x1,coord2_y1)
+            end2 = (coord2_x2,coord2_y2)
+
+            cv2.imshow("next", util.fit_display(cv2.rectangle(cropped_image, start2, end2, color2, -1)))
             return False
     print("Layer:" + str(data[0]) + " Step:" + str(data[1]) + " Passed")
     return True
