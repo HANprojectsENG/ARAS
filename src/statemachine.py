@@ -2,7 +2,8 @@ import util
 import pathlib
 import time
 import recognise
-import traceback
+import coordinates
+import analyze
 import cv2
 import numpy as np
 from enum import Enum
@@ -27,6 +28,8 @@ def processManager(loadedSequence, savePath, imagePath):
     Step = 0
     currentStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     checkStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
+    cropped_image = analyze.get_image(imagePath)
+    matrix = coordinates.calculate_nub_coordinate_matrix((4,0),(992,994))
     try:
         while True:
             #check if loop should continue or not
@@ -60,12 +63,8 @@ def processManager(loadedSequence, savePath, imagePath):
                 NextState = ProcessState.CHECK_CURRENT_STEP
         
             elif State == ProcessState.CHECK_CURRENT_STEP:
-                #print("We are in currently in Layer: " + str(Layer) + " Step: " + str(Step))
-                # basic idea of last check, change bool to move steps or not
-                completed = recognise.recognition(loadedSequence[Layer][Step], imagePath)
-                #time.sleep(2)
-                #while cv2.waitKey(100) != ord("n"):
-                    #pass
+                # check recogntion of current step
+                completed = recognise.recognition(loadedSequence[Layer][Step], cropped_image, matrix)
                 if completed:
                     NextState = ProcessState.CHECK_NEXT_STEP
                 else:
@@ -77,6 +76,9 @@ def processManager(loadedSequence, savePath, imagePath):
         
             elif State == ProcessState.WAIT:
                 # wait for hand movement
+                # wait for key press until hand movement is working
+                while cv2.waitKey(100) != ord("n"):
+                    pass
                 NextState = ProcessState.PROJECTOR_OFF
 
             elif State == ProcessState.PROJECTOR_OFF:

@@ -118,11 +118,10 @@ def compare_color(avg_color, COLOR_MIN, COLOR_MAX):
             return False
     return True
 
-
-def crop_image(image, data, destination_pos, destination_size):
-    #Create matrix 
-    matrix = coordinates.calculate_nub_coordinate_matrix(
-        destination_pos, destination_size)
+def recognition(data,cropped_image, matrix):
+    #layer. step. legosize(in nobs). color. posx1. posy1. posxn. posyn
+    #print("Layer: " + str(data[0]) + " Step: " + str(data[1]) + " size: " + str(data[2]) + " color: " + str(data[3]) + " x1: " + str(data[4]) + " y1: " + str(data[5]) + "...")
+    
     layer = data[0]
     for i in range(0,data[2]):
         pos_x = data[2 * i + 4]
@@ -132,28 +131,20 @@ def crop_image(image, data, destination_pos, destination_size):
         coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - 4)
 
         #Get bottom right pixel coordinates of lego stud
-        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + 14)
+        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + 11)
         coord_y2 = int(matrix[layer, pos_x, pos_y, 1] + 14)
 
         #Crop image to the pixel boundries
-        crop_img = image[coord_y1:coord_y2, coord_x1:coord_x2]
+        cropped_stud = cropped_image[coord_y1:coord_y2, coord_x1:coord_x2]
 
         #Get resulting color of cropped stud
-        result = check_color(crop_img)
+        result = check_color(cropped_stud)
 
         #Compare result with expected color
         if (result != data[3]):
-            cv2.imshow("failed", crop_img)
+            cv2.imshow("failed", cropped_stud)
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
+            print("detected:" + str(result))
             return False
     print("Layer:" + str(data[0]) + " Step:" + str(data[1]) + " Passed")
     return True
-
-
-def recognition(data,imagePath):
-    image = analyze.get_image(imagePath)
-    #layer. step. legosize(in nobs). color. posx1. posy1. posxn. posyn
-    print("Layer: " + str(data[0]) + " Step: " + str(data[1]) + " size: " + str(data[2]) + " color: " + str(data[3]) + " x1: " + str(data[4]) + " y1: " + str(data[5]) + "...")
-    
-    #crop image to the size of one lego brick from top left to bottom right stud               
-    return crop_image(image,data,(4,0),(992,994))
