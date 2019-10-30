@@ -29,6 +29,8 @@ def test_main(imagePath, filePath, savePath):
         pass
 
 def calibrate(imagePath):
+    if imagePath == True:
+        camera.init()
     cropped_image = analyze.get_image(imagePath)
     util.draw_dot_matrix(cropped_image, constants.BASEPLATE_SIZE, constants.BASEPLATE_CUTOUT_POS, constants.BASEPLATE_CUTOUT_SIZE)
     cv2.imshow("calibration", util.fit_display(cropped_image))

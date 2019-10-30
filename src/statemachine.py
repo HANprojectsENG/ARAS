@@ -3,11 +3,12 @@ import pathlib
 import time
 import recognise
 import coordinates
+import traceback
 import analyze
 import cv2
 import numpy as np
 from enum import Enum
-from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER, SAVE_FILE_READ_ERROR, CHECK_NEXT_STEP_COORDINATES_ERROR
+from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER, SAVE_FILE_READ_ERROR, CHECK_NEXT_STEP_COORDINATES_ERROR, BASEPLATE_CUTOUT_POS, BASEPLATE_CUTOUT_SIZE
 
 
 class ProcessState(Enum):
@@ -30,7 +31,7 @@ def processManager(loadedSequence, savePath, imagePath):
     currentStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     checkStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     cropped_image = analyze.get_image(imagePath)
-    matrix = coordinates.calculate_nub_coordinate_matrix(constants.BASEPLATE_CUTOUT_POS, constants.BASEPLATE_CUTOUT_SIZE)
+    matrix = coordinates.calculate_nub_coordinate_matrix(BASEPLATE_CUTOUT_POS, BASEPLATE_CUTOUT_SIZE)
     try:
         while True:
             #check if loop should continue or not
