@@ -127,7 +127,7 @@ def recognition(data,cropped_image, matrix):
         pos_x = data[2 * i + 4]
         pos_y = data[2 * i + 5]
         #Get Top left pixel coordinates of lego stud
-        coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - 5)
+        coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - 2)
         coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - 4)
 
         #Get bottom right pixel coordinates of lego stud
