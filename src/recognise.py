@@ -70,12 +70,23 @@ def find_bricks_by_color(bgrImage):
     return (bricks, cv2.cvtColor(displayImage, cv2.COLOR_HSV2BGR))
 
 
-def find_aruco_markers(grayImage):
+def find_aruco_markers(grayImage, expectedCorners):
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_100)
     parameters = aruco.DetectorParameters_create()
-    corners, ids, rejectedImgPoints = aruco.detectMarkers(
-        grayImage, aruco_dict, parameters=parameters)
-    return (corners, ids, rejectedImgPoints)
+    allIds = []
+    allCorners = []
+    for i in range(1, 255, 10):
+        corners, ids, rejectedImgPoints = aruco.detectMarkers(
+            cv2.inRange(grayImage, i, 255), aruco_dict, parameters=parameters)
+        if ids is not None:
+            for idx, mid in np.ndenumerate(ids):
+                if int(mid) not in allIds:
+                    allIds.append(np.array([mid]))
+                    allCorners.append(corners[int(idx[0])])
+
+            if len(allIds) == expectedCorners:
+                return (allCorners, np.array(allIds, dtype=np.uint32))
+    raise ValueError("Expected " + str(expectedCorners) + " markers, found " + str(len(allIds)))
 
 
 def aruco_to_playfield_corners(corners, ids):
@@ -85,12 +96,6 @@ def aruco_to_playfield_corners(corners, ids):
         playfieldCorners[MARKER_IDS.index(int(ids[idx]))] = tuple(
             map(int, markerCorners[0][MARKER_CORNER_IDX[int(ids[idx])]]))
 
-    return playfieldCorners
-
-
-def get_playfield_corners_by_aruco(grayImage):
-    corners, ids, rejectedImgPoints = find_aruco_markers(grayImage)
-    playfieldCorners = aruco_to_playfield_corners(corners, ids)
     return playfieldCorners
 
 

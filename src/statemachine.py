@@ -2,6 +2,7 @@ import util
 import pathlib
 import time
 import recognise
+import traceback
 import cv2
 import numpy as np
 from enum import Enum
@@ -128,7 +129,7 @@ def processManager(loadedSequence, savePath, imagePath):
 
     except Exception as e:
         print ("Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
-        print(e)
+        traceback.print_exc()
 
 def LoopChecker():
   CheckedArucoisFineDontWorryAboutIt = True
