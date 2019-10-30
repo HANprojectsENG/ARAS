@@ -30,7 +30,7 @@ def processManager(loadedSequence, savePath, imagePath):
     currentStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     checkStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     cropped_image = analyze.get_image(imagePath)
-    matrix = coordinates.calculate_nub_coordinate_matrix((4,0),(992,994))
+    matrix = coordinates.calculate_nub_coordinate_matrix(constants.BASEPLATE_CUTOUT_POS, constants.BASEPLATE_CUTOUT_SIZE)
     try:
         while True:
             #check if loop should continue or not
