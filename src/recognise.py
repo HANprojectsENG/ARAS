@@ -1,6 +1,7 @@
 import numpy as np
 from enum import Enum
 import analyze
+import util
 import coordinates
 import cv2
 import cv2.aruco as aruco
@@ -16,10 +17,10 @@ class BrickColor(Enum):
 
 COLOR_RANGES = {
     BrickColor.ORANGE: (np.array([0, 128, 60]), np.array([10, 255, 255])),
-    BrickColor.GREEN: (np.array([70, 192, 20]), np.array([90, 255, 128])),
+    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128])), #Changed lower red value
     BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 192, 255])),
     BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255])),
-    BrickColor.RED: (np.array([160, 162, 96]), np.array([180, 255, 255]))
+    BrickColor.RED: (np.array([155, 162, 96]), np.array([180, 255, 255])) #Changed lower red value
 }
 
 MARKER_CORNER_IDX = {
@@ -128,10 +129,10 @@ def recognition(data,cropped_image, matrix):
         pos_y = data[2 * i + 5]
         #Get Top left pixel coordinates of lego stud
         coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - 2)
-        coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - 4)
+        coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - 8)
 
         #Get bottom right pixel coordinates of lego stud
-        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + 11)
+        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + 18)
         coord_y2 = int(matrix[layer, pos_x, pos_y, 1] + 14)
 
         #Crop image to the pixel boundries
@@ -142,9 +143,13 @@ def recognition(data,cropped_image, matrix):
 
         #Compare result with expected color
         if (result != data[3]):
-            cv2.imshow("failed", cropped_stud)
+            color = (0,0,0)
+            thickness = 2
+            start_point = (coord_x1,coord_y1)
+            end_point = (coord_x2,coord_y2)
+            cv2.imshow("failed", util.fit_display(cv2.rectangle(cropped_image, start_point, end_point, color, thickness)))
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
-            print("detected:" + str(result))
+            print("expected:" + str(data[3]) + "\ndetected:" + str(result))
             return False
     print("Layer:" + str(data[0]) + " Step:" + str(data[1]) + " Passed")
     return True
