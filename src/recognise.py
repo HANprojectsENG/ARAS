@@ -106,6 +106,7 @@ def check_color(bgrImage):
     avg_color_per_row = np.average(hsv, axis=0)
     avg_color = np.average(avg_color_per_row, axis=0)
     int_avg_color = np.array(avg_color, dtype=np.uint8)
+    print("avg_color:" + str(int_avg_color))
     for member in list(BrickColor):
         if compare_color(int_avg_color, COLOR_RANGES[member][0], COLOR_RANGES[member][1]):
             return(member.value)
