@@ -20,7 +20,7 @@ class FilterMethod(Enum):
 COLOR_RANGES_HSV = {
     BrickColor.ORANGE: (np.array([0, 128, 60]), np.array([10, 255, 255])),
     BrickColor.GREEN: (np.array([70, 192, 20]), np.array([90, 255, 128])),
-    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 192, 255])),
+    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([45, 222, 255])),
     BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255])),
     BrickColor.RED: (np.array([160, 162, 96]), np.array([180, 255, 255]))
 }
@@ -28,14 +28,14 @@ COLOR_RANGES_HSV = {
 HSV_MAX_DISTANCE = 50
 
 COLOR_RANGES_BGR = {
-    BrickColor.ORANGE: (np.array([0, 30, 60]), np.array([30, 85, 255])),
+    BrickColor.ORANGE: (np.array([0, 50, 60]), np.array([40, 95, 255])),
     BrickColor.GREEN: (np.array([10, 20, 0]), np.array([128, 128, 5])),
-    BrickColor.YELLOW: (np.array([63, 117, 148]), np.array([85, 255, 223])),
+    BrickColor.YELLOW: (np.array([33, 117, 148]), np.array([85, 255, 223])),
     BrickColor.BLUE: (np.array([128, 0, 0]), np.array([255, 96, 32])),
     BrickColor.RED: (np.array([0, 0, 96]), np.array([76, 35, 255]))
 }
 
-BGR_MAX_DISTANCE = 30
+BGR_MAX_DISTANCE = 35
 
 def calculate_euclidean_distance(image1, image2):
     absdiffImage = cv2.absdiff(image1, image2)
