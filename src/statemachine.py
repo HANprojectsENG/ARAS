@@ -5,10 +5,13 @@ import recognise
 import coordinates
 import traceback
 import analyze
+import locator
 import cv2
+import threading
 import numpy as np
 from enum import Enum
 from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER, SAVE_FILE_READ_ERROR, CHECK_NEXT_STEP_COORDINATES_ERROR, BASEPLATE_CUTOUT_POS, BASEPLATE_CUTOUT_SIZE
+stop_threads = False
 
 
 class ProcessState(Enum):
@@ -32,11 +35,14 @@ def processManager(loadedSequence, savePath, imagePath):
     checkStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     cropped_image = analyze.get_image(imagePath)
     matrix = coordinates.calculate_nub_coordinate_matrix(BASEPLATE_CUTOUT_POS, BASEPLATE_CUTOUT_SIZE)
+    # start location checking thread
+    global stop_threads
+    stop_threads = False
+    thread1 = threading.Thread(target=locator.checkLocation, args=(imagePath,), daemon=True)
+    thread1.start()
+
     try:
-        while True:
-            #check if loop should continue or not
-            if LoopChecker() == False:
-                break
+        while locator.thread_running:
             State = NextState
             # Initial state, only here once, at the beginning
             if State == ProcessState.INIT:
@@ -79,9 +85,10 @@ def processManager(loadedSequence, savePath, imagePath):
             elif State == ProcessState.WAIT:
                 # wait for hand movement
                 # wait for key press until hand movement is working
-                while cv2.waitKey(100) != ord("n"):
-                    pass
-                NextState = ProcessState.PROJECTOR_OFF
+                if cv2.waitKey(100) == ord("n"):
+                    NextState = ProcessState.PROJECTOR_OFF
+                else:
+                    NextState = ProcessState.WAIT
 
             elif State == ProcessState.PROJECTOR_OFF:
                 # Turn off projector / display black image
@@ -134,12 +141,27 @@ def processManager(loadedSequence, savePath, imagePath):
                 with open(savePath, 'w') as file:
                     file.write('')
                 print("You reached the end :)")
-                break
+                print("Process Manager stopped")
+                stop_threads = True
+                thread1.join() 
+                return 0
+
+        print("Process Manager stopped with an error")
+        stop_threads = True
+        thread1.join() 
+        if locator.thread_running:
+            return -1
+        else:
+            return 1
 
     except Exception as e:
         print ("Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
         traceback.print_exc()
+        stop_threads = True
+        thread1.join() 
+        return -1
 
-def LoopChecker():
-  CheckedArucoisFineDontWorryAboutIt = True
-  return CheckedArucoisFineDontWorryAboutIt
+# Return explenations: 
+# return = -1: error occured 
+# return = 0: we finished the sequence
+# return = 1: we exited because because something moved

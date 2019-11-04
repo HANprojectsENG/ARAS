@@ -24,9 +24,19 @@ def main(filePath, savePath):
 def test_main(imagePath, filePath, savePath):
     # Load files
     loadedSequence = lsfparser.openFile(filePath)
-    statemachine.processManager(loadedSequence, savePath, imagePath)
-    while cv2.waitKey(100) != ord("q"):
-        pass
+    status = statemachine.processManager(loadedSequence, savePath, imagePath)
+    if status == 0:
+        print("bye!")
+        return 0
+    elif status == 1:
+        print("STOP MOVING!! press r to start again")
+        while cv2.waitKey(100) != ord("r"):
+            pass
+        # this is horrible and has to be done in a different way
+        test_main(args.testImage, args.readFile, args.saveFile)
+    else:
+        print("Oh no :/")
+        return -1
 
 def calibrate(imagePath):
     if imagePath == True:

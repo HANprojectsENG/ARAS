@@ -45,4 +45,7 @@ CAPTURE_RESOLUTION = (1640, 1232)
 BASEPLATE_CUTOUT_POS = (18, 29)
 BASEPLATE_CUTOUT_SIZE = (978, 972)
 
+# Max pixel margin for the background process of looking if the markers have moved
+BOARD_LOCATION_MARGIN = 2
+
 #############################################################
