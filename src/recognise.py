@@ -152,7 +152,7 @@ def recognition(data,cropped_image, matrix):
             end_point = (coord_x2,coord_y2)
             cv2.imshow("failed", util.fit_display(cv2.rectangle(cropped_image, start_point, end_point, color, thickness)))
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
-            print("expected:" + str(data[3]) + "\ndetected:" + str(result))
+            print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str([BrickColor(result)]))
 
             color2 = (0,0,0)
             #color2 = COLOR_RANGES[BrickColor(data[3])][0]
