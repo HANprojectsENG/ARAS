@@ -87,7 +87,7 @@ def find_aruco_markers(grayImage, expectedCorners):
 
             if len(allIds) == expectedCorners:
                 return (allCorners, np.array(allIds, dtype=np.uint32))
-    raise ValueError("Expected " + str(expectedCorners) + " markers, found " + str(len(allIds)))
+    return (allCorners, np.array(allIds, dtype=np.uint32))
 
 
 def aruco_to_playfield_corners(corners, ids):
