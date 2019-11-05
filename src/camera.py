@@ -12,7 +12,7 @@ cameraDevice = None
 def init():
     global cameraDevice
     # initialize the camera and grab a reference to the raw camera capture
-    captureResolution = (1640, 1232)
+    captureResolution = (1648, 1232)
     cameraDevice = PiCamera()
     cameraDevice.resolution = CAPTURE_RESOLUTION
     cameraDevice.framerate = 15

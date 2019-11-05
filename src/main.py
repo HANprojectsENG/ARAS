@@ -16,9 +16,19 @@ import constants
 def main(filePath, savePath):
     loadedSequence = lsfparser.openFile(filePath)
     camera.init()
-    statemachine.processManager(loadedSequence, savePath, True)
-    while cv2.waitKey(100) != ord("q"):
-        pass
+    status = statemachine.processManager(loadedSequence, savePath, True)
+    if status == 0:
+        print("bye!")
+        return 0
+    elif status == 1:
+        print("STOP MOVING!! press r to start again")
+        while cv2.waitKey(100) != ord("r"):
+            pass
+        # this is horrible and has to be done in a different way
+        main(args.readFile, args.saveFile)
+    else:
+        print("Oh no :/")
+        return -1
 
 
 def test_main(imagePath, filePath, savePath):
