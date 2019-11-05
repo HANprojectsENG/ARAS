@@ -110,6 +110,9 @@ def check_color(bgrImage):
     for member in list(BrickColor):
         if compare_color(int_avg_color, COLOR_RANGES[member][0], COLOR_RANGES[member][1]):
             return(member.value)
+        if member.value == 21: #Special case for red brick. Wrapping around HSV value
+            if compare_color(int_avg_color, [0, 162, 96], [5, 255, 255]): 
+                return(member.value)
     return(0)
 
 
