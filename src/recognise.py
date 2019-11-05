@@ -17,10 +17,10 @@ class BrickColor(Enum):
 
 COLOR_RANGES = {
     BrickColor.ORANGE: (np.array([0, 128, 60]), np.array([10, 255, 255])),
-    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128])), #Changed lower h value
-    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 200, 255])), #changed higher s value
+    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128])), #Changed lower red value
+    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 192, 255])),
     BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255])),
-    BrickColor.RED: (np.array([140, 162, 96]), np.array([180, 255, 255])) #Changed lower h value
+    BrickColor.RED: (np.array([155, 162, 96]), np.array([180, 255, 255])) #Changed lower red value
 }
 
 MARKER_CORNER_IDX = {
@@ -131,12 +131,12 @@ def recognition(data,cropped_image, matrix):
         pos_x = data[2 * i + 4]
         pos_y = data[2 * i + 5]
         #Get Top left pixel coordinates of lego stud
-        coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - distance_between_nubs / 4)
-        coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - distance_between_nubs / 4)
+        coord_x1 = int(matrix[layer, pos_x, pos_y, 0] - distance_between_nubs / 3)
+        coord_y1 = int(matrix[layer, pos_x, pos_y, 1] - distance_between_nubs / 3)
 
         #Get bottom right pixel coordinates of lego stud
-        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + distance_between_nubs / 4)
-        coord_y2 = int(matrix[layer, pos_x, pos_y, 1] + distance_between_nubs / 4)
+        coord_x2 = int(matrix[layer, pos_x, pos_y, 0] + distance_between_nubs / 3)
+        coord_y2 = int(matrix[layer, pos_x, pos_y, 1] + distance_between_nubs / 3)
 
         #Crop image to the pixel boundries
         cropped_stud = cropped_image[coord_y1:coord_y2, coord_x1:coord_x2]
@@ -155,14 +155,19 @@ def recognition(data,cropped_image, matrix):
             print("expected:" + str(data[3]) + "\ndetected:" + str(result))
 
             color2 = (0,0,0)
+            #color2 = COLOR_RANGES[BrickColor(data[3])][0]
+            #color2 = (int(COLOR_RANGES[BrickColor(data[3])][0][0]),int(COLOR_RANGES[BrickColor(data[3])][0][1]),int(COLOR_RANGES[BrickColor(data[3])][0][2]))
+            #print(int(COLOR_RANGES[BrickColor(data[3])][0][0]))
+            #print(int(COLOR_RANGES[BrickColor(data[3])][0][1]))
+            #print(int(COLOR_RANGES[BrickColor(data[3])][0][2]))
 
             #Get Top left pixel coordinates of lego stud
-            coord2_x1 = int(matrix[layer, data[4], data[5], 0] - distance_between_nubs / 2)
-            coord2_y1 = int(matrix[layer, data[4], data[5], 1] - distance_between_nubs / 2)
+            coord2_x1 = int(matrix[layer, data[4], data[5], 0] - 2)
+            coord2_y1 = int(matrix[layer, data[4], data[5], 1] - 8)
 
             #Get bottom right pixel coordinates of lego stud
-            coord2_x2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 0] + distance_between_nubs / 2)
-            coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + distance_between_nubs / 2)
+            coord2_x2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 0] + 18)
+            coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + 14)
 
             start2 = (coord2_x1,coord2_y1)
             end2 = (coord2_x2,coord2_y2)
