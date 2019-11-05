@@ -154,7 +154,7 @@ def recognition(data,cropped_image, matrix):
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
             if (result == 0):
                 print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str("unknown"))
-            else 
+            else: 
                 print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str([BrickColor(result)]))
 
             color2 = (0,0,0)
