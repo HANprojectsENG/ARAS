@@ -1,4 +1,5 @@
 import time
+import threading
 from constants import CAPTURE_RESOLUTION
 try:
     from picamera.array import PiRGBArray
@@ -7,6 +8,8 @@ except ImportError:
     print("Failed to load PiCamera. Expect errors when trying to read from the camera.")
 
 cameraDevice = None
+camera_thread_stop = True
+currentImageCapture = None
 
 
 def init():
@@ -31,12 +34,31 @@ def init():
     cameraDevice.awb_gains = g
 
 
-def capture():
+def VideoStream_thread():
+    global currentImageCapture
+    global cameraDevice
     rawCapture = PiRGBArray(cameraDevice, size=CAPTURE_RESOLUTION)
-    cameraDevice.capture(rawCapture, format="bgr", use_video_port=True)
+    stream = cameraDevice.capture_continuous(rawCapture, format="bgr", use_video_port=True)
+    for f in stream:
+        frame = f.array
+        currentImageCapture = frame
+        rawCapture.truncate(0)
+        if camera_thread_stop:
+            stream.close()
+            rawCapture.close()
+            cameraDevice.close()
+            return
 
-    # grab the raw NumPy array representing the image, then initialize the timestamp
-    # and occupied/unoccupied text
-    image = rawCapture.array
+def capture():
+    return currentImageCapture
 
-    return image
+def stop_VideoStream_thread():
+    global camera_thread_stop
+    camera_thread_stop = True
+
+def start_VideoSream_thread(valid):
+    global camera_thread_stop
+    if valid == True and camera_thread_stop == True:
+        camera_thread_stop = False
+        thread2 = threading.Thread(target=VideoStream_thread, daemon=True)
+        thread2.start()

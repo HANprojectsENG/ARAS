@@ -8,6 +8,7 @@ import analyze
 import locator
 import cv2
 import threading
+import camera
 import numpy as np
 from enum import Enum
 from constants import MAX_DATA_PER_LEGO, MAX_LAYERS, MAX_LEGO_PER_LAYER, SAVE_FILE_READ_ERROR, CHECK_NEXT_STEP_COORDINATES_ERROR, BASEPLATE_CUTOUT_POS, BASEPLATE_CUTOUT_SIZE
@@ -33,6 +34,9 @@ def processManager(loadedSequence, savePath, imagePath):
     Step = 0
     currentStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
     checkStep = np.zeros((MAX_DATA_PER_LEGO), dtype=np.uint16)
+    camera.start_VideoSream_thread(imagePath)
+    # let the camera stream startup
+    time.sleep(2)
     cropped_image = analyze.get_image(imagePath)
     matrix = coordinates.calculate_nub_coordinate_matrix(BASEPLATE_CUTOUT_POS, BASEPLATE_CUTOUT_SIZE)
     # start location checking thread
@@ -150,6 +154,7 @@ def processManager(loadedSequence, savePath, imagePath):
         stop_threads = True
         thread1.join() 
         if locator.thread_running:
+            camera.stop_VideoStream_thread()
             return -1
         else:
             return 1
@@ -158,6 +163,7 @@ def processManager(loadedSequence, savePath, imagePath):
         print ("Error while in State: " + str(State) + " NextState: " + str(NextState) + " Step: " + str(Step) + " Layer: " + str(Layer))
         traceback.print_exc()
         stop_threads = True
+        camera.stop_VideoStream_thread()
         thread1.join() 
         return -1
 

@@ -39,7 +39,7 @@ MAX_DISPLAY_WIDTH = 960
 MAX_DISPLAY_HEIGHT = 960
 
 # Camera capture resolution
-CAPTURE_RESOLUTION = (1640, 1232)
+CAPTURE_RESOLUTION = (1648, 1232)
 
 # After cutting out an image based on markers, there still might be some misalignment.
 BASEPLATE_CUTOUT_POS = (18, 29)

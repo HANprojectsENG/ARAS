@@ -14,8 +14,10 @@ thread_running = True
 def checkLocation(imagePath):
     global thread_running
     oldCorners = []
+    thread_running = True
     while True:
         if statemachine.stop_threads: 
+            thread_running = False
             break
       
         if imagePath == True:
@@ -23,8 +25,11 @@ def checkLocation(imagePath):
         else:
             image = cv2.resize(cv2.imread(imagePath),None,fx=0.25,fy=0.25)
 
-        arucoCorners, arucoIds = recognise.find_aruco_markers(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), 4)
-        corners = recognise.aruco_to_playfield_corners(arucoCorners, arucoIds)
+        try:
+            arucoCorners, arucoIds = recognise.find_aruco_markers(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), 4)
+            corners = recognise.aruco_to_playfield_corners(arucoCorners, arucoIds)
+        except:
+            corners = 0
 
         if len(corners) < 4 or len(corners) > 4:
             # ignore check if wrong amount of corners found
