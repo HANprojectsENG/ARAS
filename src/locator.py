@@ -13,7 +13,9 @@ thread_running = True
 
 def checkLocation(imagePath):
     global thread_running
-    oldCorners = []
+    playfieldCornersOLD = []
+    arucoIdsOLD = []
+    arucoCornersOLD = []
     thread_running = True
     while True:
         if statemachine.stop_threads: 
@@ -25,18 +27,26 @@ def checkLocation(imagePath):
         else:
             image = cv2.resize(cv2.imread(imagePath),None,fx=0.25,fy=0.25)
 
-        try:
-            arucoCorners, arucoIds = recognise.find_aruco_markers(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), 4)
-            corners = recognise.aruco_to_playfield_corners(arucoCorners, arucoIds)
-        except:
-            corners = 0
+        arucoCorners, arucoIds = recognise.find_aruco_markers(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), 4)
+        if len(arucoCorners) != 4:
+            arucoIds = arucoIdsOLD
+            arucoCorners = arucoCornersOLD
+        else:
+            arucoIdsOLD = arucoIds
+            arucoCornersOLD = arucoCorners
 
-        if len(corners) < 4 or len(corners) > 4:
+        if len(arucoCorners) != 4 or len(arucoCornersOLD) != 4:
+            raise ValueError("Expected 4 markers, found " + str(len(arucoCorners)))
+
+
+        playfieldCorners = recognise.aruco_to_playfield_corners(arucoCorners, arucoIds)
+
+        if len(playfieldCorners) < 4 or len(playfieldCorners) > 4:
             # ignore check if wrong amount of corners found
             thread_running = True
             time.sleep(0.6)
         else:
-            thread_running, oldCorners = checkCornerLocation(corners, oldCorners)
+            thread_running, playfieldCornersOLD = checkCornerLocation(playfieldCorners, playfieldCornersOLD)
             time.sleep(0.6)
       
   

@@ -87,7 +87,7 @@ def find_aruco_markers(grayImage, expectedCorners):
 
             if len(allIds) == expectedCorners:
                 return (allCorners, np.array(allIds, dtype=np.uint32))
-    raise ValueError("Expected " + str(expectedCorners) + " markers, found " + str(len(allIds)))
+    return (allCorners, np.array(allIds, dtype=np.uint32))
 
 
 def aruco_to_playfield_corners(corners, ids):
@@ -152,7 +152,10 @@ def recognition(data,cropped_image, matrix):
             end_point = (coord_x2,coord_y2)
             cv2.imshow("failed", util.fit_display(cv2.rectangle(cropped_image, start_point, end_point, color, thickness)))
             print("pos:" + str(data[2 * i + 4]) + "," + str(data[2 * i + 5]) + " failed")
-            print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str([BrickColor(result)]))
+            if (result == 0):
+                print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str("unknown"))
+            else 
+                print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str([BrickColor(result)]))
 
             color2 = (0,0,0)
             #color2 = COLOR_RANGES[BrickColor(data[3])][0]
