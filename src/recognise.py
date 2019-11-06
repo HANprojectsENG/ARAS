@@ -173,7 +173,7 @@ def recognition(data,cropped_image, matrix):
             start2 = (coord2_x1,coord2_y1)
             end2 = (coord2_x2,coord2_y2)
 
-            cv2.imshow("next", util.fit_display(cv2.rectangle(cropped_image, start2, end2, color2, 2)))
+            cv2.imshow("next", util.fit_display(cv2.rectangle(cropped_image, start2, end2, color2, 4)))
             return False
     print("Layer:" + str(data[0]) + " Step:" + str(data[1]) + " Passed")
     return True
