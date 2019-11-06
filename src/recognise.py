@@ -16,11 +16,11 @@ class BrickColor(Enum):
 
 
 COLOR_RANGES = {
-    BrickColor.ORANGE: (np.array([0, 128, 60]), np.array([10, 255, 255])),
-    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128])), #Changed lower h value
-    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 200, 255])), #changed higher s value
-    BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255])),
-    BrickColor.RED: (np.array([140, 162, 96]), np.array([180, 255, 255])) #Changed lower h value
+    BrickColor.ORANGE: (np.array([5, 128, 60]), np.array([15, 255, 255]), np.array([0, 128, 255])),
+    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128]), np.array([0, 155, 0])), #Changed lower h value
+    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 200, 255]), np.array([51, 255, 255])), #changed higher s value
+    BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255]), np.array([255, 51, 51])),
+    BrickColor.RED: (np.array([140, 162, 96]), np.array([180, 255, 255]), np.array([00, 0, 200])) #Changed lower h value
 }
 
 MARKER_CORNER_IDX = {
@@ -160,20 +160,20 @@ def recognition(data,cropped_image, matrix):
             else: 
                 print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str([BrickColor(result)]))
 
-            color2 = (0,0,0)
+            color2 = (int(COLOR_RANGES[BrickColor(data[3])][2][0]),int(COLOR_RANGES[BrickColor(data[3])][2][1]),int(COLOR_RANGES[BrickColor(data[3])][2][2]))
 
             #Get Top left pixel coordinates of lego stud
             coord2_x1 = int(matrix[layer, data[4], data[5], 0] - distance_between_nubs / 2)
-            coord2_y1 = int(matrix[layer, data[4], data[5], 1] - distance_between_nubs / 2)
+            coord2_y1 = int(matrix[layer, data[4], data[5], 1] - distance_between_nubs / 2) + 10
 
             #Get bottom right pixel coordinates of lego stud
             coord2_x2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 0] + distance_between_nubs / 2)
-            coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + distance_between_nubs / 2)
+            coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + distance_between_nubs / 2) + 10
 
             start2 = (coord2_x1,coord2_y1)
             end2 = (coord2_x2,coord2_y2)
 
-            cv2.imshow("next", util.fit_display(cv2.rectangle(cropped_image, start2, end2, color2, -1)))
+            cv2.imshow("next", util.fit_display(cv2.rectangle(cropped_image, start2, end2, color2, 2)))
             return False
     print("Layer:" + str(data[0]) + " Step:" + str(data[1]) + " Passed")
     return True
