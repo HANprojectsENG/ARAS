@@ -42,7 +42,7 @@ MAX_DISPLAY_HEIGHT = 960
 CAPTURE_RESOLUTION = (1648, 1232)
 
 # After cutting out an image based on markers, there still might be some misalignment.
-BASEPLATE_CUTOUT_POS = (18, 29)
+BASEPLATE_CUTOUT_POS = (20, 40)
 BASEPLATE_CUTOUT_SIZE = (978, 972)
 
 # Max pixel margin for the background process of looking if the markers have moved

@@ -21,7 +21,7 @@ def init():
     cameraDevice.framerate = 15
     cameraDevice.iso = 100
     cameraDevice.meter_mode = "matrix"
-    cameraDevice.awb_mode = "fluorescent"
+    cameraDevice.awb_mode = "auto"
 
     # allow the camera to warmup
     time.sleep(2)

@@ -160,22 +160,6 @@ def recognition(data,cropped_image, matrix):
             else: 
                 print("expected:" + str([BrickColor(data[3])]) + "\ndetected:" + str([BrickColor(result)]))
 
-<<<<<<< HEAD
-            color2 = (0,0,0)
-            #color2 = COLOR_RANGES[BrickColor(data[3])][0]
-            #color2 = (int(COLOR_RANGES[BrickColor(data[3])][0][0]),int(COLOR_RANGES[BrickColor(data[3])][0][1]),int(COLOR_RANGES[BrickColor(data[3])][0][2]))
-            #print(int(COLOR_RANGES[BrickColor(data[3])][0][0]))
-            #print(int(COLOR_RANGES[BrickColor(data[3])][0][1]))
-            #print(int(COLOR_RANGES[BrickColor(data[3])][0][2]))
-
-            #Get Top left pixel coordinates of lego stud
-            coord2_x1 = int(matrix[layer, data[4], data[5], 0] - 2)
-            coord2_y1 = int(matrix[layer, data[4], data[5], 1] - 8)
-
-            #Get bottom right pixel coordinates of lego stud
-            coord2_x2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 0] + 18)
-            coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + 14)
-=======
             color2 = (int(COLOR_RANGES[BrickColor(data[3])][2][0]),int(COLOR_RANGES[BrickColor(data[3])][2][1]),int(COLOR_RANGES[BrickColor(data[3])][2][2]))
 
             #Get Top left pixel coordinates of lego stud
@@ -185,7 +169,6 @@ def recognition(data,cropped_image, matrix):
             #Get bottom right pixel coordinates of lego stud
             coord2_x2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 0] + distance_between_nubs / 2)
             coord2_y2 = int(matrix[layer, data[2 * data[2] + 2], data[2 * data[2] + 3], 1] + distance_between_nubs / 2) + 10
->>>>>>> ff3c7398a077d3c485763518c1dc48ca9f3b5b1e
 
             start2 = (coord2_x1,coord2_y1)
             end2 = (coord2_x2,coord2_y2)
