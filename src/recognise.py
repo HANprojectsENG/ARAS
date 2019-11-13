@@ -16,11 +16,11 @@ class BrickColor(Enum):
 
 
 COLOR_RANGES = {
-    BrickColor.ORANGE: (np.array([5, 128, 60]), np.array([15, 255, 255]), np.array([0, 128, 255])),
-    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128]), np.array([0, 155, 0])), #Changed lower h value
-    BrickColor.YELLOW: (np.array([15, 108, 148]), np.array([35, 200, 255]), np.array([51, 255, 255])), #changed higher s value
+    BrickColor.ORANGE: (np.array([8, 128, 60]), np.array([18, 255, 255]), np.array([0, 128, 255])),
+    BrickColor.GREEN: (np.array([64, 192, 20]), np.array([90, 255, 128]), np.array([0, 155, 0])), 
+    BrickColor.YELLOW: (np.array([18, 108, 148]), np.array([35, 200, 255]), np.array([51, 255, 255])), 
     BrickColor.BLUE: (np.array([100, 192, 128]), np.array([120, 255, 255]), np.array([255, 51, 51])),
-    BrickColor.RED: (np.array([140, 162, 96]), np.array([180, 255, 255]), np.array([00, 0, 200])) #Changed lower h value
+    BrickColor.RED: (np.array([140, 162, 96]), np.array([180, 255, 255]), np.array([0, 0, 200]))
 }
 
 MARKER_CORNER_IDX = {
