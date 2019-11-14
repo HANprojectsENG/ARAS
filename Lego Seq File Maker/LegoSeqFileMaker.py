@@ -1,6 +1,7 @@
 from appJar import gui
 import numpy as np
 import time
+import datetime
 import subprocess
 import sys
 import os
@@ -221,25 +222,29 @@ def nextLayer():
 
 
 def saveFile():
-    file = open("LegoSequenceFile.lsf","w+")
-    file.write("File generated with Lego Sec File Maker \n") 
-    layer = 0
-    for layer in range(0, MAX_LAYERS):
-        step = 0
-        if matrix[layer, step, 2] != 0:
-            file.write("This is Layer: " + str(layer) + "\n")
-            for step in range(0, MAX_LEGO_PER_LAYER):
-                if matrix[layer, step, 2] != 0:
-                    totals = 4 + matrix[layer, step, 2] * 2
-                    finalstring = ""
-                    for index in range(0, totals):
-                        if index == totals - 1:
-                            finalstring = finalstring + str(matrix[layer, step, index]) + "\n"
-                        else:
-                            finalstring = finalstring + str(matrix[layer, step, index]) + ", "
-                    file.write(finalstring) 
-
-    file.close() 
+    saveLocation = app.saveBox(title="Save lsf file", fileName="LegoSequenceFile", dirName=None, fileExt=".lsf", fileTypes=[('Lego Sequence File', '*.lsf')], asFile=None, parent=None)
+    if saveLocation == '':
+        return 0
+    else:
+        currentDate = datetime.datetime.now()
+        file = open(saveLocation,"w+")
+        file.write("File generated with Lego Sec File Maker at " + str(currentDate) + " \n") 
+        layer = 0
+        for layer in range(0, MAX_LAYERS):
+            step = 0
+            if matrix[layer, step, 2] != 0:
+                file.write("This is Layer: " + str(layer) + "\n")
+                for step in range(0, MAX_LEGO_PER_LAYER):
+                    if matrix[layer, step, 2] != 0:
+                        totals = 4 + matrix[layer, step, 2] * 2
+                        finalstring = ""
+                        for index in range(0, totals):
+                            if index == totals - 1:
+                                finalstring = finalstring + str(matrix[layer, step, index]) + "\n"
+                            else:
+                                finalstring = finalstring + str(matrix[layer, step, index]) + ", "
+                        file.write(finalstring) 
+        file.close() 
 
 
 
