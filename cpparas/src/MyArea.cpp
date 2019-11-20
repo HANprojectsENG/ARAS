@@ -1,4 +1,6 @@
 #include "MyArea.hpp"
+#include "ImageUtils.hpp"
+#include "operators.h"
 #include <cairomm/context.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
 #include <giomm/resource.h>
@@ -8,15 +10,10 @@
 const uint32_t width = 200;
 const uint32_t height = 200;
 
-MyArea::MyArea()
+MyArea::MyArea(image_t* image)
 {
     try {
-        // Allocate new buffer and fill with pattern.
-        uint8_t* data = (uint8_t*)malloc(width * height * 3);
-        for (uint32_t i = 0; i < width * height * 3; i++) {
-            data[i] = i;
-        }
-        m_image = Gdk::Pixbuf::create_from_data(data, Gdk::Colorspace::COLORSPACE_RGB, false, 8, width, height, width * 3);
+        m_image = ImageUtils::imageToPixbuf(image);
     } catch (const Gio::ResourceError& ex) {
         std::cerr << "ResourceError: " << ex.what() << std::endl;
     } catch (const Gdk::PixbufError& ex) {

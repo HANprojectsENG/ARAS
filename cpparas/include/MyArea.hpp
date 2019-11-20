@@ -1,12 +1,13 @@
 #ifndef MYAREA_HPP
 #define MYAREA_HPP
 
+#include "operators.h"
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/drawingarea.h>
 
 class MyArea : public Gtk::DrawingArea {
 public:
-    MyArea();
+    MyArea(image_t* image);
     virtual ~MyArea();
 
 protected:

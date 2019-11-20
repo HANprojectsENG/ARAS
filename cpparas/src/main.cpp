@@ -8,7 +8,16 @@ int main(int argc, char* argv[])
     Gtk::Window window;
     window.set_default_size(200, 200);
 
-    MyArea area;
+    const int32_t IMAGE_COLS = 200;
+    const int32_t IMAGE_ROWS = 200;
+    image_t* image = newRGB888Image(IMAGE_COLS, IMAGE_ROWS);
+    for (int32_t j = 0; j < IMAGE_ROWS; j++) {
+        for (int32_t i = 0; i < IMAGE_COLS; i++) {
+            setRGB888Pixel(image, i, j, (rgb888_pixel_t) { .r = 255, .g = 0, .b = 0 });
+        }
+    }
+
+    MyArea area(image);
     window.add(area);
     area.show();
 
