@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+exe=$(which clang-format)
+
+if [ -n "$exe" ]
+then
+  IFS=$'\n'
+  for line in $(git status -s)
+  do
+    if [[ $line == A* || $line == M* ]]
+    then
+      if [[ $line == *.c || $line == *.cpp || $line == *.h || $line == *.hpp ]];
+      then
+        clang-format -i -style=file $(pwd)/${line:3}
+        git add $(pwd)/${line:3}
+      fi
+    fi
+  done
+else
+  echo "WARNING: clang-format not found in system"
+fi
