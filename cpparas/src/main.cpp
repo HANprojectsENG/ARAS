@@ -1,4 +1,4 @@
-#include "MyArea.hpp"
+#include "ImageArea.hpp"
 #include <gtkmm.h>
 
 int main(int argc, char* argv[])
@@ -17,7 +17,8 @@ int main(int argc, char* argv[])
         }
     }
 
-    MyArea area(image);
+    ImageArea area;
+    area.setImage(image);
     window.add(area);
     area.show();
 

@@ -1,14 +1,15 @@
-#ifndef MYAREA_HPP
-#define MYAREA_HPP
+#ifndef IMAGEAREA_HPP
+#define IMAGEAREA_HPP
 
 #include "operators.h"
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/drawingarea.h>
 
-class MyArea : public Gtk::DrawingArea {
+class ImageArea : public Gtk::DrawingArea {
 public:
-    MyArea(image_t* image);
-    virtual ~MyArea();
+    ImageArea();
+    virtual ~ImageArea();
+    void setImage(image_t* image);
 
 protected:
     //Override default signal handler:
@@ -17,4 +18,4 @@ protected:
     Glib::RefPtr<Gdk::Pixbuf> m_image;
 };
 
-#endif /* MYAREA_HPP */
+#endif /* IMAGEAREA_HPP */

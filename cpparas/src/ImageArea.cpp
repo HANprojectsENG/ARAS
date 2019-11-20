@@ -1,4 +1,4 @@
-#include "MyArea.hpp"
+#include "ImageArea.hpp"
 #include "ImageUtils.hpp"
 #include "operators.h"
 #include <cairomm/context.h>
@@ -10,8 +10,15 @@
 const uint32_t width = 200;
 const uint32_t height = 200;
 
-MyArea::MyArea(image_t* image)
+ImageArea::ImageArea()
 {
+}
+
+ImageArea::~ImageArea()
+{
+}
+
+void ImageArea::setImage(image_t* image) {
     try {
         m_image = ImageUtils::imageToPixbuf(image);
     } catch (const Gio::ResourceError& ex) {
@@ -19,17 +26,9 @@ MyArea::MyArea(image_t* image)
     } catch (const Gdk::PixbufError& ex) {
         std::cerr << "PixbufError: " << ex.what() << std::endl;
     }
-
-    // Show at least a quarter of the image.
-    if (m_image)
-        set_size_request(m_image->get_width() / 2, m_image->get_height() / 2);
 }
 
-MyArea::~MyArea()
-{
-}
-
-bool MyArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
     if (!m_image)
         return false;
