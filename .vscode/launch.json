@@ -9,7 +9,12 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "args":["--testImage",
+                "C:\\Users\\Nick\\OneDrive\\Documents\\School\\EVDProject\\EVD-ARAS-Project\\paras\\testimages\\demotest.jpg",
+                "--readFile",
+                "C:\\Users\\Nick\\OneDrive\\Documents\\School\\EVDProject\\EVD-ARAS-Project\\snippets\\setups\\building1\\LegoSequenceFile.lsf"]
+
         }
     ]
 }

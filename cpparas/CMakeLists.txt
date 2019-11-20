@@ -7,11 +7,15 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTKMM gtkmm-3.0)
 
 link_directories(${GTKMM_LIBRARY_DIRS})
-include_directories(${GTKMM_INCLUDE_DIRS} include)
+include_directories(${GTKMM_INCLUDE_DIRS} include evdk_operators)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c11")
 
-file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCES
+	"${PROJECT_SOURCE_DIR}/src/*.cpp"
+	"${PROJECT_SOURCE_DIR}/src/vision/*.c"
+	"${PROJECT_SOURCE_DIR}/evdk_operators/*.c")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES})
