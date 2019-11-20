@@ -1,15 +1,16 @@
-#include "test.hpp"
+#include "MyArea.hpp"
 #include <gtkmm.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-  auto app =
-    Gtk::Application::create(argc, argv,
-      "org.gtkmm.examples.base");
+    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-  Gtk::Window window;
-  window.set_default_size(200, 200);
+    Gtk::Window window;
+    window.set_default_size(200, 200);
 
-  return app->run(window);
+    MyArea area;
+    window.add(area);
+    area.show();
+
+    return app->run(window);
 }
-
