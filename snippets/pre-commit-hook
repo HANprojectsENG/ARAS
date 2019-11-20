@@ -9,7 +9,7 @@ then
   do
     if [[ $line == A* || $line == M* ]]
     then
-      if [[ $line == *.c || $line == *.cpp || $line == *.inc || $line == *.ino || $line == *.hpp || $line == .h$ ]];
+      if [[ $line == *.c || $line == *.cpp || $line == *.h || $line == *.hpp ]];
       then
         clang-format -i -style=file $(pwd)/${line:3}
         git add $(pwd)/${line:3}

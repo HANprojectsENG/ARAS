@@ -43,21 +43,13 @@
 // Function prototypes
 // ----------------------------------------------------------------------------
 
-void contrastStretch_rgb888( const image_t *src
-                           ,       image_t *dst
-                           , const rgb888_pixel_t bottom
-                           , const rgb888_pixel_t top
-                           );
+void contrastStretch_rgb888(const image_t* src, image_t* dst, const rgb888_pixel_t bottom, const rgb888_pixel_t top);
 
-void threshold_rgb888( const image_t *src
-                     ,       image_t *dst
-                     , const rgb888_pixel_t low
-                     , const rgb888_pixel_t high
-                     );
+void threshold_rgb888(const image_t* src, image_t* dst, const rgb888_pixel_t low, const rgb888_pixel_t high);
 
-void erase_rgb888( const image_t *img );
+void erase_rgb888(const image_t* img);
 
-void copy_rgb888( const image_t *src, image_t *dst );
+void copy_rgb888(const image_t* src, image_t* dst);
 
 #endif // _OPERATORS_RGB888_H_
 // ----------------------------------------------------------------------------

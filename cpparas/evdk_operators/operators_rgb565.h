@@ -43,21 +43,13 @@
 // Function prototypes
 // ----------------------------------------------------------------------------
 
-void contrastStretch_rgb565( const image_t *src
-                           ,       image_t *dst
-                           , const rgb565_pixel_t bottom
-                           , const rgb565_pixel_t top
-                           );
+void contrastStretch_rgb565(const image_t* src, image_t* dst, const rgb565_pixel_t bottom, const rgb565_pixel_t top);
 
-void threshold_rgb565( const image_t *src
-                     ,       image_t *dst
-                     , const rgb565_pixel_t low
-                     , const rgb565_pixel_t high
-                     );
+void threshold_rgb565(const image_t* src, image_t* dst, const rgb565_pixel_t low, const rgb565_pixel_t high);
 
-void erase_rgb565( const image_t *img );
+void erase_rgb565(const image_t* img);
 
-void copy_rgb565( const image_t *src, image_t *dst );
+void copy_rgb565(const image_t* src, image_t* dst);
 
 #endif // _OPERATORS_RGB565_H_
 // ----------------------------------------------------------------------------

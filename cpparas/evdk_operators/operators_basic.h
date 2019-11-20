@@ -43,132 +43,80 @@
 // Function prototypes
 // ----------------------------------------------------------------------------
 
-void contrastStretch_basic( const image_t *src
-                          ,       image_t *dst
-                          , const basic_pixel_t bottom
-                          , const basic_pixel_t top
-                          );
+void contrastStretch_basic(const image_t* src, image_t* dst, const basic_pixel_t bottom, const basic_pixel_t top);
 
-void contrastStretchFast_basic( const image_t *src
-                              ,       image_t *dst
-                              );
+void contrastStretchFast_basic(const image_t* src, image_t* dst);
 
 // ----------------------------------------------------------------------------
 // Rotation
 // ----------------------------------------------------------------------------
 
-void rotate180_basic( const image_t *img );
+void rotate180_basic(const image_t* img);
 
 // ----------------------------------------------------------------------------
 // Thresholding
 // ----------------------------------------------------------------------------
 
+void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high);
 
-void threshold_basic( const image_t *src
-                    ,       image_t *dst
-                    , const basic_pixel_t low
-                    , const basic_pixel_t high
-                    );
+void threshold2Means_basic(const image_t* src, image_t* dst, const eBrightness brightness);
 
-void threshold2Means_basic( const image_t *src
-                          ,       image_t *dst
-                          , const eBrightness brightness
-                          );
-
-void thresholdOtsu_basic( const image_t *src
-                        ,       image_t *dst
-                        , const eBrightness brightness
-                        );
+void thresholdOtsu_basic(const image_t* src, image_t* dst, const eBrightness brightness);
 
 // ----------------------------------------------------------------------------
 // Miscellaneous
 // ----------------------------------------------------------------------------
 
-void erase_basic( const image_t *img );
+void erase_basic(const image_t* img);
 
-void copy_basic( const image_t *src, image_t *dst );
+void copy_basic(const image_t* src, image_t* dst);
 
-void setSelectedToValue_basic( const image_t *src
-                             ,       image_t *dst
-                             , const basic_pixel_t selected
-                             , const basic_pixel_t value
-                             );
+void setSelectedToValue_basic(const image_t* src, image_t* dst, const basic_pixel_t selected, const basic_pixel_t value);
 
-uint32_t neighbourCount_basic( const image_t *img
-                             , const int32_t c
-                             , const int32_t r
-                             , const basic_pixel_t pixel
-                             , const eConnected connected
-                             );
+uint32_t neighbourCount_basic(const image_t* img, const int32_t c, const int32_t r, const basic_pixel_t pixel, const eConnected connected);
 
-void histogram_basic( const image_t *img, uint16_t *hist );
+void histogram_basic(const image_t* img, uint16_t* hist);
 
 // ----------------------------------------------------------------------------
 // Arithmetic
 // ----------------------------------------------------------------------------
 
-void add_basic( const image_t *src, image_t *dst );
+void add_basic(const image_t* src, image_t* dst);
 
-uint32_t sum_basic( const image_t *img );
+uint32_t sum_basic(const image_t* img);
 
-void multiply_basic( const image_t *src, image_t *dst );
+void multiply_basic(const image_t* src, image_t* dst);
 
-void invert_basic( const image_t *src, image_t *dst);
-
+void invert_basic(const image_t* src, image_t* dst);
 
 // ----------------------------------------------------------------------------
 // Filters
 // ----------------------------------------------------------------------------
 
-void nonlinearFilter_basic( const image_t *src
-                          ,       image_t *dst
-                          , const eFilterOperation fo
-                          , const uint8_t n
-                          );
+void nonlinearFilter_basic(const image_t* src, image_t* dst, const eFilterOperation fo, const uint8_t n);
 
 // ----------------------------------------------------------------------------
 // Binary
 // ----------------------------------------------------------------------------
 
-void removeBorderBlobs_basic( const image_t *src
-                            ,       image_t *dst
-                            , const eConnected connected
-                            );
+void removeBorderBlobs_basic(const image_t* src, image_t* dst, const eConnected connected);
 
-void fillHoles_basic( const image_t *src
-                    ,       image_t *dst
-                    , const eConnected connected
-                    );
+void fillHoles_basic(const image_t* src, image_t* dst, const eConnected connected);
 
-uint32_t labelBlobs_basic( const image_t *src
-                         ,       image_t *dst
-                         , const eConnected connected);
+uint32_t labelBlobs_basic(const image_t* src, image_t* dst, const eConnected connected);
 
-void binaryEdgeDetect_basic( const image_t *src
-                           ,       image_t *dst
-                           , const eConnected connected
-                           );
+void binaryEdgeDetect_basic(const image_t* src, image_t* dst, const eConnected connected);
 
 // ----------------------------------------------------------------------------
 // Analysis
 // ----------------------------------------------------------------------------
 
-void blobAnalyse_basic( const image_t *img
-                      , const uint8_t blobnr
-                      ,       blobinfo_t *blobInfo);
+void blobAnalyse_basic(const image_t* img, const uint8_t blobnr, blobinfo_t* blobInfo);
 
-void centroid_basic( const image_t *img
-                   , const uint8_t blobnr
-                   ,       int32_t *cc
-                   ,       int32_t *rc
-                   );
+void centroid_basic(const image_t* img, const uint8_t blobnr, int32_t* cc, int32_t* rc);
 
-float normalizedCentralMoments_basic( const image_t *img
-                                    , const uint8_t blobnr
-                                    , const int32_t p
-                                    , const int32_t q
-                                    );
-                            
+float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, const int32_t p, const int32_t q);
+
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------
 // EOF

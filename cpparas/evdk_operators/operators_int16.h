@@ -43,27 +43,15 @@
 // Function prototypes
 // ----------------------------------------------------------------------------
 
-void contrastStretch_int16( const image_t *src
-                          ,       image_t *dst
-                          , const int16_pixel_t bottom
-                          , const int16_pixel_t top
-                          );
+void contrastStretch_int16(const image_t* src, image_t* dst, const int16_pixel_t bottom, const int16_pixel_t top);
 
-void threshold_int16( const image_t *src
-                    ,       image_t *dst
-                    , const int16_pixel_t low
-                    , const int16_pixel_t high
-                    );
+void threshold_int16(const image_t* src, image_t* dst, const int16_pixel_t low, const int16_pixel_t high);
 
-void erase_int16( const image_t *img );
+void erase_int16(const image_t* img);
 
-void copy_int16( const image_t *src, image_t *dst );
+void copy_int16(const image_t* src, image_t* dst);
 
-void setSelectedToValue_int16( const image_t *src
-                             ,       image_t *dst
-                             , const int16_pixel_t selected
-                             , const int16_pixel_t value
-                             );
+void setSelectedToValue_int16(const image_t* src, image_t* dst, const int16_pixel_t selected, const int16_pixel_t value);
 
 #endif // _OPERATORS_INT_H_
 // ----------------------------------------------------------------------------
