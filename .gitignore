@@ -3,4 +3,6 @@ __pycache__/
 Saved.gg
 
 /paras/.vscode/
+/cpparas/.vscode/
+/.vscode/
 /cpparas/build/
