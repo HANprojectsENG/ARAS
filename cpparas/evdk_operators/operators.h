@@ -424,6 +424,16 @@ void centroid(const image_t* img, const uint8_t blobnr, int32_t* cc, int32_t* rc
 // Postcondition: -
 float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const int32_t p, const int32_t q);
 
+// ----------------------------------------------------------------------------
+// Custom operators
+// ----------------------------------------------------------------------------
+// Cuts out a part of the input iamge and warps it with perspective correction.
+// The interpolation method is neareast neighbor (no interpolation).
+//
+// Precondition : dst is allocated and has the wanted cols and rows
+// Postcondition: dst is filled with the warped image
+void warpPerspective(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]);
+
 #endif // _OPERATORS_H_
 
 #ifdef __cplusplus

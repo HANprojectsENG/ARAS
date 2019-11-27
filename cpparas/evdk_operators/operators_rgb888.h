@@ -51,6 +51,8 @@ void erase_rgb888(const image_t* img);
 
 void copy_rgb888(const image_t* src, image_t* dst);
 
+void warpPerspective_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]);
+
 #endif // _OPERATORS_RGB888_H_
 // ----------------------------------------------------------------------------
 // EOF
