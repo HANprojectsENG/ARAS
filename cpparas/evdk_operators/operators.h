@@ -427,8 +427,9 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-// Cuts out a part of the input iamge and warps it with perspective correction.
-// The interpolation method is neareast neighbor (no interpolation).
+
+// Cuts out a part of the input image and warps it with perspective correction.
+// The interpolation method is nearest neighbor (no interpolation).
 //
 // Precondition : dst is allocated and has the wanted cols and rows
 // Postcondition: dst is filled with the warped image
