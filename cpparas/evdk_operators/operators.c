@@ -661,17 +661,32 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-void warpPerspective(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
+void warp(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
 {
     switch (img->type) {
     case IMGTYPE_RGB888:
-        warpPerspective_rgb888(img, dst, colpos, rowpos);
+        warp_rgb888(img, dst, colpos, rowpos);
         break;
     case IMGTYPE_BASIC:
     case IMGTYPE_INT16:
     case IMGTYPE_FLOAT:
     default:
-        fprintf(stderr, "warpPerspective(): image type %d not supported\n", img->type);
+        fprintf(stderr, "warp(): image type %d not supported\n", img->type);
+        break;
+    }
+}
+
+void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3])
+{
+    switch (img->type) {
+    case IMGTYPE_RGB888:
+        warpAffine_rgb888(img, dst, warpMatrix);
+        break;
+    case IMGTYPE_BASIC:
+    case IMGTYPE_INT16:
+    case IMGTYPE_FLOAT:
+    default:
+        fprintf(stderr, "warpAffine(): image type %d not supported\n", img->type);
         break;
     }
 }
