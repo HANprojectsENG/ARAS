@@ -217,18 +217,25 @@ void rotate180_basic(const image_t* img)
 // ----------------------------------------------------------------------------
 void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high)
 {
-
-#warning TODO: threshold_basic
-    // ********************************************
-    // Added to prevent compiler warnings
-    // Remove these when implementation starts
+    int i;
+    int x;
+    basic_pixel_t pixel;
+    for(x = 0; x < src->rows; x++){
+        for(i = 0; i < src->cols; i++){
+            pixel = getBasicPixel(src,i,x);
+            if((pixel >= low) && (pixel <= high)){
+                setBasicPixel(dst,i,x,(basic_pixel_t)0);
+            }
+            else{
+                setBasicPixel(dst,i,x,(basic_pixel_t)255);
+            }
+        }
+    }
     (void)src;
     (void)dst;
     (void)low;
     (void)high;
-
     return;
-    // ********************************************
 }
 
 // ----------------------------------------------------------------------------
