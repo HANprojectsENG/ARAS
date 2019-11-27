@@ -14,7 +14,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c11")
 
 file(GLOB SOURCES
 	"${PROJECT_SOURCE_DIR}/src/*.cpp"
-	"${PROJECT_SOURCE_DIR}/src/vision/*.c"
+	"${PROJECT_SOURCE_DIR}/src/util/*.cpp"
 	"${PROJECT_SOURCE_DIR}/evdk_operators/*.c")
 add_executable(${PROJECT_NAME} ${SOURCES})
 
