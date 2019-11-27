@@ -53,6 +53,8 @@ void copy_rgb888(const image_t* src, image_t* dst);
 
 void warpPerspective_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]);
 
+void convertToHSV888Image(const image_t* img, image_t* dst);
+
 #endif // _OPERATORS_RGB888_H_
 // ----------------------------------------------------------------------------
 // EOF

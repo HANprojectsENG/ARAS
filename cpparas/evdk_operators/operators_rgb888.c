@@ -224,6 +224,11 @@ void warpPerspective_rgb888(const image_t* img, image_t* dst, int32_t colpos[4],
 {
 }
 
+
+void convertToHSV888Image(const image_t* img, image_t* dst)
+{
+}
+
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------

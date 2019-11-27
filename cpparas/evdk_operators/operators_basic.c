@@ -588,5 +588,31 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 }
 
 // ----------------------------------------------------------------------------
+// Custom operators
+// ----------------------------------------------------------------------------
+void findContours_basic(const image_t* src, image_t* dst)
+{
+    copy(src,dst);
+
+    int i;
+    int x;
+    int y;
+    int z;
+    basic_pixel_t pixel;
+    basic_pixel_t top_left;
+    basic_pixel_t top_right;
+    basic_pixel_t bottom_left;
+    basic_pixel_t bottom_right;
+    for(x = 0; x < src->rows; x++){
+        for(i = 0; i < src->cols; i++){           
+        }
+    }
+    (void)src;
+    (void)dst;
+
+    return;
+}
+
+// ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------

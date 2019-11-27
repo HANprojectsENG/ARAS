@@ -435,6 +435,21 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
 // Postcondition: dst is filled with the warped image
 void warpPerspective(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]);
 
+// 
+// 
+//
+// Precondition : 
+// Postcondition: 
+void findContours(const image_t* img, image_t* dst);
+
+
+// 
+// 
+//
+// Precondition : 
+// Postcondition: 
+void convertToHSV(const image_t* img, image_t* dst);
+
 #endif // _OPERATORS_H_
 
 #ifdef __cplusplus
