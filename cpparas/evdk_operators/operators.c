@@ -44,7 +44,6 @@ extern "C" {
 #include "operators_basic.h"
 #include "operators_float.h"
 #include "operators_int16.h"
-#include "operators_rgb565.h"
 #include "operators_rgb888.h"
 
 // ----------------------------------------------------------------------------
@@ -95,16 +94,6 @@ inline rgb888_pixel_t getRGB888Pixel(image_t* img, int32_t c, int32_t r)
     return (*((rgb888_pixel_t*)(img->data) + (r * img->cols + c)));
 }
 
-inline void setRGB565Pixel(image_t* img, int32_t c, int32_t r, rgb565_pixel_t value)
-{
-    *((rgb565_pixel_t*)(img->data) + (r * img->cols + c)) = value;
-}
-
-inline rgb565_pixel_t getRGB565Pixel(image_t* img, int32_t c, int32_t r)
-{
-    return (*((rgb565_pixel_t*)(img->data) + (r * img->cols + c)));
-}
-
 // ----------------------------------------------------------------------------
 // Image creation
 // ----------------------------------------------------------------------------
@@ -123,9 +112,6 @@ void deleteImage(image_t* img)
         break;
     case IMGTYPE_RGB888:
         deleteRGB888Image(img);
-        break;
-    case IMGTYPE_RGB565:
-        deleteRGB565Image(img);
         break;
     default:
         fprintf(stderr, "deleteImage(): image type %d not supported\n", img->type);
@@ -147,9 +133,6 @@ void convertImage(const image_t* src, image_t* dst)
         break;
     case IMGTYPE_RGB888:
         convertToRGB888Image(src, dst);
-        break;
-    case IMGTYPE_RGB565:
-        convertToRGB565Image(src, dst);
         break;
     default:
         fprintf(stderr, "convertImage(): image type %d not supported\n", dst->type);
@@ -176,7 +159,6 @@ void contrastStretch(const image_t* src, image_t* dst, const int32_t bottom, con
         fprintf(stderr, "contrastStretch(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "contrastStretch(): image type %d not supported\n", src->type);
         break;
@@ -196,7 +178,6 @@ void contrastStretchFast(const image_t* src, image_t* dst)
         fprintf(stderr, "contrastStretchFast(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "contrastStretchFast(): image type %d not supported\n", src->type);
         break;
@@ -222,24 +203,6 @@ void contrastStretchRGB888(const image_t* src, image_t* dst, const rgb888_pixel_
 }
 
 // ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-void contrastStretchRGB565(const image_t* src, image_t* dst, const rgb565_pixel_t bottom, const rgb565_pixel_t top)
-{
-    if (src->type != dst->type) {
-        fprintf(stderr, "contrastStretchRGB888(): src and dst are of different type\n");
-    }
-
-    switch (src->type) {
-    case IMGTYPE_RGB565:
-        contrastStretch_rgb565(src, dst, bottom, top);
-        break;
-    default:
-        fprintf(stderr, "contrastStretchRGB565(): image type %d not supported\n", src->type);
-        break;
-    }
-}
-
-// ----------------------------------------------------------------------------
 // Rotation
 // ----------------------------------------------------------------------------
 
@@ -252,7 +215,6 @@ void rotate180(const image_t* img)
         //rotate180_int16,
         //rotate180_float,
         //rotate180_rgb888
-        //rotate180_rgb565
     };
 
     // Call the function
@@ -293,11 +255,6 @@ void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_
 
         threshold_rgb888(src, dst, rgb888_low, rgb888_high);
     } break;
-    case IMGTYPE_RGB565: {
-        rgb565_pixel_t rgb565_low = 0x0000;
-        rgb565_pixel_t rgb565_high = 0xFFFF;
-        threshold_rgb565(src, dst, rgb565_low, rgb565_high);
-    } break;
     default:
         fprintf(stderr, "threshold(): image type %d not supported\n", src->type);
         break;
@@ -317,7 +274,6 @@ void threshold2Means(const image_t* src, image_t* dst, const eBrightness brightn
         fprintf(stderr, "threshold2Means(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "threshold2Means(): image type %d not supported\n", src->type);
         break;
@@ -337,7 +293,6 @@ void thresholdOtsu(const image_t* src, image_t* dst, const eBrightness brightnes
         fprintf(stderr, "thresholdOtsu(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "thresholdOtsu(): image type %d not supported\n", src->type);
         break;
@@ -356,8 +311,7 @@ void erase(const image_t* img)
         erase_basic,
         erase_int16,
         erase_float,
-        erase_rgb888,
-        erase_rgb565
+        erase_rgb888
     };
 
     // Call the function
@@ -378,8 +332,7 @@ void copy(const image_t* src, image_t* dst)
         copy_basic,
         copy_int16,
         copy_float,
-        copy_rgb888,
-        copy_rgb565
+        copy_rgb888
     };
 
     // Call the function
@@ -402,7 +355,6 @@ void setSelectedToValue(const image_t* src, image_t* dst, const int32_t selected
         fprintf(stderr, "setSelectedToValue(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "setSelectedToValue(): image type %d not supported\n", src->type);
         break;
@@ -421,7 +373,6 @@ uint32_t neighbourCount(const image_t* img, const int32_t c, const int32_t r, co
         fprintf(stderr, "neighbourCount(): image type %d not yet implemented\n", img->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "neighbourCount(): image type %d not supported\n", img->type);
         break;
@@ -443,7 +394,6 @@ void histogram(const image_t* img, uint16_t* hist)
         fprintf(stderr, "histogram(): image type %d not yet implemented\n", img->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "histogram(): image type %d not supported\n", img->type);
         break;
@@ -467,7 +417,6 @@ void add(const image_t* src, image_t* dst)
         //add_int16,
         //add_float,
         //add_rgb888,
-        //add_rgb565
     };
 
     // Call the function
@@ -485,7 +434,6 @@ uint32_t sum(const image_t* img)
         //sum_int16,
         //sum_float,
         //sum_rgb888,
-        //sum_rgb565
     };
 
     // Call the function
@@ -507,7 +455,6 @@ void multiply(const image_t* src, image_t* dst)
         //multiply_int16,
         //multiply_float,
         //multiply_rgb888,
-        //multiply_rgb565
     };
 
     // Call the function
@@ -529,7 +476,6 @@ void invert(const image_t* src, image_t* dst)
         //invert_int16,
         //invert_float,
         //invert_rgb888,
-        //invert_rgb565
     };
 
     // Call the function
@@ -551,7 +497,6 @@ void nonlinearFilter(const image_t* src, image_t* dst, const eFilterOperation fo
         fprintf(stderr, "nonlinearFilter(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "nonlinearFilter(): image type %d not supported\n", src->type);
         break;
@@ -577,7 +522,6 @@ void removeBorderBlobs(const image_t* src, image_t* dst, const eConnected connec
         fprintf(stderr, "removeBorderBlobs(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "removeBorderBlobs(): image type %d not supported\n", src->type);
         break;
@@ -601,7 +545,6 @@ void fillHoles(const image_t* src, image_t* dst, const eConnected connected)
         fprintf(stderr, "fillHoles(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "fillHoles(): image type %d not supported\n", src->type);
         break;
@@ -624,7 +567,6 @@ uint32_t labelBlobs(const image_t* src, image_t* dst, const eConnected connected
         fprintf(stderr, "labelBlobs(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "labelBlobs(): image type %d not supported\n", src->type);
         break;
@@ -650,7 +592,6 @@ void binaryEdgeDetect(const image_t* src, image_t* dst, const eConnected connect
         fprintf(stderr, "binaryEdgeDetect(): image type %d not yet implemented\n", src->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "binaryEdgeDetect(): image type %d not supported\n", src->type);
         break;
@@ -672,7 +613,6 @@ void blobAnalyse(const image_t* img, const uint8_t blobnr, blobinfo_t* blobInfo)
         fprintf(stderr, "blobAnalyse(): image type %d not yet implemented\n", img->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "blobAnalyse(): image type %d not supported\n", img->type);
         break;
@@ -692,7 +632,6 @@ void centroid(const image_t* img, const uint8_t blobnr, int32_t* cc, int32_t* rc
         fprintf(stderr, "centroid(): image type %d not yet implemented\n", img->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "centroid(): image type %d not supported\n", img->type);
         break;
@@ -711,7 +650,6 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
         fprintf(stderr, "normalizedCentralMoments(): image type %d not yet implemented\n", img->type);
         break;
     case IMGTYPE_RGB888:
-    case IMGTYPE_RGB565:
     default:
         fprintf(stderr, "normalizedCentralMoments(): image type %d not supported\n", img->type);
         break;

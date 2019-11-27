@@ -33,6 +33,9 @@
     Version 2.0 - September 2019
     > Updated for EVDK3.0
 
+    Version 2.1 - November 2019
+    > Updated by EVD ARAS group, removed RGB565
+
 ******************************************************************************/
 #ifdef __cplusplus
 extern "C" {
@@ -68,7 +71,6 @@ typedef enum {
     IMGTYPE_INT16 = 1, // Integer
     IMGTYPE_FLOAT = 2, // Float
     IMGTYPE_RGB888 = 3, // RGB 8-bit per pixel
-    IMGTYPE_RGB565 = 4,
 
     IMGTYPE_MAX = 2147483647 // Max 32-bit int value,
     // forces enum to be 4 bytes
@@ -96,8 +98,6 @@ typedef struct rgb888_pixel_t {
 
 } rgb888_pixel_t;
 
-typedef uint16_t rgb565_pixel_t;
-
 typedef struct complex_pixel_t {
     float real;
     float imaginary;
@@ -109,7 +109,6 @@ union pixel {
     int16_pixel_t int16_pixel;
     float_pixel_t float_pixel;
     rgb888_pixel_t rgb888_pixel;
-    rgb565_pixel_t rgb565_pixel;
 };
 
 typedef union pixel pixel_t;
@@ -175,8 +174,6 @@ extern void setFloatPixel(image_t* img, int32_t c, int32_t r, float_pixel_t valu
 extern float_pixel_t getFloatPixel(image_t* img, int32_t c, int32_t r);
 extern void setRGB888Pixel(image_t* img, int32_t c, int32_t r, rgb888_pixel_t value);
 extern rgb888_pixel_t getRGB888Pixel(image_t* img, int32_t c, int32_t r);
-extern void setRGB565Pixel(image_t* img, int32_t c, int32_t r, rgb565_pixel_t value);
-extern rgb565_pixel_t getRGB565Pixel(image_t* img, int32_t c, int32_t r);
 
 // ----------------------------------------------------------------------------
 // Memory (de)allocation
@@ -192,7 +189,6 @@ image_t* newBasicImage(const uint32_t cols, const uint32_t rows);
 image_t* newInt16Image(const uint32_t cols, const uint32_t rows);
 image_t* newFloatImage(const uint32_t cols, const uint32_t rows);
 image_t* newRGB888Image(const uint32_t cols, const uint32_t rows);
-image_t* newRGB565Image(const uint32_t cols, const uint32_t rows);
 
 // These functions can be used for copying images
 // Memory is allocated within these functions
@@ -204,7 +200,6 @@ image_t* toBasicImage(image_t* src);
 image_t* toInt16Image(image_t* src);
 image_t* toFloatImage(image_t* src);
 image_t* toRGB888Image(image_t* src);
-image_t* toRGB565Image(image_t* src);
 
 // Use the function deleteImage() for freeing memory
 // This function will automatically call the appropriate function based on the
@@ -217,7 +212,6 @@ void deleteBasicImage(image_t* img);
 void deleteInt16Image(image_t* img);
 void deleteFloatImage(image_t* img);
 void deleteRGB888Image(image_t* img);
-void deleteRGB565Image(image_t* img);
 
 // Use the function convertImage() for converting between image types
 //
@@ -235,7 +229,6 @@ void convertToBasicImage(const image_t* src, image_t* dst);
 void convertToInt16Image(const image_t* src, image_t* dst);
 void convertToFloatImage(const image_t* src, image_t* dst);
 void convertToRGB888Image(const image_t* src, image_t* dst);
-void convertToRGB565Image(const image_t* src, image_t* dst);
 
 // ----------------------------------------------------------------------------
 // Contrast stretching
@@ -262,13 +255,6 @@ void contrastStretchFast(const image_t* src, image_t* dst);
 // Precondition : img is a RGB888 image
 // Postcondition: dst is a RGB888 image
 void contrastStretchRGB888(const image_t* src, image_t* dst, const rgb888_pixel_t bottom, const rgb888_pixel_t top);
-
-// This function stretches the contrast for the R, G, and B channels
-// separately
-//
-// Precondition : img is a RGB565 image
-// Postcondition: dst is a RGB565 image
-void contrastStretchRGB565(const image_t* src, image_t* dst, const rgb565_pixel_t bottom, const rgb565_pixel_t top);
 
 // ----------------------------------------------------------------------------
 // Rotation

@@ -145,19 +145,6 @@ void convertToBasicImage(const image_t* src, image_t* dst)
         }
 
     } break;
-    case IMGTYPE_RGB565: {
-        rgb565_pixel_t* s = (rgb565_pixel_t*)src->data;
-        // Loop all pixels, convert and copy
-        while (i-- > 0) {
-            unsigned char r = *s >> 11;
-            unsigned char g = (*s >> 5) & (rgb565_pixel_t)0x003F;
-            unsigned char b = (*s) & (rgb565_pixel_t)0x001F;
-
-            *d++ = (basic_pixel_t)(0.212671f * r + 0.715160f * g + 0.072169f * b);
-            s++;
-        }
-
-    } break;
     default:
         break;
     }

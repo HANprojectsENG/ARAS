@@ -144,9 +144,6 @@ void convertToInt16Image(const image_t* src, image_t* dst)
         }
 
     } break;
-    case IMGTYPE_RGB565: {
-        // TODO
-    } break;
     default:
         break;
     }
