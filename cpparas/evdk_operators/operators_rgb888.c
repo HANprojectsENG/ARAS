@@ -220,8 +220,54 @@ void copy_rgb888(const image_t* src, image_t* dst)
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-void warpPerspective_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
+void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
 {
+    float angleSrc = atan2(rowpos[1] - rowpos[0], colpos[1] - colpos[0]);
+    int32_t xdiff = colpos[1] - colpos[0];
+    int32_t ydiff = rowpos[1] - rowpos[0];
+    float lengthSrc = sqrt(xdiff * xdiff + ydiff * ydiff);
+    float lengthDst = dst->cols;
+
+    float angle = -angleSrc;
+    float scale = lengthDst / lengthSrc;
+    float newSourceX = cos(angle) * scale * colpos[0] - sin(angle) * scale * rowpos[0];
+    float newSourceY = sin(angle) * scale * colpos[0] + cos(angle) * scale * rowpos[0];
+    float offsetX = -newSourceX;
+    float offsetY = -newSourceY;
+    float warpMatrix[2][3] = {
+        { cos(angle) * scale, -sin(angle) * scale, offsetX },
+        { sin(angle) * scale, cos(angle) * scale, offsetY }
+    };
+    warpAffine_rgb888(img, dst, warpMatrix);
+}
+
+void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3])
+{
+    float maxFactor = warpMatrix[0][0];
+    if (warpMatrix[0][1] > maxFactor)
+        maxFactor = warpMatrix[0][1];
+    if (warpMatrix[1][0] > maxFactor)
+        maxFactor = warpMatrix[1][0];
+    if (warpMatrix[1][1] > maxFactor)
+        maxFactor = warpMatrix[1][1];
+    int32_t maxPxSize = (int32_t)ceil(maxFactor * 2.0f);
+
+    for (int32_t row = 0; row < img->rows; row++) {
+        for (int32_t col = 0; col < img->cols; col++) {
+            int32_t newCol = warpMatrix[0][0] * (float)col + warpMatrix[0][1] * (float)row + warpMatrix[0][2];
+            int32_t newRow = warpMatrix[1][0] * (float)col + warpMatrix[1][1] * (float)row + warpMatrix[1][2];
+            for (int32_t wRow = newRow; wRow < newRow + maxPxSize; wRow++) {
+                for (int32_t wCol = newCol; wCol < newCol + maxPxSize; wCol++) {
+                    if (wRow < 0 || wRow >= dst->rows
+                        || wCol < 0 || wCol >= dst->cols) {
+                        continue;
+                    } else {
+                        setRGB888Pixel(dst, wCol, wRow, getRGB888Pixel((image_t*)img, col, row));
+                    }
+                }
+            }
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
