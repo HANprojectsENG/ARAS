@@ -217,11 +217,21 @@ void copy_rgb888(const image_t* src, image_t* dst)
         *d++ = *s++;
 }
 
+inline float affineTransformX(float x, float y, float warpMatrix[2][3])
+{
+    return warpMatrix[0][0] * x + warpMatrix[0][1] * y + warpMatrix[0][2];
+}
+inline float affineTransformY(float x, float y, float warpMatrix[2][3])
+{
+    return warpMatrix[1][0] * x + warpMatrix[1][1] * y + warpMatrix[1][2];
+}
+
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
 void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
 {
+    // Stage one - rotate, scale and translate based on the first two corners.
     float angleSrc = atan2(rowpos[1] - rowpos[0], colpos[1] - colpos[0]);
     int32_t xdiff = colpos[1] - colpos[0];
     int32_t ydiff = rowpos[1] - rowpos[0];
@@ -230,15 +240,26 @@ void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t ro
 
     float angle = -angleSrc;
     float scale = lengthDst / lengthSrc;
-    float newSourceX = cos(angle) * scale * colpos[0] - sin(angle) * scale * rowpos[0];
-    float newSourceY = sin(angle) * scale * colpos[0] + cos(angle) * scale * rowpos[0];
-    float offsetX = -newSourceX;
-    float offsetY = -newSourceY;
-    float warpMatrix[2][3] = {
-        { cos(angle) * scale, -sin(angle) * scale, offsetX },
-        { sin(angle) * scale, cos(angle) * scale, offsetY }
+    float warpMatrixStageOne[2][3] = {
+        { cos(angle) * scale, -sin(angle) * scale, 0.0f },
+        { sin(angle) * scale, cos(angle) * scale, 0.0f }
     };
-    warpAffine_rgb888(img, dst, warpMatrix);
+    float offsetX = -affineTransformX(colpos[0], rowpos[0], warpMatrixStageOne);
+    float offsetY = -affineTransformY(colpos[0], rowpos[0], warpMatrixStageOne);
+    warpMatrixStageOne[0][2] = offsetX;
+    warpMatrixStageOne[1][2] = offsetY;
+
+    // Stage two - adjust X and Y scale based on third corner.
+    float newScaleX = scale * ((float)dst->cols / affineTransformX(colpos[2], rowpos[2], warpMatrixStageOne));
+    float newScaleY = scale * ((float)dst->rows / affineTransformY(colpos[2], rowpos[2], warpMatrixStageOne));
+    float newOffsetX = offsetX * (newScaleX / scale);
+    float newOffsetY = offsetY * (newScaleY / scale);
+    float warpMatrixStageTwo[2][3] = {
+        { cos(angle) * newScaleX, -sin(angle) * newScaleX, newOffsetX },
+        { sin(angle) * newScaleY, cos(angle) * newScaleY, newOffsetY }
+    };
+
+    warpAffine_rgb888(img, dst, warpMatrixStageTwo);
 }
 
 void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3])
@@ -254,8 +275,8 @@ void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3])
 
     for (int32_t row = 0; row < img->rows; row++) {
         for (int32_t col = 0; col < img->cols; col++) {
-            int32_t newCol = warpMatrix[0][0] * (float)col + warpMatrix[0][1] * (float)row + warpMatrix[0][2];
-            int32_t newRow = warpMatrix[1][0] * (float)col + warpMatrix[1][1] * (float)row + warpMatrix[1][2];
+            int32_t newCol = affineTransformX(col, row, warpMatrix);
+            int32_t newRow = affineTransformY(col, row, warpMatrix);
             for (int32_t wRow = newRow; wRow < newRow + maxPxSize; wRow++) {
                 for (int32_t wCol = newCol; wCol < newCol + maxPxSize; wCol++) {
                     if (wRow < 0 || wRow >= dst->rows
