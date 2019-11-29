@@ -163,7 +163,7 @@ void convertToHSVImage(const image_t* src, image_t* dst)
 
             
             if (d->h > 360){
-                d->h = 0 - d->h;
+                d->h = 360 - (0 - d->h);
             }
 
             //Calculate Saturation
