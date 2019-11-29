@@ -34,28 +34,21 @@
     > Updated for EVDK3.0
 
 ******************************************************************************/
-#ifndef _OPERATORS_RGB888_H_
-#define _OPERATORS_RGB888_H_
+#ifndef _OPERATORS_HSV_H_
+#define _OPERATORS_HSV_H_
 
 #include "operators.h"
 
 // ----------------------------------------------------------------------------
 // Function prototypes
 // ----------------------------------------------------------------------------
+void threshold_hsv(const image_t* src, image_t* dst, const hsv_pixel_t low, const hsv_pixel_t high);
 
-void contrastStretch_rgb888(const image_t* src, image_t* dst, const rgb888_pixel_t bottom, const rgb888_pixel_t top);
+void erase_hsv(const image_t* img);
 
-void threshold_rgb888(const image_t* src, image_t* dst, const rgb888_pixel_t low, const rgb888_pixel_t high);
+void copy_hsv(const image_t* src, image_t* dst);
 
-void erase_rgb888(const image_t* img);
-
-void copy_rgb888(const image_t* src, image_t* dst);
-
-void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]);
-
-void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3]);
-
-#endif // _OPERATORS_RGB888_H_
+#endif // _OPERATORS_HSV_H_
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------

@@ -34,7 +34,7 @@
     > Updated for EVDK3.0
 
 ******************************************************************************/
-#include "operators_rgb888.h"
+#include "operators_hsv.h"
 #include "math.h"
 
 #ifdef STM32F746xx
@@ -47,7 +47,7 @@
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-image_t* newRGB888Image(const uint32_t cols, const uint32_t rows)
+image_t* newHSVImage(const uint32_t cols, const uint32_t rows)
 {
     image_t* img = (image_t*)malloc(sizeof(image_t));
     if (img == NULL) {
@@ -58,7 +58,7 @@ image_t* newRGB888Image(const uint32_t cols, const uint32_t rows)
 #ifdef STM32F746xx
     img->data = mem_manager_alloc();
 #else
-    img->data = (uint8_t*)malloc((rows * cols) * sizeof(rgb888_pixel_t));
+    img->data = (uint8_t*)malloc((rows * cols) * sizeof(hsv_pixel_t));
 #endif
 
     if (img->data == NULL) {
@@ -70,27 +70,27 @@ image_t* newRGB888Image(const uint32_t cols, const uint32_t rows)
     img->cols = cols;
     img->rows = rows;
     img->view = IMGVIEW_CLIP;
-    img->type = IMGTYPE_RGB888;
+    img->type = IMGTYPE_HSV;
     return (img);
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-image_t* toRGB888Image(image_t* src)
+image_t* toHSVImage(image_t* src)
 {
 
-    image_t* dst = newRGB888Image(src->cols, src->rows);
+    image_t* dst = newHSVImage(src->cols, src->rows);
     if (dst == NULL)
         return NULL;
 
-    convertToRGB888Image(src, dst);
+    convertToHSVImage(src, dst);
 
     return dst;
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void deleteRGB888Image(image_t* img)
+void deleteHSVImage(image_t* img)
 {
 #ifdef STM32F746xx
     mem_manager_free(img->data);
@@ -103,10 +103,11 @@ void deleteRGB888Image(image_t* img)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void convertToRGB888Image(const image_t* src, image_t* dst)
+void convertToHSVImage(const image_t* src, image_t* dst)
 {
+    //to do
     register long int i = src->rows * src->cols;
-    register rgb888_pixel_t* d = (rgb888_pixel_t*)dst->data;
+    register hsv_pixel_t* d = (hsv_pixel_t*)dst->data;
 
     dst->view = src->view;
     dst->cols = src->cols;
@@ -115,16 +116,7 @@ void convertToRGB888Image(const image_t* src, image_t* dst)
 
     switch (src->type) {
     case IMGTYPE_BASIC: {
-        basic_pixel_t* s = (basic_pixel_t*)src->data;
-        // Loop all pixels and copy all channels with same value
-        while (i-- > 0) {
-            d->r = *s;
-            d->g = *s;
-            d->b = *s;
-
-            s++;
-            d++;
-        }
+        // TODO
 
     } break;
     case IMGTYPE_INT16: {
@@ -136,7 +128,58 @@ void convertToRGB888Image(const image_t* src, image_t* dst)
 
     } break;
     case IMGTYPE_RGB888: {
-        copy_rgb888(src, dst);
+        // TODO
+        rgb888_pixel_t* s = (rgb888_pixel_t*)src->data;
+        // Loop all pixels, convert and copy
+        //Formulas taken from https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+        while (i-- > 0) {
+            unsigned char r = s->r;
+            unsigned char g = s->g;
+            unsigned char b = s->b;
+
+            double min, max, delta;
+
+            //Change R,G,B ranges from 0-255 to 0-1
+            double r_ = (double)r/255;  
+            double g_ = (double)g/255;
+            double b_ = (double)b/255;
+
+            //find max and min values between R,G,B
+            max = ((r_ > g_ ? r_ : g_) > b_ ? (r_ > g_ ? r_ : g_) : b_);
+            min = ((r_ < g_ ? r_ : g_) < b_ ? (r_ < g_ ? r_ : g_) : b_);
+            delta = max - min;
+            
+
+            //Calculate Hue
+            if (max == r_){
+                d->h = (fmod(((g_ - b_) / delta), 6.0)) * 60;
+            }
+            else if (max == g_ ){
+                d->h = (((b_ - r_) / delta) + 2.0) * 60;
+            }
+            else{
+                d->h = (((r_ - g_) / delta) + 4.0) * 60;
+            }
+
+            
+            if (d->h > 360){
+                d->h = 0 - d->h;
+            }
+
+            //Calculate Saturation
+            if (max == 0.0){
+                d->s = 0;
+            }
+            else{
+                d->s = ((delta / max) * 100);
+            }
+
+            //Calculate Value
+            d->v = (max * 100);
+
+            d++;
+            s++;
+        }
 
     } break;
     default:
@@ -146,35 +189,16 @@ void convertToRGB888Image(const image_t* src, image_t* dst)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void contrastStretch_rgb888(const image_t* src,
-    image_t* dst,
-    const rgb888_pixel_t bottom,
-    const rgb888_pixel_t top)
-{
-    // ********************************************
-    // Added to prevent compiler warnings
-    // Remove these when implementation starts
-    (void)src;
-    (void)dst;
-    (void)bottom;
-    (void)top;
-
-    return;
-    // ********************************************
-}
-
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-void erase_rgb888(const image_t* img)
+void erase_hsv(const image_t* img)
 {
     register long int i = img->rows * img->cols;
-    register rgb888_pixel_t* s = (rgb888_pixel_t*)img->data;
+    register hsv_pixel_t* s = (hsv_pixel_t*)img->data;
 
     // Loop through the image and set all pixels to the value 0
     while (i-- > 0) {
-        s->r = 0;
-        s->g = 0;
-        s->b = 0;
+        s->h = 0;
+        s->s = 0;
+        s->v = 0;
 
         s++;
     }
@@ -182,10 +206,10 @@ void erase_rgb888(const image_t* img)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void threshold_rgb888(const image_t* src,
+void threshold_hsv(const image_t* src,
     image_t* dst,
-    const rgb888_pixel_t low,
-    const rgb888_pixel_t high)
+    const hsv_pixel_t low,
+    const hsv_pixel_t high)
 {
     // ********************************************
     // Added to prevent compiler warnings
@@ -201,11 +225,11 @@ void threshold_rgb888(const image_t* src,
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void copy_rgb888(const image_t* src, image_t* dst)
+void copy_hsv(const image_t* src, image_t* dst)
 {
     register long int i = src->rows * src->cols;
-    register rgb888_pixel_t* s = (rgb888_pixel_t*)src->data;
-    register rgb888_pixel_t* d = (rgb888_pixel_t*)dst->data;
+    register hsv_pixel_t* s = (hsv_pixel_t*)src->data;
+    register hsv_pixel_t* d = (hsv_pixel_t*)dst->data;
 
     dst->rows = src->rows;
     dst->cols = src->cols;
@@ -217,79 +241,11 @@ void copy_rgb888(const image_t* src, image_t* dst)
         *d++ = *s++;
 }
 
-static inline float affineTransformX(float x, float y, float warpMatrix[2][3])
-{
-    return warpMatrix[0][0] * x + warpMatrix[0][1] * y + warpMatrix[0][2];
-}
-static inline float affineTransformY(float x, float y, float warpMatrix[2][3])
-{
-    return warpMatrix[1][0] * x + warpMatrix[1][1] * y + warpMatrix[1][2];
-}
 
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
-{
-    // Stage one - rotate, scale and translate based on the first two corners.
-    float angleSrc = atan2(rowpos[1] - rowpos[0], colpos[1] - colpos[0]);
-    int32_t xdiff = colpos[1] - colpos[0];
-    int32_t ydiff = rowpos[1] - rowpos[0];
-    float lengthSrc = sqrt(xdiff * xdiff + ydiff * ydiff);
-    float lengthDst = dst->cols;
 
-    float angle = -angleSrc;
-    float scale = lengthDst / lengthSrc;
-    float warpMatrixStageOne[2][3] = {
-        { cos(angle) * scale, -sin(angle) * scale, 0.0f },
-        { sin(angle) * scale, cos(angle) * scale, 0.0f }
-    };
-    float offsetX = -affineTransformX(colpos[0], rowpos[0], warpMatrixStageOne);
-    float offsetY = -affineTransformY(colpos[0], rowpos[0], warpMatrixStageOne);
-    warpMatrixStageOne[0][2] = offsetX;
-    warpMatrixStageOne[1][2] = offsetY;
-
-    // Stage two - adjust X and Y scale based on third corner.
-    float newScaleX = scale * ((float)dst->cols / affineTransformX(colpos[2], rowpos[2], warpMatrixStageOne));
-    float newScaleY = scale * ((float)dst->rows / affineTransformY(colpos[2], rowpos[2], warpMatrixStageOne));
-    float newOffsetX = offsetX * (newScaleX / scale);
-    float newOffsetY = offsetY * (newScaleY / scale);
-    float warpMatrixStageTwo[2][3] = {
-        { cos(angle) * newScaleX, -sin(angle) * newScaleX, newOffsetX },
-        { sin(angle) * newScaleY, cos(angle) * newScaleY, newOffsetY }
-    };
-
-    warpAffine_rgb888(img, dst, warpMatrixStageTwo);
-}
-
-void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3])
-{
-    float maxFactor = warpMatrix[0][0];
-    if (warpMatrix[0][1] > maxFactor)
-        maxFactor = warpMatrix[0][1];
-    if (warpMatrix[1][0] > maxFactor)
-        maxFactor = warpMatrix[1][0];
-    if (warpMatrix[1][1] > maxFactor)
-        maxFactor = warpMatrix[1][1];
-    int32_t maxPxSize = (int32_t)ceil(maxFactor * 2.0f);
-
-    for (int32_t row = 0; row < img->rows; row++) {
-        for (int32_t col = 0; col < img->cols; col++) {
-            int32_t newCol = affineTransformX(col, row, warpMatrix);
-            int32_t newRow = affineTransformY(col, row, warpMatrix);
-            for (int32_t wRow = newRow; wRow < newRow + maxPxSize; wRow++) {
-                for (int32_t wCol = newCol; wCol < newCol + maxPxSize; wCol++) {
-                    if (wRow < 0 || wRow >= dst->rows
-                        || wCol < 0 || wCol >= dst->cols) {
-                        continue;
-                    } else {
-                        setRGB888Pixel(dst, wCol, wRow, getRGB888Pixel((image_t*)img, col, row));
-                    }
-                }
-            }
-        }
-    }
-}
 
 // ----------------------------------------------------------------------------
 // EOF
