@@ -7,6 +7,9 @@
 namespace ImageUtils {
 
 Glib::RefPtr<Gdk::Pixbuf> imageToPixbuf(image_t* image);
+image_t* pixbufToImage(const Glib::RefPtr<Gdk::Pixbuf>& pixbuf);
+image_t* loadImageFromFile(const std::string& fileName);
+image_t* performTestOperations(image_t* src);
 
 }
 

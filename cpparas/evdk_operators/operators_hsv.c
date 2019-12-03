@@ -3,7 +3,7 @@
  * Copyright  : 2019 HAN Electrical and Electronic Engineering
  * Author     : Hugo Arends
  *
- * Description: Implementation file for RGB565 image processing operators
+ * Description: Implementation file for RGB888 image processing operators
  *
  * Copyright (C) 2019 HAN University of Applied Sciences. All Rights Reserved.
  *
@@ -34,7 +34,7 @@
     > Updated for EVDK3.0
 
 ******************************************************************************/
-#include "operators_rgb565.h"
+#include "operators_hsv.h"
 #include "math.h"
 
 #ifdef STM32F746xx
@@ -47,7 +47,7 @@
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-image_t* newRGB565Image(const uint32_t cols, const uint32_t rows)
+image_t* newHSVImage(const uint32_t cols, const uint32_t rows)
 {
     image_t* img = (image_t*)malloc(sizeof(image_t));
     if (img == NULL) {
@@ -58,7 +58,7 @@ image_t* newRGB565Image(const uint32_t cols, const uint32_t rows)
 #ifdef STM32F746xx
     img->data = mem_manager_alloc();
 #else
-    img->data = (uint8_t*)malloc((rows * cols) * sizeof(rgb565_pixel_t));
+    img->data = (uint8_t*)malloc((rows * cols) * sizeof(hsv_pixel_t));
 #endif
 
     if (img->data == NULL) {
@@ -70,26 +70,27 @@ image_t* newRGB565Image(const uint32_t cols, const uint32_t rows)
     img->cols = cols;
     img->rows = rows;
     img->view = IMGVIEW_CLIP;
-    img->type = IMGTYPE_RGB565;
+    img->type = IMGTYPE_HSV;
     return (img);
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-image_t* toRGB565Image(image_t* src)
+image_t* toHSVImage(image_t* src)
 {
-    image_t* dst = newRGB565Image(src->cols, src->rows);
+
+    image_t* dst = newHSVImage(src->cols, src->rows);
     if (dst == NULL)
         return NULL;
 
-    convertToRGB565Image(src, dst);
+    convertToHSVImage(src, dst);
 
     return dst;
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void deleteRGB565Image(image_t* img)
+void deleteHSVImage(image_t* img)
 {
 #ifdef STM32F746xx
     mem_manager_free(img->data);
@@ -102,10 +103,11 @@ void deleteRGB565Image(image_t* img)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void convertToRGB565Image(const image_t* src, image_t* dst)
+void convertToHSVImage(const image_t* src, image_t* dst)
 {
+    //to do
     register long int i = src->rows * src->cols;
-    register rgb565_pixel_t* d = (rgb565_pixel_t*)dst->data;
+    register hsv_pixel_t* d = (hsv_pixel_t*)dst->data;
 
     dst->view = src->view;
     dst->cols = src->cols;
@@ -114,18 +116,7 @@ void convertToRGB565Image(const image_t* src, image_t* dst)
 
     switch (src->type) {
     case IMGTYPE_BASIC: {
-        basic_pixel_t* s = (basic_pixel_t*)src->data;
-        // Loop all pixels and copy all channels with same value
-        while (i-- > 0) {
-            *d = 0;
-
-            *d |= ((*s & 0x1F) << 11);
-            *d |= ((*s & 0x3F) << 5);
-            *d |= (*s & 0x1F);
-
-            s++;
-            d++;
-        }
+        // TODO
 
     } break;
     case IMGTYPE_INT16: {
@@ -138,10 +129,57 @@ void convertToRGB565Image(const image_t* src, image_t* dst)
     } break;
     case IMGTYPE_RGB888: {
         // TODO
+        rgb888_pixel_t* s = (rgb888_pixel_t*)src->data;
+        // Loop all pixels, convert and copy
+        //Formulas taken from https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+        while (i-- > 0) {
+            unsigned char r = s->r;
+            unsigned char g = s->g;
+            unsigned char b = s->b;
 
-    } break;
-    case IMGTYPE_RGB565: {
-        copy_rgb565(src, dst);
+            double min, max, delta;
+
+            //Change R,G,B ranges from 0-255 to 0-1
+            double r_ = (double)r/255;  
+            double g_ = (double)g/255;
+            double b_ = (double)b/255;
+
+            //find max and min values between R,G,B
+            max = ((r_ > g_ ? r_ : g_) > b_ ? (r_ > g_ ? r_ : g_) : b_);
+            min = ((r_ < g_ ? r_ : g_) < b_ ? (r_ < g_ ? r_ : g_) : b_);
+            delta = max - min;
+            
+
+            //Calculate Hue
+            if (max == r_){
+                d->h = (fmod(((g_ - b_) / delta), 6.0)) * 60;
+            }
+            else if (max == g_ ){
+                d->h = (((b_ - r_) / delta) + 2.0) * 60;
+            }
+            else{
+                d->h = (((r_ - g_) / delta) + 4.0) * 60;
+            }
+
+            
+            if (d->h > 360){
+                d->h = 360 - (0 - d->h);
+            }
+
+            //Calculate Saturation
+            if (max == 0.0){
+                d->s = 0;
+            }
+            else{
+                d->s = ((delta / max) * 100);
+            }
+
+            //Calculate Value
+            d->v = (max * 100);
+
+            d++;
+            s++;
+        }
 
     } break;
     default:
@@ -151,49 +189,47 @@ void convertToRGB565Image(const image_t* src, image_t* dst)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void contrastStretch_rgb565(const image_t* src,
-    image_t* dst,
-    const rgb565_pixel_t bottom,
-    const rgb565_pixel_t top)
-{
-    (void)src;
-    (void)dst;
-    (void)bottom;
-    (void)top;
-}
-
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-void erase_rgb565(const image_t* img)
+void erase_hsv(const image_t* img)
 {
     register long int i = img->rows * img->cols;
-    register rgb565_pixel_t* s = (rgb565_pixel_t*)img->data;
+    register hsv_pixel_t* s = (hsv_pixel_t*)img->data;
 
     // Loop through the image and set all pixels to the value 0
-    while (i-- > 0)
-        *s++ = 0;
+    while (i-- > 0) {
+        s->h = 0;
+        s->s = 0;
+        s->v = 0;
+
+        s++;
+    }
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void threshold_rgb565(const image_t* src,
+void threshold_hsv(const image_t* src,
     image_t* dst,
-    const rgb565_pixel_t low,
-    const rgb565_pixel_t high)
+    const hsv_pixel_t low,
+    const hsv_pixel_t high)
 {
+    // ********************************************
+    // Added to prevent compiler warnings
+    // Remove these when implementation starts
     (void)src;
     (void)dst;
     (void)low;
     (void)high;
+
+    return;
+    // ********************************************
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void copy_rgb565(const image_t* src, image_t* dst)
+void copy_hsv(const image_t* src, image_t* dst)
 {
     register long int i = src->rows * src->cols;
-    register rgb565_pixel_t* s = (rgb565_pixel_t*)src->data;
-    register rgb565_pixel_t* d = (rgb565_pixel_t*)dst->data;
+    register hsv_pixel_t* s = (hsv_pixel_t*)src->data;
+    register hsv_pixel_t* d = (hsv_pixel_t*)dst->data;
 
     dst->rows = src->rows;
     dst->cols = src->cols;
@@ -204,6 +240,12 @@ void copy_rgb565(const image_t* src, image_t* dst)
     while (i-- > 0)
         *d++ = *s++;
 }
+
+
+// ----------------------------------------------------------------------------
+// Custom operators
+// ----------------------------------------------------------------------------
+
 
 // ----------------------------------------------------------------------------
 // EOF

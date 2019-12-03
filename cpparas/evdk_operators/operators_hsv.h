@@ -3,7 +3,7 @@
  * Copyright  : 2019 HAN Electrical and Electronic Engineering
  * Author     : Hugo Arends
  *
- * Description: Header file for RGB565 image processing operators
+ * Description: Header file for RGB888 image processing operators
  *
  * Copyright (C) 2019 HAN University of Applied Sciences. All Rights Reserved.
  *
@@ -34,24 +34,21 @@
     > Updated for EVDK3.0
 
 ******************************************************************************/
-#ifndef _OPERATORS_RGB565_H_
-#define _OPERATORS_RGB565_H_
+#ifndef _OPERATORS_HSV_H_
+#define _OPERATORS_HSV_H_
 
 #include "operators.h"
 
 // ----------------------------------------------------------------------------
 // Function prototypes
 // ----------------------------------------------------------------------------
+void threshold_hsv(const image_t* src, image_t* dst, const hsv_pixel_t low, const hsv_pixel_t high);
 
-void contrastStretch_rgb565(const image_t* src, image_t* dst, const rgb565_pixel_t bottom, const rgb565_pixel_t top);
+void erase_hsv(const image_t* img);
 
-void threshold_rgb565(const image_t* src, image_t* dst, const rgb565_pixel_t low, const rgb565_pixel_t high);
+void copy_hsv(const image_t* src, image_t* dst);
 
-void erase_rgb565(const image_t* img);
-
-void copy_rgb565(const image_t* src, image_t* dst);
-
-#endif // _OPERATORS_RGB565_H_
+#endif // _OPERATORS_HSV_H_
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------

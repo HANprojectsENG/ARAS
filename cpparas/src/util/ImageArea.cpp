@@ -1,5 +1,5 @@
-#include "ImageArea.hpp"
-#include "ImageUtils.hpp"
+#include "util/ImageArea.hpp"
+#include "util/ImageUtils.hpp"
 #include "operators.h"
 #include <cairomm/context.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
@@ -32,6 +32,7 @@ bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
     if (!m_image)
         return false;
+
 
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
