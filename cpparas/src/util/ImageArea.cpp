@@ -41,7 +41,6 @@ bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
     Gdk::Cairo::set_source_pixbuf(cr, m_image,
         (width - m_image->get_width()) / 2, (height - m_image->get_height()) / 2);
     cr->paint();
-    this->queue_draw();
 
     return true;
 }

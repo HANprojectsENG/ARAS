@@ -55,8 +55,6 @@ void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t ro
 
 void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 
-void scaleImage_rgb888(const image_t* src, image_t* dst);
-
 #endif // _OPERATORS_RGB888_H_
 // ----------------------------------------------------------------------------
 // EOF

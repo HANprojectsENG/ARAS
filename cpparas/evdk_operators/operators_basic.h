@@ -121,7 +121,6 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 // Custom
 // ----------------------------------------------------------------------------
 
-void scaleImage_basic(const image_t* src, image_t* dst);
 
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------

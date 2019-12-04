@@ -178,13 +178,13 @@ typedef struct blobinfo_t {
 extern void setBasicPixel(image_t* img, int32_t c, int32_t r, basic_pixel_t value);
 extern basic_pixel_t getBasicPixel(const image_t* img, int32_t c, int32_t r);
 extern void setInt16Pixel(image_t* img, int32_t c, int32_t r, int16_pixel_t value);
-extern int16_pixel_t getInt16Pixel(const image_t* img, int32_t c, int32_t r);
+extern int16_pixel_t getInt16Pixel(image_t* img, int32_t c, int32_t r);
 extern void setFloatPixel(image_t* img, int32_t c, int32_t r, float_pixel_t value);
-extern float_pixel_t getFloatPixel(const image_t* img, int32_t c, int32_t r);
+extern float_pixel_t getFloatPixel(image_t* img, int32_t c, int32_t r);
 extern void setRGB888Pixel(image_t* img, int32_t c, int32_t r, rgb888_pixel_t value);
-extern rgb888_pixel_t getRGB888Pixel(const image_t* img, int32_t c, int32_t r);
+extern rgb888_pixel_t getRGB888Pixel(image_t* img, int32_t c, int32_t r);
 extern void setHSVPixel(image_t* img, int32_t c, int32_t r, hsv_pixel_t value);
-extern hsv_pixel_t getHSVPixel(const image_t* img, int32_t c, int32_t r);
+extern hsv_pixel_t getHSVPixel(image_t* img, int32_t c, int32_t r);
 
 // ----------------------------------------------------------------------------
 // Memory (de)allocation
@@ -458,12 +458,6 @@ void warp(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]
 // Postcondition: dst is filled with the warped image
 void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 
-// Scales an image.
-// The interpolation method is nearest neighbor (no interpolation).
-//
-// Precondition : dst is allocated and has the wanted cols and rows
-// Postcondition: dst is filled with the scaled image
-void scaleImage(const image_t* src, image_t* dst);
 
 #endif // _OPERATORS_H_
 
