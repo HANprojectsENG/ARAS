@@ -26,7 +26,7 @@ ControlUI::ControlUI()
     widgetContainer.attach(useLastImageButton, 2, 1, 1, 1);
     widgetContainer.attach(useCameraButton, 3, 1, 1, 1);
     widgetContainer.attach(separator, 4, 1, 1, 1);
-    widgetContainer.attach(imageViewport, 1, 2, 4);
+    widgetContainer.attach(imageViewport, 1, 2, 4, 1);
 
     selectImageButton.set_hexpand(false);
     useLastImageButton.set_hexpand(false);
