@@ -108,7 +108,10 @@ void ControlUI::on_use_last_image_button_clicked()
 
 void ControlUI::on_use_camera_button_clicked()
 {
-    std::cout << "Hello World" << std::endl;
+    // TODO: remove test code.
+    StateMachine st;
+    st.init();
+    st.doCycle();
 }
 
 void ControlUI::set_input_image(const std::string& filePath)

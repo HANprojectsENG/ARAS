@@ -21,6 +21,18 @@ enum class State {
     FINAL_STEP = 8
 };
 
+const std::map<State, std::string> STATE_NAMES = {
+    { State::INIT, "Init" },
+    { State::STARTING, "Starting" },
+    { State::CHECK_CURRENT_STEP, "Check Current Step" },
+    { State::PROJECT_STEP, "Project Step" },
+    { State::WAIT, "Wait" },
+    { State::PROJECT_OFF, "Project Off" },
+    { State::CAPTURE, "Capture" },
+    { State::CHECK_NEXT_STEP, "Check Next Step" },
+    { State::FINAL_STEP, "Final Step" }
+};
+
 class StateMachine {
 public:
     StateMachine();
@@ -30,6 +42,9 @@ public:
     bool doCycle();
 
 private:
+    void performEntry();
+    void performDo();
+    void performExit();
     void switchState(State newState);
 
     void INIT_entry();

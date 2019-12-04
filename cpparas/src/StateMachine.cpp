@@ -1,4 +1,6 @@
 #include "StateMachine.hpp"
+#include "util/Debug.hpp"
+#include <iostream>
 
 StateMachine::StateMachine()
 {
@@ -11,21 +13,43 @@ StateMachine::~StateMachine()
 void StateMachine::init()
 {
     currentState = State::INIT;
-    (this->*ENTRY_FUNCS[currentState])();
+    performEntry();
 }
 
 bool StateMachine::doCycle()
 {
-    (this->*DO_FUNCS[currentState])();
-    // Always continue for now.
-    return true;
+    performDo();
+    if (currentState == State::FINAL_STEP) {
+        performExit();
+        return false;
+    } else {
+        return true;
+    }
+}
+
+void StateMachine::performEntry()
+{
+    Debug::println(std::string("Performing state ") + STATE_NAMES.at(currentState) + std::string(" entry"));
+    (this->*ENTRY_FUNCS.at(currentState))();
+}
+
+void StateMachine::performDo()
+{
+    Debug::println(std::string("Performing state ") + STATE_NAMES.at(currentState) + std::string(" do"));
+    (this->*DO_FUNCS.at(currentState))();
+}
+
+void StateMachine::performExit()
+{
+    Debug::println(std::string("Performing state ") + STATE_NAMES.at(currentState) + std::string(" exit"));
+    (this->*EXIT_FUNCS.at(currentState))();
 }
 
 void StateMachine::switchState(State newState)
 {
-    (this->*EXIT_FUNCS[currentState])();
+    performExit();
     currentState = newState;
-    (this->*ENTRY_FUNCS[currentState])();
+    performEntry();
 }
 
 void StateMachine::INIT_entry() {}
