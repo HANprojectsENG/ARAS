@@ -1,6 +1,6 @@
 #include "util/ImageArea.hpp"
-#include "util/ImageUtils.hpp"
 #include "operators.h"
+#include "util/ImageUtils.hpp"
 #include <cairomm/context.h>
 #include <gdkmm/general.h> // set_source_pixbuf()
 #include <giomm/resource.h>
@@ -18,9 +18,11 @@ ImageArea::~ImageArea()
 {
 }
 
-void ImageArea::setImage(image_t* image) {
+void ImageArea::setImage(image_t* image)
+{
     try {
         m_image = ImageUtils::imageToPixbuf(image);
+        this->set_size_request(m_image->get_width(), m_image->get_height());
     } catch (const Gio::ResourceError& ex) {
         std::cerr << "ResourceError: " << ex.what() << std::endl;
     } catch (const Gdk::PixbufError& ex) {
@@ -32,7 +34,6 @@ bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
     if (!m_image)
         return false;
-
 
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();

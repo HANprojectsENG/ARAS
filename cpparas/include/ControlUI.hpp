@@ -6,6 +6,9 @@
 #include "StateMachine.hpp"
 #include "util/ImageArea.hpp"
 #include <gtkmm/button.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/separator.h>
 #include <gtkmm/window.h>
 
 class ControlUI : public Gtk::Window {
@@ -14,8 +17,14 @@ public:
     virtual ~ControlUI();
 
 private:
+    void set_input_image(const std::string& filePath);
     void on_button_clicked();
-    ImageArea area;
+    Gtk::Grid widgetContainer;
+    Gtk::Button selectImageButton;
+    Gtk::Button useCameraButton;
+    Gtk::Separator separator;
+    Gtk::ScrolledWindow imageViewport;
+    ImageArea imageArea;
     image_t* displayImage;
 };
 
