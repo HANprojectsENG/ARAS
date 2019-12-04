@@ -224,14 +224,13 @@ void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, 
     int i;
     int x;
     basic_pixel_t pixel;
-    for(x = 0; x < src->rows; x++){
-        for(i = 0; i < src->cols; i++){
-            pixel = getBasicPixel(src,i,x);
-            if((pixel >= low) && (pixel <= high)){
-                setBasicPixel(dst,i,x,(basic_pixel_t)0);
-            }
-            else{
-                setBasicPixel(dst,i,x,(basic_pixel_t)255);
+    for (x = 0; x < src->rows; x++) {
+        for (i = 0; i < src->cols; i++) {
+            pixel = getBasicPixel(src, i, x);
+            if ((pixel >= low) && (pixel <= high)) {
+                setBasicPixel(dst, i, x, (basic_pixel_t)0);
+            } else {
+                setBasicPixel(dst, i, x, (basic_pixel_t)255);
             }
         }
     }
@@ -594,6 +593,22 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+void scaleImage_basic(const image_t* src, image_t* dst)
+{
+    float scaleFactorX = (float)src->cols / (float)dst->cols;
+    float scaleFactorY = (float)src->rows / (float)dst->rows;
+
+    for (int row = 0; row < dst->rows; row++) {
+        for (int col = 0; col < dst->cols; col++) {
+            int srcCol = (int)((float)col * scaleFactorX);
+            int srcRow = (int)((float)row * scaleFactorY);
+            setBasicPixel(dst, col, row, getBasicPixel(src, srcCol, srcRow));
+        }
+    }
+}
 
 // ----------------------------------------------------------------------------
 // EOF

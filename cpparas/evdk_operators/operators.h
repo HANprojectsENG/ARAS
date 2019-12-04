@@ -458,6 +458,12 @@ void warp(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]
 // Postcondition: dst is filled with the warped image
 void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 
+// Scales an image.
+// The interpolation method is nearest neighbor (no interpolation).
+//
+// Precondition : dst is allocated and has the wanted cols and rows
+// Postcondition: dst is filled with the scaled image
+void scaleImage(const image_t* src, image_t* dst);
 
 #endif // _OPERATORS_H_
 

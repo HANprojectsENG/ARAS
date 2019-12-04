@@ -43,9 +43,9 @@ extern "C" {
 #include "operators.h"
 #include "operators_basic.h"
 #include "operators_float.h"
+#include "operators_hsv.h"
 #include "operators_int16.h"
 #include "operators_rgb888.h"
-#include "operators_hsv.h"
 
 // ----------------------------------------------------------------------------
 // Function implementations
@@ -724,6 +724,24 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3])
     case IMGTYPE_HSV:
     default:
         fprintf(stderr, "warpAffine(): image type %d not supported\n", img->type);
+        break;
+    }
+}
+
+void scaleImage(const image_t* src, image_t* dst)
+{
+    switch (src->type) {
+    case IMGTYPE_BASIC:
+        scaleImage_basic(src, dst);
+        break;
+    case IMGTYPE_RGB888:
+        scaleImage_rgb888(src, dst);
+        break;
+    case IMGTYPE_INT16:
+    case IMGTYPE_FLOAT:
+    case IMGTYPE_HSV:
+    default:
+        fprintf(stderr, "warpAffine(): image type %d not supported\n", src->type);
         break;
     }
 }

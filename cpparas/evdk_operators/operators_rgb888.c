@@ -292,5 +292,21 @@ void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3])
 }
 
 // ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+void scaleImage_rgb888(const image_t* src, image_t* dst)
+{
+    float scaleFactorX = (float)src->cols / (float)dst->cols;
+    float scaleFactorY = (float)src->rows / (float)dst->rows;
+
+    for (int row = 0; row < dst->rows; row++) {
+        for (int col = 0; col < dst->cols; col++) {
+            int srcCol = (int)((float)col * scaleFactorX);
+            int srcRow = (int)((float)row * scaleFactorY);
+            setRGB888Pixel(dst, col, row, getRGB888Pixel(src, srcCol, srcRow));
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------
