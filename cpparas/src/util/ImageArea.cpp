@@ -7,9 +7,6 @@
 #include <glibmm/fileutils.h>
 #include <iostream>
 
-const uint32_t width = 200;
-const uint32_t height = 200;
-
 ImageArea::ImageArea()
 {
 }

@@ -21,6 +21,7 @@ private:
     void on_button_clicked();
     Gtk::Grid widgetContainer;
     Gtk::Button selectImageButton;
+    Gtk::Button useLastImageButton;
     Gtk::Button useCameraButton;
     Gtk::Separator separator;
     Gtk::ScrolledWindow imageViewport;
