@@ -217,11 +217,11 @@ void copy_rgb888(const image_t* src, image_t* dst)
         *d++ = *s++;
 }
 
-inline float affineTransformX(float x, float y, float warpMatrix[2][3])
+static inline float affineTransformX(float x, float y, float warpMatrix[2][3])
 {
     return warpMatrix[0][0] * x + warpMatrix[0][1] * y + warpMatrix[0][2];
 }
-inline float affineTransformY(float x, float y, float warpMatrix[2][3])
+static inline float affineTransformY(float x, float y, float warpMatrix[2][3])
 {
     return warpMatrix[1][0] * x + warpMatrix[1][1] * y + warpMatrix[1][2];
 }

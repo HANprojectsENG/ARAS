@@ -117,6 +117,11 @@ void centroid_basic(const image_t* img, const uint8_t blobnr, int32_t* cc, int32
 
 float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, const int32_t p, const int32_t q);
 
+// ----------------------------------------------------------------------------
+// Custom
+// ----------------------------------------------------------------------------
+
+
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------
 // EOF

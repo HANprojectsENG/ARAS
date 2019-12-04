@@ -145,6 +145,10 @@ void convertToBasicImage(const image_t* src, image_t* dst)
         }
 
     } break;
+    case IMGTYPE_HSV: {
+        // ToDo
+
+    } break;
     default:
         break;
     }
@@ -586,6 +590,10 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
     return 0.0f;
     // ********************************************
 }
+
+// ----------------------------------------------------------------------------
+// Custom operators
+// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // EOF
