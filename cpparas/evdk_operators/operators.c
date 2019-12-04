@@ -70,7 +70,7 @@ inline void setInt16Pixel(image_t* img, int32_t c, int32_t r, int16_pixel_t valu
     *((int16_pixel_t*)(img->data) + (r * img->cols + c)) = value;
 }
 
-inline int16_pixel_t getInt16Pixel(image_t* img, int32_t c, int32_t r)
+inline int16_pixel_t getInt16Pixel(const image_t* img, int32_t c, int32_t r)
 {
     return (*((int16_pixel_t*)(img->data) + (r * img->cols + c)));
 }
@@ -80,7 +80,7 @@ inline void setFloatPixel(image_t* img, int32_t c, int32_t r, float_pixel_t valu
     *((float_pixel_t*)(img->data) + (r * img->cols + c)) = value;
 }
 
-inline float_pixel_t getFloatPixel(image_t* img, int32_t c, int32_t r)
+inline float_pixel_t getFloatPixel(const image_t* img, int32_t c, int32_t r)
 {
     return (*((float_pixel_t*)(img->data) + (r * img->cols + c)));
 }
@@ -90,7 +90,7 @@ inline void setRGB888Pixel(image_t* img, int32_t c, int32_t r, rgb888_pixel_t va
     *((rgb888_pixel_t*)(img->data) + (r * img->cols + c)) = value;
 }
 
-inline rgb888_pixel_t getRGB888Pixel(image_t* img, int32_t c, int32_t r)
+inline rgb888_pixel_t getRGB888Pixel(const image_t* img, int32_t c, int32_t r)
 {
     return (*((rgb888_pixel_t*)(img->data) + (r * img->cols + c)));
 }
@@ -100,7 +100,7 @@ inline void setHSVPixel(image_t* img, int32_t c, int32_t r, hsv_pixel_t value)
     *((hsv_pixel_t*)(img->data) + (r * img->cols + c)) = value;
 }
 
-inline hsv_pixel_t getHSVPixel(image_t* img, int32_t c, int32_t r)
+inline hsv_pixel_t getHSVPixel(const image_t* img, int32_t c, int32_t r)
 {
     return (*((hsv_pixel_t*)(img->data) + (r * img->cols + c)));
 }

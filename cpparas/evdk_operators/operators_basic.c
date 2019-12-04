@@ -159,7 +159,7 @@ void convertToBasicImage(const image_t* src, image_t* dst)
 void contrastStretch_basic(const image_t* src, image_t* dst, const basic_pixel_t bottom, const basic_pixel_t top)
 {
 
-#warning TODO: contrastStretch_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -177,7 +177,7 @@ void contrastStretch_basic(const image_t* src, image_t* dst, const basic_pixel_t
 void contrastStretchFast_basic(const image_t* src, image_t* dst)
 {
 
-#warning TODO: contrastStretchFast_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -197,7 +197,7 @@ void contrastStretchFast_basic(const image_t* src, image_t* dst)
 void rotate180_basic(const image_t* img)
 {
 
-#warning TODO: rotate180_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -246,7 +246,7 @@ void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, 
 void threshold2Means_basic(const image_t* src, image_t* dst, const eBrightness brightness)
 {
 
-#warning TODO: threshold2Means_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -263,7 +263,7 @@ void threshold2Means_basic(const image_t* src, image_t* dst, const eBrightness b
 void thresholdOtsu_basic(const image_t* src, image_t* dst, const eBrightness brightness)
 {
 
-#warning TODO: thresholdOtsu_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -284,7 +284,7 @@ void thresholdOtsu_basic(const image_t* src, image_t* dst, const eBrightness bri
 void erase_basic(const image_t* img)
 {
 
-#warning TODO: erase_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -320,7 +320,7 @@ void setSelectedToValue_basic(const image_t* src,
     const basic_pixel_t value)
 {
 
-#warning TODO: setSelectedToValue_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -342,7 +342,7 @@ uint32_t neighbourCount_basic(const image_t* img,
     const eConnected connected)
 {
 
-#warning TODO: neighbourCount_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -361,7 +361,7 @@ uint32_t neighbourCount_basic(const image_t* img,
 void histogram_basic(const image_t* img, uint16_t* hist)
 {
 
-#warning TODO: histogram_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -381,7 +381,7 @@ void histogram_basic(const image_t* img, uint16_t* hist)
 void add_basic(const image_t* src, image_t* dst)
 {
 
-#warning TODO: add_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -397,7 +397,7 @@ void add_basic(const image_t* src, image_t* dst)
 uint32_t sum_basic(const image_t* img)
 {
 
-#warning TODO: sum_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -412,7 +412,7 @@ uint32_t sum_basic(const image_t* img)
 void multiply_basic(const image_t* src, image_t* dst)
 {
 
-#warning TODO: multiply_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -428,7 +428,7 @@ void multiply_basic(const image_t* src, image_t* dst)
 void invert_basic(const image_t* src, image_t* dst)
 {
 
-#warning TODO: invert_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -448,7 +448,7 @@ void invert_basic(const image_t* src, image_t* dst)
 void nonlinearFilter_basic(const image_t* src, image_t* dst, const eFilterOperation fo, const uint8_t n)
 {
 
-#warning TODO: nonlinearFilter_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -470,7 +470,7 @@ void nonlinearFilter_basic(const image_t* src, image_t* dst, const eFilterOperat
 void removeBorderBlobs_basic(const image_t* src, image_t* dst, const eConnected connected)
 {
 
-#warning TODO: removeBorderBlobs_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -487,7 +487,7 @@ void removeBorderBlobs_basic(const image_t* src, image_t* dst, const eConnected 
 void fillHoles_basic(const image_t* src, image_t* dst, const eConnected connected)
 {
 
-#warning TODO: fillHoles_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -504,7 +504,7 @@ void fillHoles_basic(const image_t* src, image_t* dst, const eConnected connecte
 uint32_t labelBlobs_basic(const image_t* src, image_t* dst, const eConnected connected)
 {
 
-#warning TODO: labelBlobs_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -521,7 +521,7 @@ uint32_t labelBlobs_basic(const image_t* src, image_t* dst, const eConnected con
 void binaryEdgeDetect_basic(const image_t* src, image_t* dst, const eConnected connected)
 {
 
-#warning TODO: binaryEdgeDetect_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -542,7 +542,7 @@ void binaryEdgeDetect_basic(const image_t* src, image_t* dst, const eConnected c
 void blobAnalyse_basic(const image_t* img, const uint8_t blobnr, blobinfo_t* blobInfo)
 {
 
-#warning TODO: blobAnalyse_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -559,7 +559,7 @@ void blobAnalyse_basic(const image_t* img, const uint8_t blobnr, blobinfo_t* blo
 void centroid_basic(const image_t* img, const uint8_t blobnr, int32_t* cc, int32_t* rc)
 {
 
-#warning TODO: centroid_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts
@@ -577,7 +577,7 @@ void centroid_basic(const image_t* img, const uint8_t blobnr, int32_t* cc, int32
 float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, const int32_t p, const int32_t q)
 {
 
-#warning TODO: normalizedCentralMoments_basic
+    // Not yet implemented
     // ********************************************
     // Added to prevent compiler warnings
     // Remove these when implementation starts

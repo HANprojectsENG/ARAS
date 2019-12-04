@@ -178,13 +178,13 @@ typedef struct blobinfo_t {
 extern void setBasicPixel(image_t* img, int32_t c, int32_t r, basic_pixel_t value);
 extern basic_pixel_t getBasicPixel(const image_t* img, int32_t c, int32_t r);
 extern void setInt16Pixel(image_t* img, int32_t c, int32_t r, int16_pixel_t value);
-extern int16_pixel_t getInt16Pixel(image_t* img, int32_t c, int32_t r);
+extern int16_pixel_t getInt16Pixel(const image_t* img, int32_t c, int32_t r);
 extern void setFloatPixel(image_t* img, int32_t c, int32_t r, float_pixel_t value);
-extern float_pixel_t getFloatPixel(image_t* img, int32_t c, int32_t r);
+extern float_pixel_t getFloatPixel(const image_t* img, int32_t c, int32_t r);
 extern void setRGB888Pixel(image_t* img, int32_t c, int32_t r, rgb888_pixel_t value);
-extern rgb888_pixel_t getRGB888Pixel(image_t* img, int32_t c, int32_t r);
+extern rgb888_pixel_t getRGB888Pixel(const image_t* img, int32_t c, int32_t r);
 extern void setHSVPixel(image_t* img, int32_t c, int32_t r, hsv_pixel_t value);
-extern hsv_pixel_t getHSVPixel(image_t* img, int32_t c, int32_t r);
+extern hsv_pixel_t getHSVPixel(const image_t* img, int32_t c, int32_t r);
 
 // ----------------------------------------------------------------------------
 // Memory (de)allocation
