@@ -2,10 +2,11 @@
 #include "operators.h"
 #include "util/ImageArea.hpp"
 #include "util/ImageUtils.hpp"
+#include <fstream>
 #include <gtkmm/filechooserdialog.h>
 #include <iostream>
 
-const std::string TEST_IMAGE_PATH = "../../snippets/setups/nobuilding/test-small-markers.jpg";
+const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 
 ControlUI::ControlUI()
     : widgetContainer()
@@ -15,9 +16,12 @@ ControlUI::ControlUI()
     , separator()
     , imageViewport()
     , imageArea()
+    , displayImage(nullptr)
 {
     this->set_title("Control UI");
 
+    widgetContainer.set_margin_top(5);
+    widgetContainer.set_column_spacing(5);
     widgetContainer.set_row_spacing(5);
     selectImageButton.set_hexpand(false);
     useLastImageButton.set_hexpand(false);
@@ -48,11 +52,14 @@ ControlUI::ControlUI()
     separator.show();
     imageViewport.show();
     imageArea.show();
+
+    useLastImageButton.grab_focus();
 }
 
 ControlUI::~ControlUI()
 {
-    deleteImage(displayImage);
+    if (displayImage)
+        deleteImage(displayImage);
 }
 
 void ControlUI::on_select_image_button_clicked()
@@ -77,8 +84,6 @@ void ControlUI::on_select_image_button_clicked()
     //Handle the response:
     switch (result) {
     case (Gtk::RESPONSE_OK): {
-        std::cout << "Open clicked." << std::endl;
-
         std::string filename = dialog.get_filename();
         this->set_input_image(filename);
         break;
@@ -92,7 +97,13 @@ void ControlUI::on_select_image_button_clicked()
 
 void ControlUI::on_use_last_image_button_clicked()
 {
-    std::cout << "Hello World" << std::endl;
+    std::ifstream inFile(LAST_IMAGE_CONF_PATH);
+    if (!inFile.good())
+        return;
+    std::string filePath;
+    std::getline(inFile, filePath);
+    inFile.close();
+    this->set_input_image(filePath);
 }
 
 void ControlUI::on_use_camera_button_clicked()
@@ -103,6 +114,13 @@ void ControlUI::on_use_camera_button_clicked()
 void ControlUI::set_input_image(const std::string& filePath)
 {
     image_t* inputImage = ImageUtils::loadImageFromFile(filePath);
+
+    std::ofstream outFile(LAST_IMAGE_CONF_PATH);
+    outFile << filePath;
+    outFile.close();
+
+    if (displayImage)
+        deleteImage(displayImage);
     displayImage = ImageUtils::performTestOperations(inputImage);
     deleteImage(inputImage);
     imageArea.setImage(displayImage);

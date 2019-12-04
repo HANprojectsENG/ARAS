@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 Saved.gg
+.cpparas-last-image
 
 /paras/.vscode/
 /cpparas/.vscode/
