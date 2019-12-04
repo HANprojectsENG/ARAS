@@ -18,7 +18,9 @@ public:
 
 private:
     void set_input_image(const std::string& filePath);
-    void on_button_clicked();
+    void on_select_image_button_clicked();
+    void on_use_last_image_button_clicked();
+    void on_use_camera_button_clicked();
     Gtk::Grid widgetContainer;
     Gtk::Button selectImageButton;
     Gtk::Button useLastImageButton;
