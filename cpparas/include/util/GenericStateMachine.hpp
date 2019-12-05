@@ -1,6 +1,8 @@
 #ifndef GENERICSTATEMACHINE_HPP
 #define GENERICSTATEMACHINE_HPP
 
+#include "util/Debug.hpp"
+#include <exception>
 #include <functional>
 #include <map>
 
@@ -10,16 +12,29 @@ enum class StateFuncType {
     EXIT
 };
 
+const std::map<StateFuncType, std::string> STATE_FUNC_TYPE_NAMES = {
+    { StateFuncType::ENTRY, "entry" },
+    { StateFuncType::DO, "do" },
+    { StateFuncType::EXIT, "exit" }
+};
+
 template <typename StateT>
 class GenericStateMachine {
 public:
+    virtual void init() = 0;
+
     bool doCycle()
     {
-        performDo();
+        if (exited) {
+            throw std::logic_error("state machine has already exited");
+        }
+
+        perform(StateFuncType::DO);
         if (continueCondition()) {
             return true;
         } else {
-            performExit();
+            perform(StateFuncType::EXIT);
+            exited = true;
             return false;
         }
     }
@@ -34,42 +49,40 @@ protected:
     {
         handlerFuncs[std::make_pair(state, type)] = handler;
     }
-    bool continueCondition()
+    void addStateName(StateT state, std::string name)
     {
-        return true;
+        stateNames[state] = name;
     }
+    virtual bool continueCondition() = 0;
     void setInitialState(StateT state)
     {
         currentState = state;
-        performEntry();
+        perform(StateFuncType::ENTRY);
     }
     void switchState(StateT newState)
     {
-        performExit();
+        perform(StateFuncType::EXIT);
         currentState = newState;
-        performEntry();
+        perform(StateFuncType::ENTRY);
     }
 
 private:
-    void performEntry()
-    {
-        perform(StateFuncType::ENTRY);
-    }
-    void performDo()
-    {
-        perform(StateFuncType::DO);
-    }
-    void performExit()
-    {
-        perform(StateFuncType::EXIT);
-    }
     void perform(StateFuncType type)
     {
+        std::string stateName;
+        if (stateNames.count(currentState) == 1) {
+            stateName = stateNames.at(currentState);
+        } else {
+            stateName = std::to_string((int)currentState);
+        }
+        Debug::println(std::string("Performing state " + stateName + std::string(" ") + STATE_FUNC_TYPE_NAMES.at(type)));
         this->handlerFuncs.at(std::make_pair(currentState, type))();
     }
 
     StateT currentState;
-    std::map<std::pair<StateT, StateFuncType>, std::function<void()>> handlerFuncs;
+    bool exited = false;
+    std::map<std::pair<StateT, StateFuncType>, std::function<void()>> handlerFuncs {};
+    std::map<StateT, std::string> stateNames {};
 };
 
 #endif /* GENERICSTATEMACHINE_HPP */

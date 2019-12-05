@@ -41,6 +41,9 @@ public:
 
     void init();
 
+protected:
+    bool continueCondition();
+
 private:
     void INIT_entry();
     void INIT_do();

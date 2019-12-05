@@ -4,6 +4,16 @@
 
 StateMachine::StateMachine()
 {
+    addStateName(State::INIT, "Init");
+    addStateName(State::STARTING, "Starting");
+    addStateName(State::CHECK_CURRENT_STEP, "Check Current Step");
+    addStateName(State::PROJECT_STEP, "Project Step");
+    addStateName(State::WAIT, "Wait");
+    addStateName(State::PROJECT_OFF, "Project Off");
+    addStateName(State::CAPTURE, "Capture");
+    addStateName(State::CHECK_NEXT_STEP, "Check Next Step");
+    addStateName(State::FINAL_STEP, "Final Step");
+
     addHandler(State::INIT, StateFuncType::ENTRY, std::bind(&StateMachine::INIT_entry, this));
     addHandler(State::INIT, StateFuncType::DO, std::bind(&StateMachine::INIT_do, this));
     addHandler(State::INIT, StateFuncType::EXIT, std::bind(&StateMachine::INIT_exit, this));
@@ -48,6 +58,11 @@ StateMachine::~StateMachine()
 void StateMachine::init()
 {
     setInitialState(State::INIT);
+}
+
+bool StateMachine::continueCondition()
+{
+    return getCurrentState() != State::FINAL_STEP;
 }
 
 void StateMachine::INIT_entry() {}
