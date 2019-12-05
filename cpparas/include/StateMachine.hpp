@@ -7,6 +7,7 @@
 #include "Projection.hpp"
 #include "RegionExtractor.hpp"
 #include "StudChecker.hpp"
+#include "util/GenericStateMachine.hpp"
 #include <map>
 
 enum class State {
@@ -33,20 +34,14 @@ const std::map<State, std::string> STATE_NAMES = {
     { State::FINAL_STEP, "Final Step" }
 };
 
-class StateMachine {
+class StateMachine : public GenericStateMachine<State> {
 public:
     StateMachine();
     ~StateMachine();
 
     void init();
-    bool doCycle();
 
 private:
-    void performEntry();
-    void performDo();
-    void performExit();
-    void switchState(State newState);
-
     void INIT_entry();
     void INIT_do();
     void INIT_exit();
@@ -82,42 +77,6 @@ private:
     void FINAL_STEP_entry();
     void FINAL_STEP_do();
     void FINAL_STEP_exit();
-
-    std::map<State, void (StateMachine::*)()> ENTRY_FUNCS {
-        { State::INIT, &StateMachine::INIT_entry },
-        { State::STARTING, &StateMachine::STARTING_entry },
-        { State::CHECK_CURRENT_STEP, &StateMachine::CHECK_CURRENT_STEP_entry },
-        { State::PROJECT_STEP, &StateMachine::PROJECT_STEP_entry },
-        { State::WAIT, &StateMachine::WAIT_entry },
-        { State::PROJECT_STEP, &StateMachine::PROJECT_STEP_entry },
-        { State::CAPTURE, &StateMachine::CAPTURE_entry },
-        { State::CHECK_NEXT_STEP, &StateMachine::CHECK_NEXT_STEP_entry },
-        { State::FINAL_STEP, &StateMachine::FINAL_STEP_entry }
-    };
-    std::map<State, void (StateMachine::*)()> DO_FUNCS {
-        { State::INIT, &StateMachine::INIT_do },
-        { State::STARTING, &StateMachine::STARTING_do },
-        { State::CHECK_CURRENT_STEP, &StateMachine::CHECK_CURRENT_STEP_do },
-        { State::PROJECT_STEP, &StateMachine::PROJECT_STEP_do },
-        { State::WAIT, &StateMachine::WAIT_do },
-        { State::PROJECT_STEP, &StateMachine::PROJECT_STEP_do },
-        { State::CAPTURE, &StateMachine::CAPTURE_do },
-        { State::CHECK_NEXT_STEP, &StateMachine::CHECK_NEXT_STEP_do },
-        { State::FINAL_STEP, &StateMachine::FINAL_STEP_do }
-    };
-    std::map<State, void (StateMachine::*)()> EXIT_FUNCS {
-        { State::INIT, &StateMachine::INIT_exit },
-        { State::STARTING, &StateMachine::STARTING_exit },
-        { State::CHECK_CURRENT_STEP, &StateMachine::CHECK_CURRENT_STEP_exit },
-        { State::PROJECT_STEP, &StateMachine::PROJECT_STEP_exit },
-        { State::WAIT, &StateMachine::WAIT_exit },
-        { State::PROJECT_STEP, &StateMachine::PROJECT_STEP_exit },
-        { State::CAPTURE, &StateMachine::CAPTURE_exit },
-        { State::CHECK_NEXT_STEP, &StateMachine::CHECK_NEXT_STEP_exit },
-        { State::FINAL_STEP, &StateMachine::FINAL_STEP_exit }
-    };
-
-    State currentState;
 };
 
 #endif /* STATEMACHINE_HPP */
