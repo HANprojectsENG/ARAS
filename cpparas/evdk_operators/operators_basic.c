@@ -610,6 +610,27 @@ void scaleImage_basic(const image_t* src, image_t* dst)
     }
 }
 
+void crop_basic(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2])
+{
+    //Gotta check every check to make sure we are checked!
+    if ((top_left[0] < img->cols) && (top_left[1] < img->rows) && 
+        (bottom_right[0] < img->cols) && (bottom_right[1] < img->rows) && 
+        (top_left[0] || bottom_right[0]) && (top_left[1] || bottom_right[1]))
+    {
+        dst->cols = bottom_right[0] - top_left[0]; 
+        dst->rows = bottom_right[1] - top_left[1];  
+        dst->type = img->type; 
+
+        for (uint32_t i = 0; i < dst->rows; i++)
+        {
+            for (uint32_t j = 0; j < dst->cols; j++)
+            {
+                setBasicPixel(dst, j, i, getBasicPixel(img, top_left[0] + j, top_left[1] + i));
+            }
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------

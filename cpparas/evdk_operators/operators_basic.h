@@ -123,6 +123,8 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 
 void scaleImage_basic(const image_t* src, image_t* dst);
 
+void crop_basic(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2]);
+
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------
 // EOF

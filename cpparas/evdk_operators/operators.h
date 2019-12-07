@@ -465,6 +465,13 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 // Postcondition: dst is filled with the scaled image
 void scaleImage(const image_t* src, image_t* dst);
 
+// Crops the image using an upper left corner and an bottom right corner coordinates.
+//
+// If crop factor is 0 or outside bountries, nothing is returned from the function
+//
+// Arrays are [0] = x, [1] = y for the coordinates of each corner
+void crop(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2]);
+
 #endif // _OPERATORS_H_
 
 #ifdef __cplusplus

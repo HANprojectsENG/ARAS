@@ -741,7 +741,25 @@ void scaleImage(const image_t* src, image_t* dst)
     case IMGTYPE_FLOAT:
     case IMGTYPE_HSV:
     default:
-        fprintf(stderr, "warpAffine(): image type %d not supported\n", src->type);
+        fprintf(stderr, "scaleImage(): image type %d not supported\n", src->type);
+        break;
+    }
+}
+
+void crop(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2])
+{
+    switch (img->type) {
+    case IMGTYPE_RGB888:
+        crop_rgb888(img, dst, top_left, bottom_right);
+        break;
+    case IMGTYPE_BASIC:
+        crop_basic(img, dst, top_left, bottom_right);
+        break;
+    case IMGTYPE_INT16:
+    case IMGTYPE_FLOAT:
+    case IMGTYPE_HSV:
+    default:
+        fprintf(stderr, "crop(): image type %d not supported\n", img->type);
         break;
     }
 }
