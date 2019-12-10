@@ -381,10 +381,10 @@ void add_basic(const image_t* src, image_t* dst)
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-        //Set every pixel to the multiple of src and dst pixel    
-        sum = getBasicPixel(src, c, r) + getBasicPixel(dst, c, r); 
-        sum = sum > 255 ? 255 : sum;
-        setBasicPixel(dst, c, r, sum);
+            //Set every pixel to the multiple of src and dst pixel
+            sum = getBasicPixel(src, c, r) + getBasicPixel(dst, c, r);
+            sum = sum > 255 ? 255 : sum;
+            setBasicPixel(dst, c, r, sum);
         }
     }
     return;
@@ -416,10 +416,10 @@ void multiply_basic(const image_t* src, image_t* dst)
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-        //Set every pixel to the multiple of src and dst pixel 
-        sum = (getBasicPixel(src,c,r) * getBasicPixel(dst,c,r));
-        sum = sum > 255 ? 255 : sum;
-        setBasicPixel(dst, c, r, sum);
+            //Set every pixel to the multiple of src and dst pixel
+            sum = (getBasicPixel(src, c, r) * getBasicPixel(dst, c, r));
+            sum = sum > 255 ? 255 : sum;
+            setBasicPixel(dst, c, r, sum);
         }
     }
     return;
@@ -613,8 +613,9 @@ void scaleImage_basic(const image_t* src, image_t* dst)
     return;
 }
 
-void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k){
-    
+void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k)
+{
+
     image_t* der_x = newBasicImage(src->cols, src->rows);
     image_t* der_y = newBasicImage(src->cols, src->rows);
     image_t* der_x2 = newUInt16Image(src->cols, src->rows);
@@ -625,42 +626,41 @@ void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSiz
     basic_pixel_t temp;
     basic_pixel_t temp2;
 
-
     //Testing
-    edge_basic(src,dst,blockSize);
+    edge_basic(src, dst, blockSize);
     //gaussian_basic_xy(dst,ksize);
 
     //1. Calculate x and y derivative of image via sobel
-    sobelX_basic(src,der_x);
-    sobelY_basic(src,der_y);
+    sobelX_basic(src, der_x);
+    sobelY_basic(src, der_y);
     //2. Calculate other three images in M
     power_uint16(der_x, der_x2, blockSize); //der_x^2
     power_uint16(der_y, der_y2, blockSize); //der_y^2
     multiply_basic_2(der_x, der_y, der_xy); //der_x * der_y
     //3. Apply Gaussian
-    gaussian_uint16_x(der_x2,ksize);
-    gaussian_uint16_y(der_y2,ksize);
-    gaussian_uint16_xy(der_xy,ksize);
+    gaussian_uint16_x(der_x2, ksize);
+    gaussian_uint16_y(der_y2, ksize);
+    gaussian_uint16_xy(der_xy, ksize);
     //4. Calulate R with K
-    multiply_basic_2(der_x2,der_y2,der_x2y2);
-    multiply_basic(der_xy,der_xy);
-    
+    multiply_basic_2(der_x2, der_y2, der_x2y2);
+    multiply_basic(der_xy, der_xy);
+
     //
-    add_basic(der_x2,der_y2);
-    subtract_basic(der_x2y2,der_xy);
-    power_uint16(der_y2,mtrace,blockSize);
+    add_basic(der_x2, der_y2);
+    subtract_basic(der_x2y2, der_xy);
+    power_uint16(der_y2, mtrace, blockSize);
 
     //Multiply mtrace by k
     for (uint16_t r = 0; r < dst->rows; r++) {
         for (uint16_t c = 0; c < dst->cols; c++) {
-            temp = getBasicPixel(mtrace,c,r);
+            temp = getBasicPixel(mtrace, c, r);
             temp2 = temp * k;
             setBasicPixel(mtrace, c, r, temp2);
         }
     }
 
     //
-    subtract_basic(der_xy,mtrace);
+    subtract_basic(der_xy, mtrace);
     //copy_basic(mtrace,dst);
 
     //5. Temp print results
@@ -669,7 +669,8 @@ void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSiz
     return;
 }
 
-void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize){
+void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize)
+{
     uint16_t c;
     uint16_t r;
     int32_t sum_x, sum_y;
@@ -687,12 +688,7 @@ void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize){
             *| -1 | -2 | -1 |
             *+----+----+----+
             */
-            sum_x = getBasicPixel(src,c - 1,r - 1) + 
-            (2 * getBasicPixel(src,c,r - 1)) +
-            getBasicPixel(src,c + 1,r - 1) -
-            getBasicPixel(src,c - 1,r + 1) -
-            (2 * getBasicPixel(src,c ,r + 1)) -
-            getBasicPixel(src,c + 1,r + 1);
+            sum_x = getBasicPixel(src, c - 1, r - 1) + (2 * getBasicPixel(src, c, r - 1)) + getBasicPixel(src, c + 1, r - 1) - getBasicPixel(src, c - 1, r + 1) - (2 * getBasicPixel(src, c, r + 1)) - getBasicPixel(src, c + 1, r + 1);
 
             /*Apply sobel filter in y direction
             *+----+----+----+
@@ -703,12 +699,7 @@ void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize){
             *| -1 |  0 | +1 |
             *+----+----+----+
             */
-            sum_y = getBasicPixel(src,c + 1,r - 1) + 
-            (2 * getBasicPixel(src,c + 1,r)) +
-            getBasicPixel(src,c + 1,r + 1) -
-            getBasicPixel(src,c - 1,r - 1) -
-            (2 * getBasicPixel(src,c - 1 ,r)) -
-            getBasicPixel(src,c - 1,r + 1);
+            sum_y = getBasicPixel(src, c + 1, r - 1) + (2 * getBasicPixel(src, c + 1, r)) + getBasicPixel(src, c + 1, r + 1) - getBasicPixel(src, c - 1, r - 1) - (2 * getBasicPixel(src, c - 1, r)) - getBasicPixel(src, c - 1, r + 1);
 
             //power of n of both x and y results
             sum_x = pow(sum_x, blockSize);
@@ -718,16 +709,17 @@ void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize){
             sum = sum_x + sum_y;
 
             //Take nth root of sum to get result
-            sum = pow(sum, (1./blockSize));
+            sum = pow(sum, (1. / blockSize));
 
             sum = sum < 0.0 ? (0 - sum) : sum;
             sum = sum > 255.0 ? 255.0 : sum;
-            setBasicPixel(dst,c, r, (uint8_t)sum);            
+            setBasicPixel(dst, c, r, (uint8_t)sum);
         }
     }
     return;
 }
-void sobelX_basic(const image_t* src, image_t* dst){
+void sobelX_basic(const image_t* src, image_t* dst)
+{
     uint16_t c;
     uint16_t r;
     int32_t sum;
@@ -744,21 +736,17 @@ void sobelX_basic(const image_t* src, image_t* dst){
             *| -1 | -2 | -1 |
             *+----+----+----+
             */
-            sum = getBasicPixel(src,c - 1,r - 1) + 
-            (2 * getBasicPixel(src,c,r - 1)) +
-            getBasicPixel(src,c + 1,r - 1) -
-            getBasicPixel(src,c - 1,r + 1) -
-            (2 * getBasicPixel(src,c ,r + 1)) -
-            getBasicPixel(src,c + 1,r + 1);
+            sum = getBasicPixel(src, c - 1, r - 1) + (2 * getBasicPixel(src, c, r - 1)) + getBasicPixel(src, c + 1, r - 1) - getBasicPixel(src, c - 1, r + 1) - (2 * getBasicPixel(src, c, r + 1)) - getBasicPixel(src, c + 1, r + 1);
             sum = sum < 0.0 ? (0 - sum) : sum;
             sum = sum > 255 ? 255 : sum;
-            setBasicPixel(dst,c, r, sum);
+            setBasicPixel(dst, c, r, sum);
         }
     }
     return;
 }
 
-void sobelY_basic(const image_t* src, image_t* dst){
+void sobelY_basic(const image_t* src, image_t* dst)
+{
     uint16_t c;
     uint16_t r;
     int32_t sum;
@@ -775,30 +763,26 @@ void sobelY_basic(const image_t* src, image_t* dst){
             *| -1 |  0 | +1 |
             *+----+----+----+
             */
-            sum = getBasicPixel(src,c + 1,r - 1) + 
-            (2 * getBasicPixel(src,c + 1,r)) +
-            getBasicPixel(src,c + 1,r + 1) -
-            getBasicPixel(src,c - 1,r - 1) -
-            (2 * getBasicPixel(src,c - 1 ,r)) -
-            getBasicPixel(src,c - 1,r + 1);
+            sum = getBasicPixel(src, c + 1, r - 1) + (2 * getBasicPixel(src, c + 1, r)) + getBasicPixel(src, c + 1, r + 1) - getBasicPixel(src, c - 1, r - 1) - (2 * getBasicPixel(src, c - 1, r)) - getBasicPixel(src, c - 1, r + 1);
             sum = sum < 0.0 ? (0 - sum) : sum;
             sum = sum > 255 ? 255 : sum;
-            setBasicPixel(dst,c, r, sum);
+            setBasicPixel(dst, c, r, sum);
         }
     }
     return;
 }
 
-void power_uint16(const image_t* src,image_t* dst, const uint8_t blockSize){
+void power_uint16(const image_t* src, image_t* dst, const uint8_t blockSize)
+{
     uint16_t c;
     uint16_t r;
 
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-            //Set every pixel to the power of blockSize    
-            setUInt16Pixel(dst, c, r, pow(getUInt16Pixel(src,c,r),blockSize));
-        }    
+            //Set every pixel to the power of blockSize
+            setUInt16Pixel(dst, c, r, pow(getUInt16Pixel(src, c, r), blockSize));
+        }
     }
     return;
 }
@@ -811,8 +795,8 @@ void multiply_basic_2(const image_t* src, const image_t* src2, image_t* dst)
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-        //Set every pixel to the multiple of src and dst pixel    
-        setUInt16Pixel(dst, c, r, (getBasicPixel(src,c,r) * getBasicPixel(src2,c,r)));
+            //Set every pixel to the multiple of src and dst pixel
+            setUInt16Pixel(dst, c, r, (getBasicPixel(src, c, r) * getBasicPixel(src2, c, r)));
         }
     }
     return;
@@ -827,121 +811,124 @@ void subtract_basic(const image_t* src, image_t* dst)
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-        //Set every pixel to the multiple of src and dst pixel
-        sum = (getBasicPixel(src,c,r) - getBasicPixel(dst,c,r));
-        sum = sum < 0 ? 0 : sum;    
-        setBasicPixel(dst, c, r, sum);
+            //Set every pixel to the multiple of src and dst pixel
+            sum = (getBasicPixel(src, c, r) - getBasicPixel(dst, c, r));
+            sum = sum < 0 ? 0 : sum;
+            setBasicPixel(dst, c, r, sum);
         }
     }
     return;
 }
 
 //TODO ADD CHECK FOR KERNAL SIZE
-void gaussian_uint16_x(image_t* src, const uint8_t ksize){
-    //http://dev.theomader.com/gaussian-kernel-calculator/
-    //coefficients of 1D gaussian kernel with sigma = 1
-    double coeffs[] = {0.0059, 0.06062, 0.24184, 0.38310, 0.24184, 0.06062, 0.0059}; 
-    uint8_t offset = ksize/2; //offset for finding pixel offset in kernal is ksize/2 rounded down to int
-    float sum;
-    uint16_t c;
-    uint16_t r;
-    image_t* temp_x = newUInt16Image(src->cols, src->rows);
-
-    //Loop all pixels ignoring offset outside rows and cols
-    //Maybe add mirror pixels for outside rows and cols
-    for (r = offset; r < src->rows - offset; r++) {
-        for (c = offset; c < src->cols - offset; c++) {
-                sum = 0.0;
-                for (int8_t i = -offset; i <= offset; i++){
-                    //ksize 3 range(-1,1)   coeffs[2,3,4]
-                    //ksize 5 range(-2,2)   coeffs[1,2,3,4,5]
-                    //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
-                    sum = sum + coeffs[i + 3] * getUInt16Pixel(src,(c + i),r);
-                }
-                setUInt16Pixel(temp_x,c,r,(uint16_t)sum);
-        }
-    }
-    copy(temp_x,src);
-    return;
-}
-
-void gaussian_uint16_y(image_t* src, const uint8_t ksize){
-    //coefficients of 1D gaussian kernel with sigma = 1
-    //http://dev.theomader.com/gaussian-kernel-calculator/
-    double coeffs[] = {0.0059, 0.06062, 0.24184, 0.38310, 0.24184, 0.06062, 0.0059}; 
-    uint8_t offset = ksize/2; //offset for finding pixel offset in kernal is ksize/2 rounded down to int
-    float sum;
-    uint16_t c;
-    uint16_t r;
-    image_t* temp_x = newUInt16Image(src->cols, src->rows);
-
-    //Loop all pixels ignoring offset outside rows and cols
-    //Maybe add mirror pixels for outside rows and cols
-    for (r = offset; r < src->rows - offset; r++) {
-        for (c = offset; c < src->cols - offset; c++) {
-                sum = 0.0;
-                for (int8_t i = -offset; i <= offset; i++){
-                    //ksize 3 range(-1,1)   coeffs[2,3,4]
-                    //ksize 5 range(-2,2)   coeffs[1,2,3,4,5]
-                    //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
-                    sum = sum + coeffs[i + 3] * getUInt16Pixel(src,c,(r + i));
-                }
-                setUInt16Pixel(temp_x,c,r,sum);
-        }
-    }
-    copy(temp_x,src);  
-    return;
-}
-
-void gaussian_uint16_xy(image_t* src, const uint8_t ksize){
-    //coefficients of 1D gaussian kernel with sigma = 1
-    //http://dev.theomader.com/gaussian-kernel-calculator/
-    double coeffs[] = {0.0059, 0.06062, 0.24184, 0.38310, 0.24184, 0.06062, 0.0059}; 
-    uint8_t offset = ksize/2; //offset for finding pixel offset in kernal is ksize/2 rounded down to int
-    float sum;
-    uint16_t c;
-    uint16_t r;
-    image_t* temp_x = newUInt16Image(src->cols, src->rows);
-
-    //Loop all pixels ignoring offset outside rows and cols
-    //Maybe add mirror pixels for outside rows and cols
-    for (r = offset; r < src->rows - offset; r++) {
-        for (c = offset; c < src->cols - offset; c++) {
-                //loop through gaussian filter 
-                sum = 0.0;
-                for (int8_t r2 = -offset; r2 <= offset; r2++){
-                    for (int8_t c2 = -offset; c2 <= offset; c2++){
-                        //ksize 3 range(-1,1)   coeffs[2,3,4]
-                        //ksize 5 range(-2,2)   coeffs[1,2,3,4,5]
-                        //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
-                        //Take coeffs in both x and y direction. 
-                        sum = sum + (coeffs[r2 + 3] * coeffs[c2 + 3] * getUInt16Pixel(src,c + c2,r + r2));
-                    }
-                }
-                setUInt16Pixel(temp_x,c,r,sum);
-        }
-    }
-    copy(temp_x,src); 
-    return; 
-}
-
-void crop_basic(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2])
+void gaussian_uint16_x(image_t* src, const uint8_t ksize)
 {
-    //Gotta check every check to make sure we are checked!
-    if ((top_left[0] < img->cols) && (top_left[1] < img->rows) && 
-        (bottom_right[0] < img->cols) && (bottom_right[1] < img->rows) && 
-        (top_left[0] || bottom_right[0]) && (top_left[1] || bottom_right[1]))
-    {
-        dst->cols = bottom_right[0] - top_left[0]; 
-        dst->rows = bottom_right[1] - top_left[1];  
-        dst->type = img->type; 
+    //http://dev.theomader.com/gaussian-kernel-calculator/
+    //coefficients of 1D gaussian kernel with sigma = 1
+    double coeffs[] = { 0.0059, 0.06062, 0.24184, 0.38310, 0.24184, 0.06062, 0.0059 };
+    uint8_t offset = ksize / 2; //offset for finding pixel offset in kernal is ksize/2 rounded down to int
+    float sum;
+    uint16_t c;
+    uint16_t r;
+    image_t* temp_x = newUInt16Image(src->cols, src->rows);
 
-        for (uint32_t i = 0; i < dst->rows; i++)
-        {
-            for (uint32_t j = 0; j < dst->cols; j++)
-            {
-                setBasicPixel(dst, j, i, getBasicPixel(img, top_left[0] + j, top_left[1] + i));
+    //Loop all pixels ignoring offset outside rows and cols
+    //Maybe add mirror pixels for outside rows and cols
+    for (r = offset; r < src->rows - offset; r++) {
+        for (c = offset; c < src->cols - offset; c++) {
+            sum = 0.0;
+            for (int8_t i = -offset; i <= offset; i++) {
+                //ksize 3 range(-1,1)   coeffs[2,3,4]
+                //ksize 5 range(-2,2)   coeffs[1,2,3,4,5]
+                //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
+                sum = sum + coeffs[i + 3] * getUInt16Pixel(src, (c + i), r);
             }
+            setUInt16Pixel(temp_x, c, r, (uint16_t)sum);
+        }
+    }
+    copy(temp_x, src);
+    return;
+}
+
+void gaussian_uint16_y(image_t* src, const uint8_t ksize)
+{
+    //coefficients of 1D gaussian kernel with sigma = 1
+    //http://dev.theomader.com/gaussian-kernel-calculator/
+    double coeffs[] = { 0.0059, 0.06062, 0.24184, 0.38310, 0.24184, 0.06062, 0.0059 };
+    uint8_t offset = ksize / 2; //offset for finding pixel offset in kernal is ksize/2 rounded down to int
+    float sum;
+    uint16_t c;
+    uint16_t r;
+    image_t* temp_x = newUInt16Image(src->cols, src->rows);
+
+    //Loop all pixels ignoring offset outside rows and cols
+    //Maybe add mirror pixels for outside rows and cols
+    for (r = offset; r < src->rows - offset; r++) {
+        for (c = offset; c < src->cols - offset; c++) {
+            sum = 0.0;
+            for (int8_t i = -offset; i <= offset; i++) {
+                //ksize 3 range(-1,1)   coeffs[2,3,4]
+                //ksize 5 range(-2,2)   coeffs[1,2,3,4,5]
+                //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
+                sum = sum + coeffs[i + 3] * getUInt16Pixel(src, c, (r + i));
+            }
+            setUInt16Pixel(temp_x, c, r, sum);
+        }
+    }
+    copy(temp_x, src);
+    return;
+}
+
+void gaussian_uint16_xy(image_t* src, const uint8_t ksize)
+{
+    //coefficients of 1D gaussian kernel with sigma = 1
+    //http://dev.theomader.com/gaussian-kernel-calculator/
+    double coeffs[] = { 0.0059, 0.06062, 0.24184, 0.38310, 0.24184, 0.06062, 0.0059 };
+    uint8_t offset = ksize / 2; //offset for finding pixel offset in kernal is ksize/2 rounded down to int
+    float sum;
+    uint16_t c;
+    uint16_t r;
+    image_t* temp_x = newUInt16Image(src->cols, src->rows);
+
+    //Loop all pixels ignoring offset outside rows and cols
+    //Maybe add mirror pixels for outside rows and cols
+    for (r = offset; r < src->rows - offset; r++) {
+        for (c = offset; c < src->cols - offset; c++) {
+            //loop through gaussian filter
+            sum = 0.0;
+            for (int8_t r2 = -offset; r2 <= offset; r2++) {
+                for (int8_t c2 = -offset; c2 <= offset; c2++) {
+                    //ksize 3 range(-1,1)   coeffs[2,3,4]
+                    //ksize 5 range(-2,2)   coeffs[1,2,3,4,5]
+                    //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
+                    //Take coeffs in both x and y direction.
+                    sum = sum + (coeffs[r2 + 3] * coeffs[c2 + 3] * getUInt16Pixel(src, c + c2, r + r2));
+                }
+            }
+            setUInt16Pixel(temp_x, c, r, sum);
+        }
+    }
+    copy(temp_x, src);
+    return;
+}
+
+void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2])
+{
+    if (top_left[0] >= img->cols || top_left[1] >= img->rows
+        || top_left[0] + dst->cols <= 0 || top_left[1] + dst->cols <= 0) {
+        // Cropping region is outside of the input image.
+        return;
+    }
+
+    // Start is inclusive, end is exclusive.
+    int32_t destStartCol = top_left[0] >= 0 ? 0 : -top_left[0];
+    int32_t destStartRow = top_left[1] >= 0 ? 0 : -top_left[1];
+    int32_t destEndCol = top_left[0] + dst->cols < img->cols ? dst->cols : (dst->cols - (top_left[0] + dst->cols - img->cols));
+    int32_t destEndRow = top_left[1] + dst->rows < img->rows ? dst->rows : (dst->rows - (top_left[1] + dst->rows - img->rows));
+
+    for (int32_t row = destStartRow; row < destEndRow; row++) {
+        for (int32_t col = destStartCol; col < destEndCol; col++) {
+            setBasicPixel(dst, col, row, getBasicPixel((image_t*)img, top_left[0] + col, top_left[1] + row));
         }
     }
 }

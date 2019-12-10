@@ -72,7 +72,7 @@ typedef enum {
     IMGTYPE_FLOAT = 2, // Float
     IMGTYPE_RGB888 = 3, // RGB 8-bit per pixel
     IMGTYPE_HSV = 4, // HSV 16-bit H, 8-bit S,V
-    IMGTYPE_UINT16= 5,
+    IMGTYPE_UINT16 = 5,
 
     IMGTYPE_MAX = 2147483647 // Max 32-bit int value,
     // forces enum to be 4 bytes
@@ -474,19 +474,22 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 // Postcondition: dst is filled with the scaled image
 void scaleImage(const image_t* src, image_t* dst);
 
-// 
-// 
 //
-// Precondition : 
-// Postcondition: 
+//
+//
+// Precondition :
+// Postcondition:
 void harrisCorner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k);
 
-// Crops the image using an upper left corner and an bottom right corner coordinates.
+// Crops the image using an source upper left corner and destination size.
 //
-// If crop factor is 0 or outside bountries, nothing is returned from the function
+// WARNING:
+// If a part of the cropping region is not within the image, those parts will not be copied to the destination image.
 //
-// Arrays are [0] = x, [1] = y for the coordinates of each corner
-void crop(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2]);
+// The coordinate is specified as [0] = x, [1] = y
+// Precondition: dst is allocated and has the wanted cols and rows
+// Postcondition: dst is filled with the cropped image
+void crop(const image_t* img, image_t* dst, int32_t top_left[2]);
 
 #endif // _OPERATORS_H_
 

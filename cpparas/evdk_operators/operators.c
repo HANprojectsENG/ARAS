@@ -45,8 +45,8 @@ extern "C" {
 #include "operators_float.h"
 #include "operators_hsv.h"
 #include "operators_int16.h"
-#include "operators_uint16.h"
 #include "operators_rgb888.h"
+#include "operators_uint16.h"
 
 // ----------------------------------------------------------------------------
 // Function implementations
@@ -105,7 +105,6 @@ inline hsv_pixel_t getHSVPixel(const image_t* img, int32_t c, int32_t r)
 {
     return (*((hsv_pixel_t*)(img->data) + (r * img->cols + c)));
 }
-
 
 inline void setUInt16Pixel(image_t* img, int32_t c, int32_t r, uint16_pixel_t value)
 {
@@ -802,14 +801,14 @@ void harrisCorner(const image_t* src, image_t* dst, const uint8_t blockSize, con
     }
 }
 
-void crop(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2])
+void crop(const image_t* img, image_t* dst, int32_t top_left[2])
 {
     switch (img->type) {
     case IMGTYPE_RGB888:
-        crop_rgb888(img, dst, top_left, bottom_right);
+        crop_rgb888(img, dst, top_left);
         break;
     case IMGTYPE_BASIC:
-        crop_basic(img, dst, top_left, bottom_right);
+        crop_basic(img, dst, top_left);
         break;
     case IMGTYPE_INT16:
     case IMGTYPE_FLOAT:

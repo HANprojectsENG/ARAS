@@ -143,7 +143,7 @@ void gaussian_uint16_y(image_t* src, const uint8_t ksize);
 
 void gaussian_uint16_xy(image_t* src, const uint8_t ksize);
 
-void crop_basic(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2]);
+void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2]);
 
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------

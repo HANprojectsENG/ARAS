@@ -307,23 +307,23 @@ void scaleImage_rgb888(const image_t* src, image_t* dst)
     }
 }
 
-void crop_rgb888(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2])
+void crop_rgb888(const image_t* img, image_t* dst, int32_t top_left[2])
 {
-    //Gotta check every check to make sure we are checked!
-    if ((top_left[0] < img->cols) && (top_left[1] < img->rows) && 
-        (bottom_right[0] < img->cols) && (bottom_right[1] < img->rows) && 
-        (top_left[0] || bottom_right[0]) && (top_left[1] || bottom_right[1]))
-    {
-        dst->cols = bottom_right[0] - top_left[0]; 
-        dst->rows = bottom_right[1] - top_left[1];  
-        dst->type = img->type; 
+    if (top_left[0] >= img->cols || top_left[1] >= img->rows
+        || top_left[0] + dst->cols <= 0 || top_left[1] + dst->cols <= 0) {
+        // Cropping region is outside of the input image.
+        return;
+    }
 
-        for (uint32_t i = 0; i < dst->rows; i++)
-        {
-            for (uint32_t j = 0; j < dst->cols; j++)
-            {
-                setRGB888Pixel(dst, j, i, getRGB888Pixel((image_t*)img, top_left[0] + j, top_left[1] + i));
-            }
+    // Start is inclusive, end is exclusive.
+    int32_t destStartCol = top_left[0] >= 0 ? 0 : -top_left[0];
+    int32_t destStartRow = top_left[1] >= 0 ? 0 : -top_left[1];
+    int32_t destEndCol = top_left[0] + dst->cols < img->cols ? dst->cols : (dst->cols - (top_left[0] + dst->cols - img->cols));
+    int32_t destEndRow = top_left[1] + dst->rows < img->rows ? dst->rows : (dst->rows - (top_left[1] + dst->rows - img->rows));
+
+    for (int32_t row = destStartRow; row < destEndRow; row++) {
+        for (int32_t col = destStartCol; col < destEndCol; col++) {
+            setRGB888Pixel(dst, col, row, getRGB888Pixel((image_t*)img, top_left[0] + col, top_left[1] + row));
         }
     }
 }
