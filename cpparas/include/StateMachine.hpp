@@ -28,6 +28,8 @@ public:
     ~StateMachine();
 
     void init();
+    int getStep();
+    int getLayer();
 
 protected:
     bool continueCondition();
@@ -68,6 +70,9 @@ private:
     void FINAL_STEP_entry();
     void FINAL_STEP_do();
     void FINAL_STEP_exit();
+
+    int layer;
+    int step;
 };
 
 #endif /* STATEMACHINE_HPP */

@@ -37,6 +37,7 @@ private:
 
     image_t* displayImage;
     LSFParser::LSFData lsfData;
+    StateMachine stateMachine;
 };
 
 #endif /* CONTROLUI_HPP */

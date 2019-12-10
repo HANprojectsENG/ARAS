@@ -3,6 +3,8 @@
 #include <iostream>
 
 StateMachine::StateMachine()
+    : layer(-1)
+    , step(-1)
 {
     addStateName(State::INIT, "Init");
     addStateName(State::STARTING, "Starting");
@@ -65,38 +67,93 @@ bool StateMachine::continueCondition()
     return getCurrentState() != State::FINAL_STEP;
 }
 
-void StateMachine::INIT_entry() {}
-void StateMachine::INIT_do() {}
+void StateMachine::INIT_entry()
+{
+    // Load save file
+
+    // Spawn camera thread
+}
+void StateMachine::INIT_do()
+{
+    // if (cameraWarmUpTimer->expired()) {
+    switchState(State::STARTING);
+    // }
+}
 void StateMachine::INIT_exit() {}
 
-void StateMachine::STARTING_entry() {}
+void StateMachine::STARTING_entry()
+{
+    step = 0;
+    layer = 0;
+    switchState(State::CHECK_CURRENT_STEP);
+}
 void StateMachine::STARTING_do() {}
 void StateMachine::STARTING_exit() {}
 
-void StateMachine::CHECK_CURRENT_STEP_entry() {}
+void StateMachine::CHECK_CURRENT_STEP_entry()
+{
+    // recognise image
+    // if (completed) {
+    switchState(State::PROJECT_STEP);
+    // } else {
+    // switchState(State::CHECK_NEXT_STEP);
+    // }
+}
 void StateMachine::CHECK_CURRENT_STEP_do() {}
 void StateMachine::CHECK_CURRENT_STEP_exit() {}
 
 void StateMachine::PROJECT_STEP_entry() {}
-void StateMachine::PROJECT_STEP_do() {}
+void StateMachine::PROJECT_STEP_do()
+{
+    // if (timer->expired()) {
+    switchState(State::WAIT);
+    // }
+}
 void StateMachine::PROJECT_STEP_exit() {}
 
 void StateMachine::WAIT_entry() {}
-void StateMachine::WAIT_do() {}
+void StateMachine::WAIT_do()
+{
+    // if (timer->expired()) {
+    switchState(State::WAIT);
+    // }
+}
 void StateMachine::WAIT_exit() {}
 
-void StateMachine::PROJECT_OFF_entry() {}
+void StateMachine::PROJECT_OFF_entry()
+{
+    // Turn off projector
+
+    switchState(State::CAPTURE);
+}
 void StateMachine::PROJECT_OFF_do() {}
 void StateMachine::PROJECT_OFF_exit() {}
 
-void StateMachine::CAPTURE_entry() {}
+void StateMachine::CAPTURE_entry()
+{
+    // Capture image
+
+    switchState(State::CHECK_CURRENT_STEP);
+}
 void StateMachine::CAPTURE_do() {}
 void StateMachine::CAPTURE_exit() {}
 
-void StateMachine::CHECK_NEXT_STEP_entry() {}
+void StateMachine::CHECK_NEXT_STEP_entry()
+{
+    // Save last step
+
+    // int nextStep = step + 1;
+}
 void StateMachine::CHECK_NEXT_STEP_do() {}
 void StateMachine::CHECK_NEXT_STEP_exit() {}
 
-void StateMachine::FINAL_STEP_entry() {}
+void StateMachine::FINAL_STEP_entry()
+{
+    // Clear save file.
+
+    Debug::println("You reached the end.");
+
+    // Join camera thread.
+}
 void StateMachine::FINAL_STEP_do() {}
 void StateMachine::FINAL_STEP_exit() {}

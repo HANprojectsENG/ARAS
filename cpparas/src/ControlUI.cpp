@@ -21,6 +21,7 @@ ControlUI::ControlUI()
     , imageViewport()
     , imageArea()
     , displayImage(nullptr)
+    , stateMachine()
 {
     this->set_title("Control UI");
 
@@ -124,9 +125,8 @@ void ControlUI::on_use_last_image_button_clicked()
 void ControlUI::on_use_camera_button_clicked()
 {
     // TODO: remove test code.
-    StateMachine st;
-    st.init();
-    st.doCycle();
+    stateMachine.init();
+    stateMachine.doCycle();
 }
 
 void ControlUI::on_select_sequence_file_button_clicked()
