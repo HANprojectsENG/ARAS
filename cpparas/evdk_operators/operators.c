@@ -45,6 +45,7 @@ extern "C" {
 #include "operators_float.h"
 #include "operators_hsv.h"
 #include "operators_int16.h"
+#include "operators_uint16.h"
 #include "operators_rgb888.h"
 
 // ----------------------------------------------------------------------------
@@ -105,6 +106,17 @@ inline hsv_pixel_t getHSVPixel(const image_t* img, int32_t c, int32_t r)
     return (*((hsv_pixel_t*)(img->data) + (r * img->cols + c)));
 }
 
+
+inline void setUInt16Pixel(image_t* img, int32_t c, int32_t r, uint16_pixel_t value)
+{
+    *((uint16_pixel_t*)(img->data) + (r * img->cols + c)) = value;
+}
+
+inline uint16_pixel_t getUInt16Pixel(const image_t* img, int32_t c, int32_t r)
+{
+    return (*((uint16_pixel_t*)(img->data) + (r * img->cols + c)));
+}
+
 // ----------------------------------------------------------------------------
 // Image creation
 // ----------------------------------------------------------------------------
@@ -126,6 +138,9 @@ void deleteImage(image_t* img)
         break;
     case IMGTYPE_HSV:
         deleteHSVImage(img);
+        break;
+    case IMGTYPE_UINT16:
+        deleteUInt16Image(img);
         break;
     default:
         fprintf(stderr, "deleteImage(): image type %d not supported\n", img->type);
@@ -150,6 +165,9 @@ void convertImage(const image_t* src, image_t* dst)
         break;
     case IMGTYPE_HSV:
         convertToHSVImage(src, dst);
+        break;
+    case IMGTYPE_UINT16:
+        convertToUInt16Image(src, dst);
         break;
     default:
         fprintf(stderr, "convertImage(): image type %d not supported\n", dst->type);
@@ -177,6 +195,7 @@ void contrastStretch(const image_t* src, image_t* dst, const int32_t bottom, con
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "contrastStretch(): image type %d not supported\n", src->type);
         break;
@@ -197,6 +216,7 @@ void contrastStretchFast(const image_t* src, image_t* dst)
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "contrastStretchFast(): image type %d not supported\n", src->type);
         break;
@@ -275,6 +295,7 @@ void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_
         threshold_rgb888(src, dst, rgb888_low, rgb888_high);
     } break;
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "threshold(): image type %d not supported\n", src->type);
         break;
@@ -295,6 +316,7 @@ void threshold2Means(const image_t* src, image_t* dst, const eBrightness brightn
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "threshold2Means(): image type %d not supported\n", src->type);
         break;
@@ -315,6 +337,7 @@ void thresholdOtsu(const image_t* src, image_t* dst, const eBrightness brightnes
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "thresholdOtsu(): image type %d not supported\n", src->type);
         break;
@@ -334,7 +357,8 @@ void erase(const image_t* img)
         erase_int16,
         erase_float,
         erase_rgb888,
-        erase_hsv
+        erase_hsv,
+        erase_uint16
     };
 
     // Call the function
@@ -356,7 +380,8 @@ void copy(const image_t* src, image_t* dst)
         copy_int16,
         copy_float,
         copy_rgb888,
-        copy_hsv
+        copy_hsv,
+        copy_uint16
     };
 
     // Call the function
@@ -380,6 +405,7 @@ void setSelectedToValue(const image_t* src, image_t* dst, const int32_t selected
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "setSelectedToValue(): image type %d not supported\n", src->type);
         break;
@@ -399,6 +425,7 @@ uint32_t neighbourCount(const image_t* img, const int32_t c, const int32_t r, co
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "neighbourCount(): image type %d not supported\n", img->type);
         break;
@@ -421,6 +448,7 @@ void histogram(const image_t* img, uint16_t* hist)
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "histogram(): image type %d not supported\n", img->type);
         break;
@@ -525,6 +553,7 @@ void nonlinearFilter(const image_t* src, image_t* dst, const eFilterOperation fo
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "nonlinearFilter(): image type %d not supported\n", src->type);
         break;
@@ -551,6 +580,7 @@ void removeBorderBlobs(const image_t* src, image_t* dst, const eConnected connec
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "removeBorderBlobs(): image type %d not supported\n", src->type);
         break;
@@ -575,6 +605,7 @@ void fillHoles(const image_t* src, image_t* dst, const eConnected connected)
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "fillHoles(): image type %d not supported\n", src->type);
         break;
@@ -598,6 +629,7 @@ uint32_t labelBlobs(const image_t* src, image_t* dst, const eConnected connected
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "labelBlobs(): image type %d not supported\n", src->type);
         break;
@@ -624,6 +656,7 @@ void binaryEdgeDetect(const image_t* src, image_t* dst, const eConnected connect
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "binaryEdgeDetect(): image type %d not supported\n", src->type);
         break;
@@ -646,6 +679,7 @@ void blobAnalyse(const image_t* img, const uint8_t blobnr, blobinfo_t* blobInfo)
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "blobAnalyse(): image type %d not supported\n", img->type);
         break;
@@ -666,6 +700,7 @@ void centroid(const image_t* img, const uint8_t blobnr, int32_t* cc, int32_t* rc
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "centroid(): image type %d not supported\n", img->type);
         break;
@@ -685,6 +720,7 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "normalizedCentralMoments(): image type %d not supported\n", img->type);
         break;
@@ -706,6 +742,7 @@ void warp(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]
     case IMGTYPE_INT16:
     case IMGTYPE_FLOAT:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "warp(): image type %d not supported\n", img->type);
         break;
@@ -722,6 +759,7 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3])
     case IMGTYPE_INT16:
     case IMGTYPE_FLOAT:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "warpAffine(): image type %d not supported\n", img->type);
         break;
@@ -740,6 +778,24 @@ void scaleImage(const image_t* src, image_t* dst)
     case IMGTYPE_INT16:
     case IMGTYPE_FLOAT:
     case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
+    default:
+        fprintf(stderr, "warpAffine(): image type %d not supported\n", src->type);
+        break;
+    }
+}
+
+void harrisCorner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k)
+{
+    switch (src->type) {
+    case IMGTYPE_BASIC:
+        harrisCorner_basic(src, dst, blockSize, ksize, k);
+        break;
+    case IMGTYPE_RGB888:
+    case IMGTYPE_INT16:
+    case IMGTYPE_FLOAT:
+    case IMGTYPE_HSV:
+    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "scaleImage(): image type %d not supported\n", src->type);
         break;

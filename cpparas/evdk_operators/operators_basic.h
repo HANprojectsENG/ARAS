@@ -123,6 +123,26 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 
 void scaleImage_basic(const image_t* src, image_t* dst);
 
+void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k);
+
+void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize);
+
+void sobelX_basic(const image_t* src, image_t* dst);
+
+void sobelY_basic(const image_t* src, image_t* dst);
+
+void power_uint16(const image_t* src, image_t* dst, const uint8_t p);
+
+void multiply_basic_2(const image_t* src, const image_t* src2, image_t* dst);
+
+void subtract_basic(const image_t* src, image_t* dst);
+
+void gaussian_uint16_x(image_t* src, const uint8_t ksize);
+
+void gaussian_uint16_y(image_t* src, const uint8_t ksize);
+
+void gaussian_uint16_xy(image_t* src, const uint8_t ksize);
+
 void crop_basic(const image_t* img, image_t* dst, uint32_t top_left[2], uint32_t bottom_right[2]);
 
 #endif // _OPERATORS_BASIC_H_

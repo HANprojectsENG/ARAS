@@ -72,6 +72,7 @@ typedef enum {
     IMGTYPE_FLOAT = 2, // Float
     IMGTYPE_RGB888 = 3, // RGB 8-bit per pixel
     IMGTYPE_HSV = 4, // HSV 16-bit H, 8-bit S,V
+    IMGTYPE_UINT16= 5,
 
     IMGTYPE_MAX = 2147483647 // Max 32-bit int value,
     // forces enum to be 4 bytes
@@ -91,6 +92,7 @@ typedef enum {
 typedef uint8_t basic_pixel_t;
 typedef int16_t int16_pixel_t;
 typedef float float_pixel_t;
+typedef uint16_t uint16_pixel_t;
 
 typedef struct rgb888_pixel_t {
     uint8_t r;
@@ -118,6 +120,7 @@ union pixel {
     float_pixel_t float_pixel;
     rgb888_pixel_t rgb888_pixel;
     hsv_pixel_t hsv_pixel;
+    uint16_pixel_t uint16_pixel;
 };
 
 typedef union pixel pixel_t;
@@ -185,6 +188,8 @@ extern void setRGB888Pixel(image_t* img, int32_t c, int32_t r, rgb888_pixel_t va
 extern rgb888_pixel_t getRGB888Pixel(const image_t* img, int32_t c, int32_t r);
 extern void setHSVPixel(image_t* img, int32_t c, int32_t r, hsv_pixel_t value);
 extern hsv_pixel_t getHSVPixel(const image_t* img, int32_t c, int32_t r);
+extern void setUInt16Pixel(image_t* img, int32_t c, int32_t r, uint16_pixel_t value);
+extern uint16_pixel_t getUInt16Pixel(const image_t* img, int32_t c, int32_t r);
 
 // ----------------------------------------------------------------------------
 // Memory (de)allocation
@@ -201,6 +206,7 @@ image_t* newInt16Image(const uint32_t cols, const uint32_t rows);
 image_t* newFloatImage(const uint32_t cols, const uint32_t rows);
 image_t* newRGB888Image(const uint32_t cols, const uint32_t rows);
 image_t* newHSVImage(const uint32_t cols, const uint32_t rows);
+image_t* newUInt16Image(const uint32_t cols, const uint32_t rows);
 
 // These functions can be used for copying images
 // Memory is allocated within these functions
@@ -213,6 +219,7 @@ image_t* toInt16Image(image_t* src);
 image_t* toFloatImage(image_t* src);
 image_t* toRGB888Image(image_t* src);
 image_t* toHSVImage(image_t* src);
+image_t* toUInt16Image(image_t* src);
 
 // Use the function deleteImage() for freeing memory
 // This function will automatically call the appropriate function based on the
@@ -226,6 +233,7 @@ void deleteInt16Image(image_t* img);
 void deleteFloatImage(image_t* img);
 void deleteRGB888Image(image_t* img);
 void deleteHSVImage(image_t* img);
+void deleteUInt16Image(image_t* img);
 
 // Use the function convertImage() for converting between image types
 //
@@ -244,6 +252,7 @@ void convertToInt16Image(const image_t* src, image_t* dst);
 void convertToFloatImage(const image_t* src, image_t* dst);
 void convertToRGB888Image(const image_t* src, image_t* dst);
 void convertToHSVImage(const image_t* src, image_t* dst);
+void convertToUInt16Image(const image_t* src, image_t* dst);
 
 // ----------------------------------------------------------------------------
 // Contrast stretching
@@ -464,6 +473,13 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 // Precondition : dst is allocated and has the wanted cols and rows
 // Postcondition: dst is filled with the scaled image
 void scaleImage(const image_t* src, image_t* dst);
+
+// 
+// 
+//
+// Precondition : 
+// Postcondition: 
+void harrisCorner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k);
 
 // Crops the image using an upper left corner and an bottom right corner coordinates.
 //
