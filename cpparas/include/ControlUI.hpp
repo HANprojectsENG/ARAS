@@ -5,6 +5,7 @@
 #include "LSFParser.hpp"
 #include "StateMachine.hpp"
 #include "util/ImageArea.hpp"
+#include "util/StateMachineWidget.hpp"
 #include <gtkmm/button.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
@@ -24,6 +25,11 @@ private:
     void on_use_camera_button_clicked();
     void on_select_sequence_file_button_clicked();
     void on_use_last_sequence_file_button_clicked();
+
+    image_t* displayImage;
+    LSFParser::LSFData lsfData;
+    StateMachine stateMachine;
+
     Gtk::Grid widgetContainer;
     Gtk::Button selectImageButton;
     Gtk::Button useLastImageButton;
@@ -33,11 +39,8 @@ private:
     Gtk::Button useLastSequenceFileButton;
     Gtk::Separator separator2;
     Gtk::ScrolledWindow imageViewport;
+    StateMachineWidget stateMachineWidget;
     ImageArea imageArea;
-
-    image_t* displayImage;
-    LSFParser::LSFData lsfData;
-    StateMachine stateMachine;
 };
 
 #endif /* CONTROLUI_HPP */

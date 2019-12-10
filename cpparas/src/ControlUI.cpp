@@ -10,7 +10,9 @@
 const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 
 ControlUI::ControlUI()
-    : widgetContainer()
+    : displayImage(nullptr)
+    , stateMachine()
+    , widgetContainer()
     , selectImageButton("Select image")
     , useLastImageButton("Use last")
     , useCameraButton("Use camera")
@@ -19,9 +21,8 @@ ControlUI::ControlUI()
     , useLastSequenceFileButton("Use last")
     , separator2()
     , imageViewport()
+    , stateMachineWidget(&stateMachine)
     , imageArea()
-    , displayImage(nullptr)
-    , stateMachine()
 {
     this->set_title("Control UI");
 
@@ -35,6 +36,8 @@ ControlUI::ControlUI()
     selectSequenceFileButton.set_hexpand(false);
     useLastSequenceFileButton.set_hexpand(false);
     separator2.set_hexpand(true);
+    stateMachineWidget().set_hexpand(true);
+    stateMachineWidget().set_vexpand(false);
     imageViewport.set_vexpand(true);
     imageViewport.set_hexpand(true);
 
@@ -57,7 +60,8 @@ ControlUI::ControlUI()
     widgetContainer.attach(selectSequenceFileButton, 5, 1, 1, 1);
     widgetContainer.attach(useLastSequenceFileButton, 6, 1, 1, 1);
     widgetContainer.attach(separator2, 7, 1, 1, 1);
-    widgetContainer.attach(imageViewport, 1, 2, 7, 1);
+    widgetContainer.attach(stateMachineWidget(), 1, 2, 7, 1);
+    widgetContainer.attach(imageViewport, 1, 3, 7, 1);
     this->add(widgetContainer);
 
     selectImageButton.show();
@@ -69,6 +73,7 @@ ControlUI::ControlUI()
     widgetContainer.show();
     separator2.show();
     imageViewport.show();
+    stateMachineWidget().show();
     imageArea.show();
 
     useLastImageButton.grab_focus();
