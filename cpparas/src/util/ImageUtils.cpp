@@ -5,7 +5,7 @@
 
 namespace ImageUtils {
 
-Glib::RefPtr<Gdk::Pixbuf> imageToPixbuf(image_t* image)
+Glib::RefPtr<Gdk::Pixbuf> imageToPixbuf(const image_t* image)
 {
     if (image->type != IMGTYPE_RGB888) {
         throw std::invalid_argument("image type is not RGB888");
@@ -39,6 +39,12 @@ image_t* loadImageFromFile(const std::string& fileName)
 {
     auto pixbuf = Gdk::Pixbuf::create_from_file(fileName);
     return pixbufToImage(pixbuf);
+}
+
+void saveImageToFile(const image_t* image, const std::string& fileName, const std::string& format)
+{
+    auto pixbuf = imageToPixbuf(image);
+    pixbuf->save(fileName, format);
 }
 
 image_t* performTestOperations(image_t* src)
