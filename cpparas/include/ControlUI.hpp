@@ -4,6 +4,7 @@
 #include "ImageLoader.hpp"
 #include "LSFParser.hpp"
 #include "StateMachine.hpp"
+#include "debug/DebugUI.hpp"
 #include "util/ImageArea.hpp"
 #include "util/StateMachineWidget.hpp"
 #include <gtkmm/button.h>
@@ -11,6 +12,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/window.h>
+#include <memory>
 
 class ControlUI : public Gtk::Window {
 public:
@@ -25,10 +27,13 @@ private:
     void on_use_camera_button_clicked();
     void on_select_sequence_file_button_clicked();
     void on_use_last_sequence_file_button_clicked();
+    void on_open_debug_ui_button_clicked();
 
     image_t* displayImage;
     LSFParser::LSFData lsfData;
     StateMachine stateMachine;
+
+    std::shared_ptr<DebugUI> debugUI;
 
     Gtk::Grid widgetContainer;
     Gtk::Button selectImageButton;
@@ -38,6 +43,8 @@ private:
     Gtk::Button selectSequenceFileButton;
     Gtk::Button useLastSequenceFileButton;
     Gtk::Separator separator2;
+    Gtk::Button openDebugUIButton;
+    Gtk::Separator separator3;
     Gtk::ScrolledWindow imageViewport;
     StateMachineWidget stateMachineWidget;
     ImageArea imageArea;
