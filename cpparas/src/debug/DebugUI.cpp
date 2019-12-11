@@ -3,21 +3,36 @@
 #include <glibmm/main.h>
 #include <numeric>
 
-DebugUI::DebugUI()
-    : widgetContainer()
+DebugUI::DebugUI(StateMachine* stateMachine_)
+    : stateMachine(stateMachine_)
+    , widgetContainer()
     , logViewport()
     , logTextView()
+    , stateNameLabel()
+    , brickPositionLabel("Brick position: 16,16 2x8")
+    , expectedValueLabel("Expected colour: -")
 {
     this->set_title("DebugUI");
-    this->set_default_size(400, 300);
+    this->set_default_size(500, 400);
     this->set_resizable(false);
 
+    widgetContainer.set_margin_top(5);
+    widgetContainer.set_column_spacing(5);
+    widgetContainer.set_row_spacing(5);
+    widgetContainer.set_column_homogeneous(true);
     logTextView.set_editable(false);
     logTextView.set_hexpand(true);
     logTextView.set_vexpand(true);
 
+    stateNameLabel.set_justify(Gtk::JUSTIFY_LEFT);
+    brickPositionLabel.set_justify(Gtk::JUSTIFY_LEFT);
+    expectedValueLabel.set_justify(Gtk::JUSTIFY_LEFT);
+
     logViewport.add(logTextView);
-    widgetContainer.attach(logViewport, 1, 1, 1, 1);
+    widgetContainer.attach(stateNameLabel, 1, 1, 1, 1);
+    widgetContainer.attach(brickPositionLabel, 2, 1, 1, 1);
+    widgetContainer.attach(expectedValueLabel, 3, 1, 1, 1);
+    widgetContainer.attach(logViewport, 1, 2, 3, 1);
 
     Glib::signal_timeout().connect(
         sigc::mem_fun(*this, &DebugUI::update),
@@ -27,6 +42,9 @@ DebugUI::DebugUI()
     widgetContainer.show();
     logTextView.show();
     logViewport.show();
+    stateNameLabel.show();
+    brickPositionLabel.show();
+    expectedValueLabel.show();
 }
 
 DebugUI::~DebugUI()
@@ -45,5 +63,8 @@ bool DebugUI::update()
             adj->set_value(adj->get_upper());
         }
     }
+
+    stateNameLabel.set_text(std::string("Current state: ") + stateMachine->getCurrentStateName());
+
     return true;
 }

@@ -40,9 +40,20 @@ public:
         }
     }
 
-    StateT getCurrentState()
+    StateT getCurrentState() const
     {
         return currentState;
+    }
+
+    std::string getCurrentStateName() const
+    {
+        std::string stateName;
+        if (stateNames.count(currentState) == 1) {
+            stateName = stateNames.at(currentState);
+        } else {
+            stateName = std::to_string((int)currentState);
+        }
+        return stateName;
     }
 
 protected:
@@ -70,12 +81,7 @@ protected:
 private:
     void perform(StateFuncType type)
     {
-        std::string stateName;
-        if (stateNames.count(currentState) == 1) {
-            stateName = stateNames.at(currentState);
-        } else {
-            stateName = std::to_string((int)currentState);
-        }
+        std::string stateName = getCurrentStateName();
         Debug::println(std::string("Performing state " + stateName + std::string(" ") + STATE_FUNC_TYPE_NAMES.at(type)));
         this->handlerFuncs.at(std::make_pair(currentState, type))();
     }

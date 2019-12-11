@@ -178,7 +178,7 @@ void ControlUI::on_use_last_sequence_file_button_clicked()
 
 void ControlUI::on_open_debug_ui_button_clicked()
 {
-    debugUI = std::make_shared<DebugUI>();
+    debugUI = std::make_shared<DebugUI>(&stateMachine);
     debugUI->show();
 }
 
