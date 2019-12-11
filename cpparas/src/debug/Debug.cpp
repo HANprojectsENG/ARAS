@@ -1,4 +1,4 @@
-#include "util/Debug.hpp"
+#include "debug/Debug.hpp"
 #include <chrono>
 #include <ctime>
 #include <iomanip>
@@ -7,12 +7,15 @@
 
 void Debug::println(const std::string& line)
 {
-    auto now = std::chrono::system_clock::now();
+    auto now = std::chrono::high_resolution_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    auto nanosec = now.time_since_epoch();
 
     std::stringstream ss;
     ss << std::put_time(std::localtime(&in_time_t), "%X");
     std::string datestr = ss.str();
 
-    std::cout << "[" << datestr << "] " << line << std::endl;
+    std::cout << "[" << datestr << "."
+              << std::setfill('0') << std::setw(3) << ((nanosec.count() % 1000000000ul) / 1000000ul)
+              << "] " << line << std::endl;
 }

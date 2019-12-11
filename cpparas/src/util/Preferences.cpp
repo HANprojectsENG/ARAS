@@ -1,5 +1,5 @@
 #include "util/Preferences.hpp"
-#include "util/Debug.hpp"
+#include "debug/Debug.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>

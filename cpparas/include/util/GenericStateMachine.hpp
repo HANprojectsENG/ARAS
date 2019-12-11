@@ -1,7 +1,7 @@
 #ifndef GENERICSTATEMACHINE_HPP
 #define GENERICSTATEMACHINE_HPP
 
-#include "util/Debug.hpp"
+#include "debug/Debug.hpp"
 #include <exception>
 #include <functional>
 #include <map>

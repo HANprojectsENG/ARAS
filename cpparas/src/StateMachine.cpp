@@ -1,5 +1,5 @@
 #include "StateMachine.hpp"
-#include "util/Debug.hpp"
+#include "debug/Debug.hpp"
 #include <iostream>
 
 StateMachine::StateMachine()
