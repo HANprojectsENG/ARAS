@@ -1,4 +1,5 @@
 #include "ControlUI.hpp"
+#include "debug/DebugUI.hpp"
 #include "operators.h"
 #include "util/ImageArea.hpp"
 #include "util/ImageUtils.hpp"
@@ -20,6 +21,8 @@ ControlUI::ControlUI()
     , selectSequenceFileButton("Select sequence file")
     , useLastSequenceFileButton("Use last")
     , separator2()
+    , openDebugUIButton("Debug")
+    , separator3()
     , imageViewport()
     , stateMachineWidget(&stateMachine)
     , imageArea()
@@ -29,13 +32,7 @@ ControlUI::ControlUI()
     widgetContainer.set_margin_top(5);
     widgetContainer.set_column_spacing(5);
     widgetContainer.set_row_spacing(5);
-    selectImageButton.set_hexpand(false);
-    useLastImageButton.set_hexpand(false);
-    useCameraButton.set_hexpand(false);
-    separator1.set_hexpand(false);
-    selectSequenceFileButton.set_hexpand(false);
-    useLastSequenceFileButton.set_hexpand(false);
-    separator2.set_hexpand(true);
+    separator3.set_hexpand(true);
     stateMachineWidget().set_hexpand(true);
     stateMachineWidget().set_vexpand(false);
     imageViewport.set_vexpand(true);
@@ -51,6 +48,8 @@ ControlUI::ControlUI()
         &ControlUI::on_select_sequence_file_button_clicked));
     useLastSequenceFileButton.signal_clicked().connect(sigc::mem_fun(*this,
         &ControlUI::on_use_last_sequence_file_button_clicked));
+    openDebugUIButton.signal_clicked().connect(sigc::mem_fun(*this,
+        &ControlUI::on_open_debug_ui_button_clicked));
 
     imageViewport.add(imageArea);
     widgetContainer.attach(selectImageButton, 1, 1, 1, 1);
@@ -60,8 +59,10 @@ ControlUI::ControlUI()
     widgetContainer.attach(selectSequenceFileButton, 5, 1, 1, 1);
     widgetContainer.attach(useLastSequenceFileButton, 6, 1, 1, 1);
     widgetContainer.attach(separator2, 7, 1, 1, 1);
-    widgetContainer.attach(stateMachineWidget(), 1, 2, 7, 1);
-    widgetContainer.attach(imageViewport, 1, 3, 7, 1);
+    widgetContainer.attach(openDebugUIButton, 8, 1, 1, 1);
+    widgetContainer.attach(separator3, 9, 1, 1, 1);
+    widgetContainer.attach(stateMachineWidget(), 1, 2, 9, 1);
+    widgetContainer.attach(imageViewport, 1, 3, 9, 1);
     this->add(widgetContainer);
 
     selectImageButton.show();
@@ -72,6 +73,8 @@ ControlUI::ControlUI()
     useLastSequenceFileButton.show();
     widgetContainer.show();
     separator2.show();
+    openDebugUIButton.show();
+    separator3.show();
     imageViewport.show();
     stateMachineWidget().show();
     imageArea.show();
@@ -171,6 +174,12 @@ void ControlUI::on_use_last_sequence_file_button_clicked()
         return;
     }
     this->set_sequence_file(preferences.lastSequenceFile);
+}
+
+void ControlUI::on_open_debug_ui_button_clicked()
+{
+    debugUI = std::make_shared<DebugUI>();
+    debugUI->show();
 }
 
 void ControlUI::set_input_image(const std::string& filePath)
