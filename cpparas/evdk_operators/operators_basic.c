@@ -37,6 +37,7 @@
 
 #include "operators_basic.h"
 #include "math.h"
+#include "stdio.h"
 
 #ifdef STM32F746xx
 #include "mem_manager.h"
@@ -147,6 +148,16 @@ void convertToBasicImage(const image_t* src, image_t* dst)
     } break;
     case IMGTYPE_HSV: {
     } break;
+    case IMGTYPE_UINT16: {
+        // Loop all pixels, convert and copy
+        for (uint16_t r = 0; r < src->rows; r++) {
+            for (uint16_t c = 0; c < src->cols; c++) {
+                uint16_t temp = (getUInt16Pixel(src,c,r));
+                setBasicPixel(dst,c,r,(uint8_t)(temp/255));
+            }
+        }
+
+    } break;
     default:
         break;
     }
@@ -228,7 +239,7 @@ void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, 
             if ((pixel >= low) && (pixel <= high)) {
                 setBasicPixel(dst, i, x, (basic_pixel_t)0);
             } else {
-                setBasicPixel(dst, i, x, (basic_pixel_t)255);
+                setBasicPixel(dst, i, x, (basic_pixel_t)1);
             }
         }
     }
@@ -613,59 +624,63 @@ void scaleImage_basic(const image_t* src, image_t* dst)
     return;
 }
 
-void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k)
-{
+void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k){
+    
+    image_t* Ix = newBasicImage(src->cols, src->rows);
+    image_t* Iy = newBasicImage(src->cols, src->rows);
+    image_t* Ix2 = newUInt16Image(src->cols, src->rows);
+    image_t* Iy2 = newUInt16Image(src->cols, src->rows);
+    image_t* Ixy = newUInt16Image(src->cols, src->rows);
+    image_t* mtrace = newFloatImage(src->cols, src->rows);
 
-    image_t* der_x = newBasicImage(src->cols, src->rows);
-    image_t* der_y = newBasicImage(src->cols, src->rows);
-    image_t* der_x2 = newUInt16Image(src->cols, src->rows);
-    image_t* der_y2 = newUInt16Image(src->cols, src->rows);
-    image_t* der_xy = newUInt16Image(src->cols, src->rows);
-    image_t* der_x2y2 = newBasicImage(src->cols, src->rows);
-    image_t* mtrace = newBasicImage(src->cols, src->rows);
-    basic_pixel_t temp;
-    basic_pixel_t temp2;
-
-    //Testing
-    edge_basic(src, dst, blockSize);
-    //gaussian_basic_xy(dst,ksize);
+    uint16_t c;
+    uint16_t r;
+    uint32_t x2y2;
+    uint32_t xy2;
+    int32_t result;
+    uint32_t detM;
+    float traceM;
 
     //1. Calculate x and y derivative of image via sobel
-    sobelX_basic(src, der_x);
-    sobelY_basic(src, der_y);
+    sobelX_basic(src,Ix); //input uint8 output uint8
+    sobelY_basic(src,Iy); //input uint8 output uint8
     //2. Calculate other three images in M
-    power_uint16(der_x, der_x2, blockSize); //der_x^2
-    power_uint16(der_y, der_y2, blockSize); //der_y^2
-    multiply_basic_2(der_x, der_y, der_xy); //der_x * der_y
+    power_uint16(Ix, Ix2, blockSize); //input uint8 output uint16
+    power_uint16(Iy, Iy2, blockSize); //input uint8 output uint16
+    multiply_basic_2(Ix, Iy, Ixy); //input uint8 output uint16
     //3. Apply Gaussian
-    gaussian_uint16_x(der_x2, ksize);
-    gaussian_uint16_y(der_y2, ksize);
-    gaussian_uint16_xy(der_xy, ksize);
-    //4. Calulate R with K
-    multiply_basic_2(der_x2, der_y2, der_x2y2);
-    multiply_basic(der_xy, der_xy);
+    gaussian_uint16_x(Ix2,ksize); //input/output uint16
+    gaussian_uint16_y(Iy2,ksize); //input/output uint16
+    gaussian_uint16_xy(Ixy,ksize); //input/output uint16
+    //4. Calculate mtrace * K
+    mtrace_basic(Ix2, Iy2, mtrace, k); //input uint16 output float
 
-    //
-    add_basic(der_x2, der_y2);
-    subtract_basic(der_x2y2, der_xy);
-    power_uint16(der_y2, mtrace, blockSize);
-
-    //Multiply mtrace by k
-    for (uint16_t r = 0; r < dst->rows; r++) {
-        for (uint16_t c = 0; c < dst->cols; c++) {
-            temp = getBasicPixel(mtrace, c, r);
-            temp2 = temp * k;
-            setBasicPixel(mtrace, c, r, temp2);
+    //5. Calculate R with K and mtrace
+    for (r = 0; r < src->rows; r++) {
+        for (c = 0; c < src->cols; c++) {
+            x2y2 = getUInt16Pixel(Ix2,c,r) * getUInt16Pixel(Iy2,c,r); //uint16 * uint16 = uint32 ðœ†
+            xy2 = getUInt16Pixel(Ixy,c,r) * getUInt16Pixel(Ixy,c,r); //uint16 * uint16 = uint32
+            detM = x2y2 - xy2;
+            detM = x2y2 > xy2 ? x2y2 - xy2 : (xy2 - x2y2);
+            traceM = getFloatPixel(mtrace,c,r);
+            result = detM - (uint32_t)traceM;
+            result = result < 0 ? 0 : result;
+                if (result > 61){
+                    printf("Result:%u = detM:%i - traceM:%f, detM = x2y2:%u - xy2:%u at pos c:%u r:%u  \n",result,detM, traceM, x2y2, xy2, c, r);
+                    setBasicPixel(dst,c,r,255);
+                }
+                else {
+                    setBasicPixel(dst,c,r,0);
+                }                           
         }
     }
-
-    //
-    subtract_basic(der_xy, mtrace);
-    //copy_basic(mtrace,dst);
-
-    //5. Temp print results
-    //Test every step next
-    //TODO ADD CHECK FOR KERNAL SIZE in gauss filter
+    //TODO add check for kernal size in gauss filter
+    deleteImage(Ix);
+    deleteImage(Iy);
+    deleteImage(Ix2);
+    deleteImage(Iy2);
+    deleteImage(Ixy);
+    deleteImage(mtrace);
     return;
 }
 
@@ -718,8 +733,8 @@ void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize)
     }
     return;
 }
-void sobelX_basic(const image_t* src, image_t* dst)
-{
+
+void sobelX_basic(const image_t* src, image_t* dst){
     uint16_t c;
     uint16_t r;
     int32_t sum;
@@ -776,13 +791,15 @@ void power_uint16(const image_t* src, image_t* dst, const uint8_t blockSize)
 {
     uint16_t c;
     uint16_t r;
+    double pix;
 
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
             //Set every pixel to the power of blockSize
-            setUInt16Pixel(dst, c, r, pow(getUInt16Pixel(src, c, r), blockSize));
-        }
+            pix = pow((double)getBasicPixel(src,c,r),(double)blockSize);
+            setUInt16Pixel(dst, c, r, (uint16_t)pix);
+        }    
     }
     return;
 }
@@ -847,6 +864,7 @@ void gaussian_uint16_x(image_t* src, const uint8_t ksize)
         }
     }
     copy(temp_x, src);
+    deleteImage(temp_x);
     return;
 }
 
@@ -859,7 +877,7 @@ void gaussian_uint16_y(image_t* src, const uint8_t ksize)
     float sum;
     uint16_t c;
     uint16_t r;
-    image_t* temp_x = newUInt16Image(src->cols, src->rows);
+    image_t* temp_y = newUInt16Image(src->cols, src->rows);
 
     //Loop all pixels ignoring offset outside rows and cols
     //Maybe add mirror pixels for outside rows and cols
@@ -872,10 +890,11 @@ void gaussian_uint16_y(image_t* src, const uint8_t ksize)
                 //ksize 7 range(-3,3)   coeffs[0,1,2,3,4,5,6]
                 sum = sum + coeffs[i + 3] * getUInt16Pixel(src, c, (r + i));
             }
-            setUInt16Pixel(temp_x, c, r, sum);
+            setUInt16Pixel(temp_y, c, r, sum);
         }
     }
-    copy(temp_x, src);
+    copy(temp_y, src);
+    deleteImage(temp_y);
     return;
 }
 
@@ -909,7 +928,28 @@ void gaussian_uint16_xy(image_t* src, const uint8_t ksize)
         }
     }
     copy(temp_x, src);
+    deleteImage(temp_x);
     return;
+}
+
+void mtrace_basic(const image_t* src, const image_t* src2, image_t* dst, const float k)
+{
+    //Calulate mtrace * K
+    //((der_x2 + der_y2) ^ 2 ) * K
+    uint16_t c;
+    uint16_t r;
+    uint16_t temp;
+    float temp2;
+
+
+    //Cycle through all pixels in image
+    for (r = 0; r < src->rows; r++) {
+        for (c = 0; c < src->cols; c++) {
+            temp = getBasicPixel(src,c,r) + getBasicPixel(src2,c,r);
+            temp2 = pow((double)temp,2.0) * k;
+            setFloatPixel(dst,c,r,temp2);
+        }
+    }
 }
 
 void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2])
