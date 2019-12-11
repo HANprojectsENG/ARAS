@@ -129,9 +129,6 @@ void ControlUI::on_use_last_image_button_clicked()
 
 void ControlUI::on_use_camera_button_clicked()
 {
-    // TODO: remove test code.
-    stateMachine.init();
-    stateMachine.doCycle();
 }
 
 void ControlUI::on_select_sequence_file_button_clicked()

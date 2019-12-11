@@ -3,9 +3,11 @@
 #include <iostream>
 
 StateMachine::StateMachine()
-    : layer(-1)
+    : GenericStateMachine<State>(State::NOT_STARTED)
+    , layer(-1)
     , step(-1)
 {
+    addStateName(State::NOT_STARTED, "Not Started");
     addStateName(State::INIT, "Init");
     addStateName(State::STARTING, "Starting");
     addStateName(State::CHECK_CURRENT_STEP, "Check Current Step");
@@ -62,10 +64,22 @@ void StateMachine::init()
     setInitialState(State::INIT);
 }
 
-bool StateMachine::continueCondition()
+bool StateMachine::exitCondition()
 {
-    return getCurrentState() != State::FINAL_STEP;
+    return getCurrentState() == State::FINAL_STEP;
 }
+
+int StateMachine::getLayer()
+{
+    return layer;
+}
+
+int StateMachine::getStep()
+{
+    return step;
+}
+
+// State machine actions
 
 void StateMachine::INIT_entry()
 {
@@ -115,7 +129,7 @@ void StateMachine::WAIT_entry() {}
 void StateMachine::WAIT_do()
 {
     // if (timer->expired()) {
-    switchState(State::WAIT);
+    switchState(State::PROJECT_OFF);
     // }
 }
 void StateMachine::WAIT_exit() {}

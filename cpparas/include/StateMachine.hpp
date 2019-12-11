@@ -11,30 +11,34 @@
 #include <map>
 
 enum class State {
-    INIT = 0,
-    STARTING = 1,
-    CHECK_CURRENT_STEP = 2,
-    PROJECT_STEP = 3,
-    WAIT = 4,
-    PROJECT_OFF = 5,
-    CAPTURE = 6,
-    CHECK_NEXT_STEP = 7,
-    FINAL_STEP = 8
+    NOT_STARTED,
+    INIT,
+    STARTING,
+    CHECK_CURRENT_STEP,
+    PROJECT_STEP,
+    WAIT,
+    PROJECT_OFF,
+    CAPTURE,
+    CHECK_NEXT_STEP,
+    FINAL_STEP
 };
 
 class StateMachine : public GenericStateMachine<State> {
 public:
     StateMachine();
-    ~StateMachine();
+    ~StateMachine() override;
 
-    void init();
+    void init() override;
     int getStep();
     int getLayer();
 
 protected:
-    bool continueCondition();
+    bool exitCondition() override;
 
 private:
+    void on_start_button_clicked();
+    void on_simulate_hand_button_clicked();
+
     void INIT_entry();
     void INIT_do();
     void INIT_exit();

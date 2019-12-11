@@ -21,20 +21,21 @@ const std::map<StateFuncType, std::string> STATE_FUNC_TYPE_NAMES = {
 template <typename StateT>
 class GenericStateMachine {
 public:
+    GenericStateMachine(StateT notStartedState) { currentState = notStartedState; };
+    virtual ~GenericStateMachine() {};
     virtual void init() = 0;
 
     bool doCycle()
     {
-        if (exited) {
+        if (exitCondition()) {
             throw std::logic_error("state machine has already exited");
         }
 
         perform(StateFuncType::DO);
-        if (continueCondition()) {
+        if (!exitCondition()) {
             return true;
         } else {
             perform(StateFuncType::EXIT);
-            exited = true;
             return false;
         }
     }
@@ -53,7 +54,7 @@ protected:
     {
         stateNames[state] = name;
     }
-    virtual bool continueCondition() = 0;
+    virtual bool exitCondition() = 0;
     void setInitialState(StateT state)
     {
         currentState = state;
@@ -80,7 +81,6 @@ private:
     }
 
     StateT currentState;
-    bool exited = false;
     std::map<std::pair<StateT, StateFuncType>, std::function<void()>> handlerFuncs {};
     std::map<StateT, std::string> stateNames {};
 };

@@ -13,12 +13,17 @@ public:
     Gtk::Grid& operator()();
 
 private:
+    bool update();
+    void on_start_stop_button_clicked();
+    void on_simulate_hand_button_clicked();
+
     StateMachine* stateMachine;
     Gtk::Grid container;
-    Gtk::Button startButton;
+    Gtk::Button startStopButton;
     Gtk::Button simulateHandButton;
     Gtk::Label layerLabel;
     Gtk::Label stepLabel;
+    bool paused;
 };
 
 #endif /* STATEMACHINEWIDGET_HPP */
