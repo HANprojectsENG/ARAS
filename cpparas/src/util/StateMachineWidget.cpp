@@ -1,7 +1,7 @@
 #include "util/StateMachineWidget.hpp"
 #include <glibmm/main.h>
 
-StateMachineWidget::StateMachineWidget(StateMachine* _stateMachine)
+StateMachineWidget::StateMachineWidget(std::shared_ptr<StateMachine> _stateMachine)
     : stateMachine(_stateMachine)
     , container()
     , startStopButton()

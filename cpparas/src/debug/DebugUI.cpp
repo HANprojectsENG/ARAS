@@ -3,7 +3,7 @@
 #include <glibmm/main.h>
 #include <numeric>
 
-DebugUI::DebugUI(StateMachine* stateMachine_)
+DebugUI::DebugUI(std::shared_ptr<StateMachine> stateMachine_)
     : stateMachine(stateMachine_)
     , widgetContainer()
     , logViewport()

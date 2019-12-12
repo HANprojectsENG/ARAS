@@ -30,8 +30,8 @@ private:
     void on_open_debug_ui_button_clicked();
 
     image_t* displayImage;
-    LSFParser::LSFData lsfData;
-    StateMachine stateMachine;
+    std::shared_ptr<LSFParser::LSFData> lsfData;
+    std::shared_ptr<StateMachine> stateMachine;
 
     std::shared_ptr<DebugUI> debugUI;
 
