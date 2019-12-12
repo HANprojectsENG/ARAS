@@ -624,27 +624,34 @@ void scaleImage_basic(const image_t* src, image_t* dst)
     return;
 }
 
-void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k){
-    
+void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k, const uint8_t method){
+    //method 0 = Harris
+    //method 1 = Shi-Tomasi
     image_t* Ix = newBasicImage(src->cols, src->rows);
     image_t* Iy = newBasicImage(src->cols, src->rows);
     image_t* Ix2 = newUInt16Image(src->cols, src->rows);
     image_t* Iy2 = newUInt16Image(src->cols, src->rows);
     image_t* Ixy = newUInt16Image(src->cols, src->rows);
     image_t* mtrace = newFloatImage(src->cols, src->rows);
-
+    
+    uint32_t detM;
+    float traceM;
     uint16_t c;
     uint16_t r;
+    uint8_t max;
     uint32_t x2y2;
     uint32_t xy2;
     int32_t result;
-    uint32_t detM;
-    float traceM;
+    uint8_t corner[4] = {0};
+    //find max value in image for scaling factor
+    max = max_basic(src);
 
     //1. Calculate x and y derivative of image via sobel
     sobelX_basic(src,Ix); //input uint8 output uint8
     sobelY_basic(src,Iy); //input uint8 output uint8
-    //2. Calculate other three images in M
+    //2. Calculate three values in M
+    //M = (x,y) [Ix * Ix     Ix * Iy]
+    //   	    [Ix * Iy     Iy * Iy]    
     power_uint16(Ix, Ix2, blockSize); //input uint8 output uint16
     power_uint16(Iy, Iy2, blockSize); //input uint8 output uint16
     multiply_basic_2(Ix, Iy, Ixy); //input uint8 output uint16
@@ -652,29 +659,68 @@ void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSiz
     gaussian_uint16_x(Ix2,ksize); //input/output uint16
     gaussian_uint16_y(Iy2,ksize); //input/output uint16
     gaussian_uint16_xy(Ixy,ksize); //input/output uint16
-    //4. Calculate mtrace * K
-    mtrace_basic(Ix2, Iy2, mtrace, k); //input uint16 output float
 
-    //5. Calculate R with K and mtrace
-    for (r = 0; r < src->rows; r++) {
-        for (c = 0; c < src->cols; c++) {
-            x2y2 = getUInt16Pixel(Ix2,c,r) * getUInt16Pixel(Iy2,c,r); //uint16 * uint16 = uint32 ðœ†
-            xy2 = getUInt16Pixel(Ixy,c,r) * getUInt16Pixel(Ixy,c,r); //uint16 * uint16 = uint32
-            detM = x2y2 - xy2;
-            detM = x2y2 > xy2 ? x2y2 - xy2 : (xy2 - x2y2);
-            traceM = getFloatPixel(mtrace,c,r);
-            result = detM - (uint32_t)traceM;
-            result = result < 0 ? 0 : result;
-                if (result > 61){
-                    printf("Result:%u = detM:%i - traceM:%f, detM = x2y2:%u - xy2:%u at pos c:%u r:%u  \n",result,detM, traceM, x2y2, xy2, c, r);
-                    setBasicPixel(dst,c,r,255);
-                }
-                else {
-                    setBasicPixel(dst,c,r,0);
-                }                           
+    if (method == 0){// Harris method
+        /*R = score
+        R = det(M) - k(trace(M))^2
+        M = w(x,y) [Ix * Ix     Ix * Iy]
+                   [Ix * Iy     Iy * Iy]
+        R = score
+        R = det(M) - k(trace(M))^2
+
+        det(M) = ((Ix * Ix)𝜆) * ((Iy * Iy)𝜆) - (Ix*Iy * Ix*Iy)
+
+        det(M) = 𝜆1 * 𝜆2
+        trace(M) = 𝜆1 + 𝜆2
+        𝜆1 and 𝜆2 are the eigen values of M
+
+        When |R| is small, which is when 𝜆1 and 𝜆2 are small, region is flat
+        when R < 0 which happens when 𝜆1 >> 𝜆2 or vice versa, region is edge
+        When R is large, which happens when 𝜆1 and 𝜆2 are large, and 𝜆1 ~ 𝜆2, the region is a corner
+        */
+        //4. Calculate mtrace * K
+        mtrace_basic(Ix2, Iy2, mtrace, k); //input uint16 output float
+        //5. Calculate det(M), threshold result
+        for (r = 0; r < src->rows - 0; r++) {
+            for (c = 0; c < src->cols - 0; c++) {
+                x2y2 = getUInt16Pixel(Ix2,c,r) * getUInt16Pixel(Iy2,c,r); //uint16 * uint16 = uint32
+                xy2 = getUInt16Pixel(Ixy,c,r) * getUInt16Pixel(Ixy,c,r); //uint16 * uint16 = uint32
+                result = x2y2 > xy2 ? xy2 : x2y2; //Find min value
+                detM = x2y2 > xy2 ? x2y2 - xy2 : (xy2 - x2y2); //detM = abs value of x2y2 - xy2 
+                traceM = getFloatPixel(mtrace,c,r);
+                result = detM - (uint32_t)traceM; //calculate result
+                result = result < 0 ? 0 : result;  //ignore negative results
+                result = max > 2 ? result / 16581375 : result; //check if binary image, scale range down to 0-255
+
+                if (corner[0] < result) {corner[0] = result;} //Find 4 max values in image
+                else if (corner[1] < result) {corner[1] = result;}
+                else if (corner[2] < result) {corner[2] = result;}
+                else if (corner[3] < result) {corner[3] = result;}
+                setBasicPixel(dst,c,r,result); //fill dst with R values; 
+            }
         }
+    threshold_basic(dst,dst,corner[3],255); //threshold for highest R values 
     }
-    //TODO add check for kernal size in gauss filter
+    else if (method == 1){// Shi-Tomasi method
+        /*R = score
+        R =  min(𝜆1,𝜆2)
+        */
+        for (r = 0; r < src->rows - 0; r++) {
+            for (c = 0; c < src->cols - 0; c++) {
+                x2y2 = getUInt16Pixel(Ix2,c,r) * getUInt16Pixel(Iy2,c,r); //uint16 * uint16 = uint32
+                xy2 = getUInt16Pixel(Ixy,c,r) * getUInt16Pixel(Ixy,c,r); //uint16 * uint16 = uint32
+                result = x2y2 > xy2 ? xy2 : x2y2; //Find min value
+                result = max > 2 ? result / 16581375 : result;
+
+                if (corner[0] < result) {corner[0] = result;} //Find 4 max values in image
+                else if (corner[1] < result) {corner[1] = result;}
+                else if (corner[2] < result) {corner[2] = result;}
+                else if (corner[3] < result) {corner[3] = result;}
+                setBasicPixel(dst,c,r,result);
+            }
+        }
+    threshold_basic(dst,dst,corner[3],255); //threshold for highest R values 
+    }   
     deleteImage(Ix);
     deleteImage(Iy);
     deleteImage(Ix2);
@@ -682,6 +728,21 @@ void harrisCorner_basic(const image_t* src, image_t* dst, const uint8_t blockSiz
     deleteImage(Ixy);
     deleteImage(mtrace);
     return;
+}
+
+uint8_t max_basic(const image_t* src){
+    uint16_t c;
+    uint16_t r;
+    uint8_t max = 0;
+    //Find max pixel value in image. 
+    //Cycle through all pixels in image
+    for (r = 0; r < src->rows; r++) {
+        for (c = 0; c < src->cols; c++) {
+            max = max < getBasicPixel(src,c,r) ? getBasicPixel(src,c,r) : max;
+        }
+    }
+    printf("Max:%d\n",max);
+    return max;
 }
 
 void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize)
@@ -935,7 +996,7 @@ void gaussian_uint16_xy(image_t* src, const uint8_t ksize)
 void mtrace_basic(const image_t* src, const image_t* src2, image_t* dst, const float k)
 {
     //Calulate mtrace * K
-    //((der_x2 + der_y2) ^ 2 ) * K
+    //((Ix2 + Iy2) ^ 2 ) * K
     uint16_t c;
     uint16_t r;
     uint16_t temp;

@@ -784,11 +784,11 @@ void scaleImage(const image_t* src, image_t* dst)
     }
 }
 
-void harrisCorner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k)
+void Corner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k, const uint8_t method)
 {
     switch (src->type) {
     case IMGTYPE_BASIC:
-        harrisCorner_basic(src, dst, blockSize, ksize, k);
+        Corner_basic(src, dst, blockSize, ksize, k, method);
         break;
     case IMGTYPE_RGB888:
     case IMGTYPE_INT16:

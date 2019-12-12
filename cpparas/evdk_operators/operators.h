@@ -474,12 +474,16 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3]);
 // Postcondition: dst is filled with the scaled image
 void scaleImage(const image_t* src, image_t* dst);
 
+// Finds corners in an image
+// Blocksize must be 2 or 1 for current method
+// ksize must be 3,5, or 7
+// k should be set at 0.04 for best results
+// method 0 = Harris
+// method 1 = Shi-Tomasi
 //
-//
-//
-// Precondition :
-// Postcondition:
-void harrisCorner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k);
+// Precondition :src is binary or grayscale uint8 image
+// Postcondition:dst is binary output with corner values
+void Corner(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const double k, const uint8_t method);
 
 // Crops the image using an source upper left corner and destination size.
 //
