@@ -10,13 +10,13 @@
 
 class DebugUI : public Gtk::Window {
 public:
-    DebugUI(StateMachine* stateMachine_);
+    DebugUI(std::shared_ptr<StateMachine> stateMachine_);
     virtual ~DebugUI();
 
 private:
     bool update();
 
-    StateMachine* stateMachine;
+    std::shared_ptr<StateMachine> stateMachine;
     Gtk::Grid widgetContainer;
     Gtk::ScrolledWindow logViewport;
     Gtk::TextView logTextView;
