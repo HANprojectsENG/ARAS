@@ -7,9 +7,11 @@
 
 class Locator {
 public:
-    Locator();
+    Locator(std::shared_ptr<StateMachine> stateMachine_, std::shared_ptr<ImageLoader> imageLoader_);
 
 private:
+    std::shared_ptr<StateMachine> stateMachine;
+    std::shared_ptr<ImageLoader> imageLoader;
 };
 
 #endif /* LOCATOR_HPP */

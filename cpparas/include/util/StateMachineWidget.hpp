@@ -10,7 +10,7 @@
 class StateMachineWidget {
 public:
     StateMachineWidget(std::shared_ptr<StateMachine> _stateMachine);
-    ~StateMachineWidget();
+    virtual ~StateMachineWidget();
     Gtk::Grid& operator()();
 
 private:

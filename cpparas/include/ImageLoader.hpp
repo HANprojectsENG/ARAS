@@ -8,6 +8,7 @@ public:
     ImageLoader();
 
 private:
+    std::shared_ptr<Camera> camera;
 };
 
 #endif /* IMAGELOADER_HPP */
