@@ -3,6 +3,7 @@
 RegionExtractor::RegionExtractor(int32_t cols, int32_t rows)
 {
     regionImage = newRGB888Image(cols, rows);
+    erase(regionImage);
 }
 
 RegionExtractor::~RegionExtractor()
