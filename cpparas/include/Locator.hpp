@@ -17,7 +17,6 @@ public:
     image_t* Get_new_frame();
 
 private:
-    Camera PiCamera;
     bool locator_running = false;
     std::thread locator_thread; 
     image_t* last_cut_frame;
@@ -25,6 +24,7 @@ private:
     image_t* new_full_frame;
     std::shared_ptr<StateMachine> stateMachine;
     std::shared_ptr<ImageLoader> imageLoader;
+    Camera PiCamera;
 };
 
 #endif /* LOCATOR_HPP */
