@@ -301,7 +301,7 @@ void rotate180(const image_t* img);
 //
 // Precondition : img is a single channel image
 // Postcondition: dst is a binary image
-void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_t high);
+void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_t high, const uint8_t output);
 
 // Threshold values are automatically generated based on the 2-means method
 //

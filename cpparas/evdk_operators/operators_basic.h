@@ -57,7 +57,7 @@ void rotate180_basic(const image_t* img);
 // Thresholding
 // ----------------------------------------------------------------------------
 
-void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high);
+void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high, const uint8_t output);
 
 void threshold2Means_basic(const image_t* src, image_t* dst, const eBrightness brightness);
 

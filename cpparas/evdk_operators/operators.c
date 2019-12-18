@@ -263,7 +263,7 @@ void rotate180(const image_t* img)
 // Thresholding
 // ----------------------------------------------------------------------------
 
-void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_t high)
+void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_t high, const uint8_t output)
 {
     if (src->type != dst->type) {
         fprintf(stderr, "threshold(): src and dst are of different type\n");
@@ -279,7 +279,7 @@ void threshold(const image_t* src, image_t* dst, const int32_t low, const int32_
             fprintf(stderr, "threshold(): high > 255 is invalid for IMGTYPE_BASIC\n");
         }
 
-        threshold_basic(src, dst, (basic_pixel_t)low, (basic_pixel_t)high);
+        threshold_basic(src, dst, (basic_pixel_t)low, (basic_pixel_t)high, output);
         break;
     case IMGTYPE_INT16:
     case IMGTYPE_FLOAT:

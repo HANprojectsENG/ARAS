@@ -228,7 +228,7 @@ void rotate180_basic(const image_t* img)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high)
+void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high, const uint8_t output)
 {
     uint16_t i;
     uint16_t x;
@@ -239,7 +239,7 @@ void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, 
             if ((pixel >= low) && (pixel <= high)) {
                 setBasicPixel(dst, i, x, (basic_pixel_t)0);
             } else {
-                setBasicPixel(dst, i, x, (basic_pixel_t)1);
+                setBasicPixel(dst, i, x, output);
             }
         }
     }
@@ -699,7 +699,7 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
                 setBasicPixel(dst,c,r,result); //fill dst with R values; 
             }
         }
-    threshold_basic(dst,dst,corner[3],255); //threshold for highest R values 
+    threshold_basic(dst,dst,corner[3],255, 255); //threshold for highest R values 
     }
     else if (method == 1){// Shi-Tomasi method
         /*R = score
@@ -719,7 +719,7 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
                 setBasicPixel(dst,c,r,result);
             }
         }
-    threshold_basic(dst,dst,corner[3],255); //threshold for highest R values 
+    threshold_basic(dst,dst,corner[3],255, 255); //threshold for highest R values 
     }   
     deleteImage(Ix);
     deleteImage(Iy);
