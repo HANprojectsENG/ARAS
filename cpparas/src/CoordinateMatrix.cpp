@@ -39,13 +39,10 @@ void CoordinateMatrix::update(uint32_t baseplateX, uint32_t baseplateY, uint32_t
                         * ((float)baseplateWidth / ((float)calibration.baseplateCols - 1.0f))
                         // Adjust for the block layer (x' = x / z)
                         / ((calibration.cameraHeight - layer * calibration.blockHeight) / calibration.cameraHeight);
-                point.col = // Do the same for the row
+                point.row = // Do the same for the row
                     (float)baseplateMidpoint.row
-                    // Add the nub index corrected for the midpoint
                     + ((float)row - ((float)calibration.baseplateRows / 2.0f) + 0.5f)
-                        // Multiply by the nub size
-                        * ((float)baseplateWidth / ((float)calibration.baseplateRows - 1.0f))
-                        // Adjust for the block layer (x' = x / z)
+                        * ((float)baseplateHeight / ((float)calibration.baseplateRows - 1.0f))
                         / ((calibration.cameraHeight - layer * calibration.blockHeight) / calibration.cameraHeight);
                 matrix[layer][row][col] = point;
             }
