@@ -1044,23 +1044,34 @@ void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2])
 
 void binaryErode_basic(const image_t* src, image_t* dst, uint8_t kernelSize)
 {
+    typedef uint64_t batch_t;
+    int32_t batchSize = sizeof(batch_t);
+    if (kernelSize > batchSize) {
+        // Not implemented.
+        return;
+    }
+
     int32_t kernelOffset = kernelSize / 2;
-    int32_t kernelHalfSize = (kernelSize + 1) / 2;
+    batch_t batchMask = 0;
+    for (batch_t i = 0; i < kernelSize; i++) {
+        batchMask |= 1ULL << (i * 8ULL);
+    }
+
     for (int32_t row = 0; row < src->rows; row++) {
         for (int32_t col = 0; col < src->cols; col++) {
-            if (row < kernelHalfSize || row >= src->rows - kernelHalfSize
-                || col < kernelHalfSize || col >= src->cols - kernelHalfSize) {
-                // Don't attempt erosion.
+            if (row < batchSize || row >= src->rows - batchSize
+                || col < batchSize || col >= src->cols - batchSize) {
+                // Don't attempt erosion on edge pixels.
                 setBasicPixel(dst, col, row, getBasicPixel(src, col, row));
                 continue;
             }
 
             basic_pixel_t result = 1;
             for (int32_t innerRow = row - kernelOffset; innerRow < row - kernelOffset + kernelSize; innerRow++) {
-                for (int32_t innerCol = col - kernelOffset; innerCol < col - kernelOffset + kernelSize; innerCol++) {
-                    if (!getBasicPixel(src, innerCol, innerRow)) {
-                        result = 0;
-                    }
+                batch_t batch = *(batch_t*)(((basic_pixel_t*)src->data) + (innerRow * src->cols + col - kernelOffset));
+                if ((batch & batchMask) != batchMask) {
+                    result = 0;
+                    break;
                 }
             }
             setBasicPixel(dst, col, row, result);
