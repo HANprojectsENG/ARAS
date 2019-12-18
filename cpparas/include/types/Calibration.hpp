@@ -3,6 +3,9 @@
 
 #include <cstdint>
 
+#define with(T, ...) \
+    ([] { T ${}; __VA_ARGS__; return $; }())
+
 struct Calibration {
     float cameraHorizontalFov;
     float cameraVerticalFov;
@@ -32,32 +35,31 @@ struct Calibration {
     uint32_t boardLocationMargin;
 };
 
-const Calibration DEFAULT_CALIBRATION = {
-    .cameraHorizontalFov = 62.2f,
-    .cameraVerticalFov = 48.8f,
-    .cameraHeight = 0.65f,
+const Calibration DEFAULT_CALIBRATION = with(Calibration,
+    $.cameraHorizontalFov = 62.2f,
+    $.cameraVerticalFov = 48.8f,
+    $.cameraHeight = 0.65f,
 
-    .captureResolutionCols = 1440,
-    .captureResolutionRows = 1440,
+    $.captureResolutionCols = 1440,
+    $.captureResolutionRows = 1440,
 
-    .projectionWidth = 0.60f,
-    .projectionHeight = 0.40f,
+    $.projectionWidth = 0.60f,
+    $.projectionHeight = 0.40f,
 
-    .projectorResolutionCols = 1280,
-    .projectorResolutionRows = 720,
+    $.projectorResolutionCols = 1280,
+    $.projectorResolutionRows = 720,
 
-    .maxLayers = 20,
-    .legoPerLayer = 50,
-    .dataPerLego = 28,
+    $.maxLayers = 20,
+    $.legoPerLayer = 50,
+    $.dataPerLego = 28,
 
-    .baseplateCols = 48,
-    .baseplateRows = 48,
+    $.baseplateCols = 48,
+    $.baseplateRows = 48,
 
-    .blockHeight = 0.0096,
-    .blockUnitLength = 0.008,
-    .maxBlockLayers = 20,
+    $.blockHeight = 0.0096,
+    $.blockUnitLength = 0.008,
+    $.maxBlockLayers = 20,
 
-    .boardLocationMargin = 2
-};
+    $.boardLocationMargin = 2);
 
 #endif /* CALIBRATION_HPP */
