@@ -229,7 +229,7 @@ static inline float affineTransformY(float x, float y, float warpMatrix[2][3])
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
+void warp_rgb888(const image_t* img, image_t* dst, int32_t colpos[3], int32_t rowpos[3])
 {
     // Stage one - rotate, scale and translate based on the first two corners.
     float angleSrc = atan2(rowpos[1] - rowpos[0], colpos[1] - colpos[0]);

@@ -452,13 +452,13 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
 // Custom operators
 // ----------------------------------------------------------------------------
 
-// Cuts out a part of the input image and warps it with (approximate) perspective correction.
+// Cuts out a part of the input image and warps it with (approximate) affine correction.
 // The interpolation method is nearest neighbor (no interpolation).
 //
 // Precondition : dst is allocated and has the wanted cols and rows
-//                positions are ordered as follows: left-top, right-top, right-bottom, left-bottom
+//                positions are ordered as follows: left-top, right-top, right-bottom
 // Postcondition: dst is filled with the warped image
-void warp(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4]);
+void warp(const image_t* img, image_t* dst, int32_t colpos[3], int32_t rowpos[3]);
 
 // Performs an affine transformation warp.
 // The interpolation method is nearest neighbor (no interpolation).

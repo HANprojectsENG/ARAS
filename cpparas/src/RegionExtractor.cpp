@@ -19,20 +19,18 @@ const image_t* RegionExtractor::getRegionImage() const
 bool RegionExtractor::updateImage(const image_t* img)
 {
     std::vector<Point2D> corners = MarkerDetector::detectMarkers(img);
-    if (corners.size() < 4) {
+    if (corners.size() < 3) {
         return false;
     } else {
-        int32_t colpos[4] = {
+        int32_t colpos[3] = {
             corners[0].col,
             corners[1].col,
             corners[2].col,
-            corners[3].col
         };
-        int32_t rowpos[4] = {
+        int32_t rowpos[3] = {
             corners[0].row,
             corners[1].row,
-            corners[2].row,
-            corners[3].row
+            corners[2].row
         };
         warp(img, regionImage, colpos, rowpos);
         return true;

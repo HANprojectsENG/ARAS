@@ -731,7 +731,7 @@ float normalizedCentralMoments(const image_t* img, const uint8_t blobnr, const i
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-void warp(const image_t* img, image_t* dst, int32_t colpos[4], int32_t rowpos[4])
+void warp(const image_t* img, image_t* dst, int32_t colpos[3], int32_t rowpos[3])
 {
     switch (img->type) {
     case IMGTYPE_RGB888:
