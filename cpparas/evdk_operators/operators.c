@@ -835,6 +835,22 @@ void binaryErode(const image_t* src, image_t* dst, uint8_t kernelSize)
     }
 }
 
+void drawRect(image_t* img, const int32_t top_left[2], const int32_t size[2], pixel_t value, eShapeDrawType drawType, uint16_t borderSize)
+{
+    switch (img->type) {
+    case IMGTYPE_RGB888:
+        drawRect_rgb888(img, top_left, size, value.rgb888_pixel, drawType, borderSize);
+        break;
+    case IMGTYPE_BASIC:
+    case IMGTYPE_INT16:
+    case IMGTYPE_FLOAT:
+    case IMGTYPE_HSV:
+    default:
+        fprintf(stderr, "drawRect(): image type %d not supported\n", img->type);
+        break;
+    }
+}
+
 #ifdef __cplusplus
 }
 #endif

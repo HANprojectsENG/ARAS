@@ -327,6 +327,24 @@ void crop_rgb888(const image_t* img, image_t* dst, int32_t top_left[2])
         }
     }
 }
+
+void drawRect_rgb888(image_t* img, const int32_t top_left[2], const int32_t size[2], rgb888_pixel_t value, eShapeDrawType drawType, uint16_t borderSize)
+{
+    for (int32_t row = top_left[1]; row < top_left[1] + size[1]; row++) {
+        for (int32_t col = top_left[0]; col < top_left[0] + size[0]; col++) {
+            if (row < 0 || row >= img->rows || col < 0 || col >= img->cols)
+                continue;
+
+            int isBorder = row < top_left[1] + borderSize || row >= top_left[1] + size[1] - borderSize
+                || col < top_left[0] + borderSize || col >= top_left[0] + size[0] - borderSize;
+            if (drawType == SHAPE_FILL
+                || (drawType == SHAPE_BORDER && isBorder)
+                || (drawType == SHAPE_INNER && !isBorder)) {
+                setRGB888Pixel(img, col, row, value);
+            }
+        }
+    }
+}
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------
