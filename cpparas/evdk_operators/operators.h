@@ -495,6 +495,11 @@ void Corner(const image_t* src, image_t* dst, const uint8_t blockSize, const uin
 // Postcondition: dst is filled with the cropped image
 void crop(const image_t* img, image_t* dst, int32_t top_left[2]);
 
+// Erodes the binary image with a square structuring element of the specified size.
+// Precondition: src is filled with zeroes or ones. dst is allocated with the same size as src.
+// Postcondition: dst is eroded and filled with zeroes or ones.
+void binaryErode(const image_t* src, image_t* dst, uint8_t kernelSize);
+
 #endif // _OPERATORS_H_
 
 #ifdef __cplusplus

@@ -779,7 +779,7 @@ void scaleImage(const image_t* src, image_t* dst)
     case IMGTYPE_HSV:
     case IMGTYPE_UINT16:
     default:
-        fprintf(stderr, "warpAffine(): image type %d not supported\n", src->type);
+        fprintf(stderr, "scaleImage(): image type %d not supported\n", src->type);
         break;
     }
 }
@@ -796,7 +796,7 @@ void Corner(const image_t* src, image_t* dst, const uint8_t blockSize, const uin
     case IMGTYPE_HSV:
     case IMGTYPE_UINT16:
     default:
-        fprintf(stderr, "scaleImage(): image type %d not supported\n", src->type);
+        fprintf(stderr, "Corner(): image type %d not supported\n", src->type);
         break;
     }
 }
@@ -815,6 +815,22 @@ void crop(const image_t* img, image_t* dst, int32_t top_left[2])
     case IMGTYPE_HSV:
     default:
         fprintf(stderr, "crop(): image type %d not supported\n", img->type);
+        break;
+    }
+}
+
+void binaryErode(const image_t* src, image_t* dst, uint8_t kernelSize)
+{
+    switch (src->type) {
+    case IMGTYPE_BASIC:
+        binaryErode_basic(src, dst, kernelSize);
+        break;
+    case IMGTYPE_RGB888:
+    case IMGTYPE_INT16:
+    case IMGTYPE_FLOAT:
+    case IMGTYPE_HSV:
+    default:
+        fprintf(stderr, "binaryErode(): image type %d not supported\n", src->type);
         break;
     }
 }

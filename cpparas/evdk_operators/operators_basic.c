@@ -152,8 +152,8 @@ void convertToBasicImage(const image_t* src, image_t* dst)
         // Loop all pixels, convert and copy
         for (uint16_t r = 0; r < src->rows; r++) {
             for (uint16_t c = 0; c < src->cols; c++) {
-                uint16_t temp = (getUInt16Pixel(src,c,r));
-                setBasicPixel(dst,c,r,(uint8_t)(temp/255));
+                uint16_t temp = (getUInt16Pixel(src, c, r));
+                setBasicPixel(dst, c, r, (uint8_t)(temp / 255));
             }
         }
 
@@ -324,18 +324,13 @@ void setSelectedToValue_basic(const image_t* src,
     const basic_pixel_t selected,
     const basic_pixel_t value)
 {
-
-    // Not yet implemented
-    // ********************************************
-    // Added to prevent compiler warnings
-    // Remove these when implementation starts
-    (void)src;
-    (void)dst;
-    (void)selected;
-    (void)value;
-
-    return;
-    // ********************************************
+    register basic_pixel_t* s = (basic_pixel_t*)src->data;
+    register basic_pixel_t* d = (basic_pixel_t*)dst->data;
+    register long int i = src->rows * src->cols;
+    while (i-- != 0) {
+        basic_pixel_t originalVal = *s++;
+        *d++ = originalVal == selected ? value : originalVal;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -624,7 +619,8 @@ void scaleImage_basic(const image_t* src, image_t* dst)
     return;
 }
 
-void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k, const uint8_t method){
+void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k, const uint8_t method)
+{
     //method 0 = Harris
     //method 1 = Shi-Tomasi
     image_t* Ix = newBasicImage(src->cols, src->rows);
@@ -633,7 +629,7 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
     image_t* Iy2 = newUInt16Image(src->cols, src->rows);
     image_t* Ixy = newUInt16Image(src->cols, src->rows);
     image_t* mtrace = newFloatImage(src->cols, src->rows);
-    
+
     uint32_t detM;
     float traceM;
     uint16_t c;
@@ -642,25 +638,25 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
     uint32_t x2y2;
     uint32_t xy2;
     int32_t result;
-    uint8_t corner[4] = {0};
+    uint8_t corner[4] = { 0 };
     //find max value in image for scaling factor
     max = max_basic(src);
 
     //1. Calculate x and y derivative of image via sobel
-    sobelX_basic(src,Ix); //input uint8 output uint8
-    sobelY_basic(src,Iy); //input uint8 output uint8
+    sobelX_basic(src, Ix); //input uint8 output uint8
+    sobelY_basic(src, Iy); //input uint8 output uint8
     //2. Calculate three values in M
     //M = (x,y) [Ix * Ix     Ix * Iy]
-    //   	    [Ix * Iy     Iy * Iy]    
+    //   	    [Ix * Iy     Iy * Iy]
     power_uint16(Ix, Ix2, blockSize); //input uint8 output uint16
     power_uint16(Iy, Iy2, blockSize); //input uint8 output uint16
     multiply_basic_2(Ix, Iy, Ixy); //input uint8 output uint16
     //3. Apply Gaussian
-    gaussian_uint16_x(Ix2,ksize); //input/output uint16
-    gaussian_uint16_y(Iy2,ksize); //input/output uint16
-    gaussian_uint16_xy(Ixy,ksize); //input/output uint16
+    gaussian_uint16_x(Ix2, ksize); //input/output uint16
+    gaussian_uint16_y(Iy2, ksize); //input/output uint16
+    gaussian_uint16_xy(Ixy, ksize); //input/output uint16
 
-    if (method == 0){// Harris method
+    if (method == 0) { // Harris method
         /*R = score
         R = det(M) - k(trace(M))^2
         M = w(x,y) [Ix * Ix     Ix * Iy]
@@ -683,44 +679,55 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
         //5. Calculate det(M), threshold result
         for (r = 0; r < src->rows - 0; r++) {
             for (c = 0; c < src->cols - 0; c++) {
-                x2y2 = getUInt16Pixel(Ix2,c,r) * getUInt16Pixel(Iy2,c,r); //uint16 * uint16 = uint32
-                xy2 = getUInt16Pixel(Ixy,c,r) * getUInt16Pixel(Ixy,c,r); //uint16 * uint16 = uint32
+                x2y2 = getUInt16Pixel(Ix2, c, r) * getUInt16Pixel(Iy2, c, r); //uint16 * uint16 = uint32
+                xy2 = getUInt16Pixel(Ixy, c, r) * getUInt16Pixel(Ixy, c, r); //uint16 * uint16 = uint32
                 result = x2y2 > xy2 ? xy2 : x2y2; //Find min value
-                detM = x2y2 > xy2 ? x2y2 - xy2 : (xy2 - x2y2); //detM = abs value of x2y2 - xy2 
-                traceM = getFloatPixel(mtrace,c,r);
+                detM = x2y2 > xy2 ? x2y2 - xy2 : (xy2 - x2y2); //detM = abs value of x2y2 - xy2
+                traceM = getFloatPixel(mtrace, c, r);
                 result = detM - (uint32_t)traceM; //calculate result
-                result = result < 0 ? 0 : result;  //ignore negative results
+                result = result < 0 ? 0 : result; //ignore negative results
                 result = max > 2 ? result / 16581375 : result; //check if binary image, scale range down to 0-255
 
-                if (corner[0] < result) {corner[0] = result;} //Find 4 max values in image
-                else if (corner[1] < result) {corner[1] = result;}
-                else if (corner[2] < result) {corner[2] = result;}
-                else if (corner[3] < result) {corner[3] = result;}
-                setBasicPixel(dst,c,r,result); //fill dst with R values; 
+                if (corner[0] < result) {
+                    corner[0] = result;
+                } //Find 4 max values in image
+                else if (corner[1] < result) {
+                    corner[1] = result;
+                } else if (corner[2] < result) {
+                    corner[2] = result;
+                } else if (corner[3] < result) {
+                    corner[3] = result;
+                }
+                setBasicPixel(dst, c, r, result); //fill dst with R values;
             }
         }
-    threshold_basic(dst,dst,corner[3],255); //threshold for highest R values 
-    }
-    else if (method == 1){// Shi-Tomasi method
+        threshold_basic(dst, dst, corner[3], 255); //threshold for highest R values
+    } else if (method == 1) { // Shi-Tomasi method
         /*R = score
         R =  min(𝜆1,𝜆2)
         */
         for (r = 0; r < src->rows - 0; r++) {
             for (c = 0; c < src->cols - 0; c++) {
-                x2y2 = getUInt16Pixel(Ix2,c,r) * getUInt16Pixel(Iy2,c,r); //uint16 * uint16 = uint32
-                xy2 = getUInt16Pixel(Ixy,c,r) * getUInt16Pixel(Ixy,c,r); //uint16 * uint16 = uint32
+                x2y2 = getUInt16Pixel(Ix2, c, r) * getUInt16Pixel(Iy2, c, r); //uint16 * uint16 = uint32
+                xy2 = getUInt16Pixel(Ixy, c, r) * getUInt16Pixel(Ixy, c, r); //uint16 * uint16 = uint32
                 result = x2y2 > xy2 ? xy2 : x2y2; //Find min value
                 result = max > 2 ? result / 16581375 : result;
 
-                if (corner[0] < result) {corner[0] = result;} //Find 4 max values in image
-                else if (corner[1] < result) {corner[1] = result;}
-                else if (corner[2] < result) {corner[2] = result;}
-                else if (corner[3] < result) {corner[3] = result;}
-                setBasicPixel(dst,c,r,result);
+                if (corner[0] < result) {
+                    corner[0] = result;
+                } //Find 4 max values in image
+                else if (corner[1] < result) {
+                    corner[1] = result;
+                } else if (corner[2] < result) {
+                    corner[2] = result;
+                } else if (corner[3] < result) {
+                    corner[3] = result;
+                }
+                setBasicPixel(dst, c, r, result);
             }
         }
-    threshold_basic(dst,dst,corner[3],255); //threshold for highest R values 
-    }   
+        threshold_basic(dst, dst, corner[3], 255); //threshold for highest R values
+    }
     deleteImage(Ix);
     deleteImage(Iy);
     deleteImage(Ix2);
@@ -730,18 +737,19 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
     return;
 }
 
-uint8_t max_basic(const image_t* src){
+uint8_t max_basic(const image_t* src)
+{
     uint16_t c;
     uint16_t r;
     uint8_t max = 0;
-    //Find max pixel value in image. 
+    //Find max pixel value in image.
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-            max = max < getBasicPixel(src,c,r) ? getBasicPixel(src,c,r) : max;
+            max = max < getBasicPixel(src, c, r) ? getBasicPixel(src, c, r) : max;
         }
     }
-    printf("Max:%d\n",max);
+    printf("Max:%d\n", max);
     return max;
 }
 
@@ -795,7 +803,8 @@ void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize)
     return;
 }
 
-void sobelX_basic(const image_t* src, image_t* dst){
+void sobelX_basic(const image_t* src, image_t* dst)
+{
     uint16_t c;
     uint16_t r;
     int32_t sum;
@@ -858,9 +867,9 @@ void power_uint16(const image_t* src, image_t* dst, const uint8_t blockSize)
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
             //Set every pixel to the power of blockSize
-            pix = pow((double)getBasicPixel(src,c,r),(double)blockSize);
+            pix = pow((double)getBasicPixel(src, c, r), (double)blockSize);
             setUInt16Pixel(dst, c, r, (uint16_t)pix);
-        }    
+        }
     }
     return;
 }
@@ -1002,13 +1011,12 @@ void mtrace_basic(const image_t* src, const image_t* src2, image_t* dst, const f
     uint16_t temp;
     float temp2;
 
-
     //Cycle through all pixels in image
     for (r = 0; r < src->rows; r++) {
         for (c = 0; c < src->cols; c++) {
-            temp = getBasicPixel(src,c,r) + getBasicPixel(src2,c,r);
-            temp2 = pow((double)temp,2.0) * k;
-            setFloatPixel(dst,c,r,temp2);
+            temp = getBasicPixel(src, c, r) + getBasicPixel(src2, c, r);
+            temp2 = pow((double)temp, 2.0) * k;
+            setFloatPixel(dst, c, r, temp2);
         }
     }
 }
@@ -1030,6 +1038,32 @@ void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2])
     for (int32_t row = destStartRow; row < destEndRow; row++) {
         for (int32_t col = destStartCol; col < destEndCol; col++) {
             setBasicPixel(dst, col, row, getBasicPixel((image_t*)img, top_left[0] + col, top_left[1] + row));
+        }
+    }
+}
+
+void binaryErode_basic(const image_t* src, image_t* dst, uint8_t kernelSize)
+{
+    int32_t kernelOffset = kernelSize / 2;
+    int32_t kernelHalfSize = (kernelSize + 1) / 2;
+    for (int32_t row = 0; row < src->rows; row++) {
+        for (int32_t col = 0; col < src->cols; col++) {
+            if (row < kernelHalfSize || row >= src->rows - kernelHalfSize
+                || col < kernelHalfSize || col >= src->cols - kernelHalfSize) {
+                // Don't attempt erosion.
+                setBasicPixel(dst, col, row, getBasicPixel(src, col, row));
+                continue;
+            }
+
+            basic_pixel_t result = 1;
+            for (int32_t innerRow = row - kernelOffset; innerRow < row - kernelOffset + kernelSize; innerRow++) {
+                for (int32_t innerCol = col - kernelOffset; innerCol < col - kernelOffset + kernelSize; innerCol++) {
+                    if (!getBasicPixel(src, innerCol, innerRow)) {
+                        result = 0;
+                    }
+                }
+            }
+            setBasicPixel(dst, col, row, result);
         }
     }
 }
