@@ -12,7 +12,7 @@ find_package(Threads)
 link_directories(${GTKMM_LIBRARY_DIRS})
 include_directories(${GTKMM_INCLUDE_DIRS} include evdk_operators)
 
-set(GENERAL_FLAGS "-Wall -Wextra")
+set(GENERAL_FLAGS "-Wall -Wextra -pedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERAL_FLAGS} -std=c++14 -pthread")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERAL_FLAGS} -std=c11")
 
