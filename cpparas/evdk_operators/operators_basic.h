@@ -123,7 +123,7 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 
 void scaleImage_basic(const image_t* src, image_t* dst);
 
-void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k,const uint8_t method);
+void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k, const uint8_t method);
 
 uint8_t max_basic(const image_t* src);
 
@@ -148,6 +148,8 @@ void gaussian_uint16_xy(image_t* src, const uint8_t ksize);
 void mtrace_basic(const image_t* src, const image_t* src2, image_t* dst, const float K);
 
 void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2]);
+
+void binaryErode_basic(const image_t* src, image_t* dst, uint8_t kernelSize);
 
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------
