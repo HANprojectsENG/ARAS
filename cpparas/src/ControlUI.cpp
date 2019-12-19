@@ -199,7 +199,7 @@ void ControlUI::set_input_image(const std::string& filePath)
 
 void ControlUI::set_sequence_file(const std::string& filePath)
 {
-    lsfData = std::make_shared<LSFParser::LSFData>(LSFParser::Load_LSF_file(filePath));
+    stateMachine->setLSFData(LSFParser::Load_LSF_file(filePath));
 
     Preferences newPreferences;
     newPreferences.lastSequenceFile = filePath;

@@ -4,6 +4,7 @@
 #include "CoordinateMatrix.hpp"
 #include "HandDetection.hpp"
 #include "ImageLoader.hpp"
+#include "LSFParser.hpp"
 #include "Projection.hpp"
 #include "RegionExtractor.hpp"
 #include "StudChecker.hpp"
@@ -31,6 +32,11 @@ public:
     void init() override;
     int getStep();
     int getLayer();
+
+    void setLSFData(const LSFParser::LSFData& data);
+
+    // Encapsulating functions.
+    void simulateHand(bool handPresent);
 
 protected:
     bool exitCondition() override;
@@ -77,6 +83,9 @@ private:
 
     int layer;
     int step;
+    LSFParser::LSFData lsfData;
+    CoordinateMatrix coordinateMatrix;
+    HandDetection handDetection;
 };
 
 #endif /* STATEMACHINE_HPP */

@@ -6,6 +6,9 @@ StateMachine::StateMachine()
     : GenericStateMachine<State>(State::NOT_STARTED)
     , layer(-1)
     , step(-1)
+    , lsfData()
+    , coordinateMatrix(DEFAULT_CALIBRATION)
+    , handDetection()
 {
     addStateName(State::NOT_STARTED, "Not Started");
     addStateName(State::INIT, "Init");
@@ -77,6 +80,16 @@ int StateMachine::getLayer()
 int StateMachine::getStep()
 {
     return step;
+}
+
+void StateMachine::setLSFData(const LSFParser::LSFData& data)
+{
+    lsfData = data;
+}
+
+void StateMachine::simulateHand(bool handPresent)
+{
+    handDetection.simulateHand(handPresent);
 }
 
 // State machine actions
