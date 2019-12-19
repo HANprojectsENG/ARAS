@@ -3,6 +3,7 @@
 
 #include "ImageLoader.hpp"
 #include "LSFParser.hpp"
+#include "Locator.hpp"
 #include "StateMachine.hpp"
 #include "debug/DebugUI.hpp"
 #include "util/ImageArea.hpp"
@@ -31,6 +32,8 @@ private:
 
     image_t* displayImage;
     std::shared_ptr<StateMachine> stateMachine;
+    std::shared_ptr<ImageLoader> imageLoader;
+    std::shared_ptr<Locator> locator;
 
     std::shared_ptr<DebugUI> debugUI;
 

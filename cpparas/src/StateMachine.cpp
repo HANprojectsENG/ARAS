@@ -9,6 +9,7 @@ StateMachine::StateMachine()
     , lsfData()
     , coordinateMatrix(DEFAULT_CALIBRATION)
     , handDetection()
+    , projection(std::make_shared<Projection>(DEFAULT_CALIBRATION.projectorResolutionCols, DEFAULT_CALIBRATION.projectorResolutionRows))
 {
     addStateName(State::NOT_STARTED, "Not Started");
     addStateName(State::INIT, "Init");
@@ -80,6 +81,11 @@ int StateMachine::getLayer()
 int StateMachine::getStep()
 {
     return step;
+}
+
+std::shared_ptr<Projection> StateMachine::getProjection()
+{
+    return projection;
 }
 
 void StateMachine::setLSFData(const LSFParser::LSFData& data)

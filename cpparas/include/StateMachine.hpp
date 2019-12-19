@@ -33,6 +33,8 @@ public:
     int getStep();
     int getLayer();
 
+    std::shared_ptr<Projection> getProjection();
+
     void setLSFData(const LSFParser::LSFData& data);
 
     // Encapsulating functions.
@@ -86,6 +88,7 @@ private:
     LSFParser::LSFData lsfData;
     CoordinateMatrix coordinateMatrix;
     HandDetection handDetection;
+    std::shared_ptr<Projection> projection;
 };
 
 #endif /* STATEMACHINE_HPP */

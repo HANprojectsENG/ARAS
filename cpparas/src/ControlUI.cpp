@@ -13,6 +13,8 @@ const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 ControlUI::ControlUI()
     : displayImage(nullptr)
     , stateMachine(std::make_shared<StateMachine>())
+    , imageLoader(std::make_shared<ImageLoader>())
+    , locator(std::make_shared<Locator>(stateMachine, imageLoader))
     , widgetContainer()
     , selectImageButton("Select image")
     , useLastImageButton("Use last")
