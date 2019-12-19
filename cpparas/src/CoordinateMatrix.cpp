@@ -50,7 +50,7 @@ void CoordinateMatrix::update(uint32_t baseplateX, uint32_t baseplateY, uint32_t
     }
 }
 
-const PointMatrix& CoordinateMatrix::getMatrix()
+const PointMatrix& CoordinateMatrix::getMatrix() const
 {
     if (matrix.size() == 0) {
         throw std::logic_error("coordinate matrix not calculated yet");

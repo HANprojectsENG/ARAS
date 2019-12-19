@@ -68,22 +68,22 @@ void StateMachine::init()
     setInitialState(State::INIT);
 }
 
-bool StateMachine::exitCondition()
+bool StateMachine::exitCondition() const
 {
     return getCurrentState() == State::FINAL_STEP;
 }
 
-int StateMachine::getLayer()
+int StateMachine::getLayer() const
 {
     return layer;
 }
 
-int StateMachine::getStep()
+int StateMachine::getStep() const
 {
     return step;
 }
 
-std::shared_ptr<Projection> StateMachine::getProjection()
+const std::shared_ptr<Projection> StateMachine::getProjection() const
 {
     return projection;
 }

@@ -7,8 +7,8 @@ class HandDetection {
 public:
     HandDetection();
     void update(const image_t* image);
-    bool containsHand() const;
     void simulateHand(bool handPresent);
+    bool containsHand() const;
 
 private:
     bool handDetected;

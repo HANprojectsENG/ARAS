@@ -8,6 +8,7 @@ HandDetection::HandDetection()
 
 void HandDetection::update(const image_t* image)
 {
+    (void)image;
     // TODO: Detect hand presence.
     handDetected = false;
 }

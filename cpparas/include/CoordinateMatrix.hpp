@@ -12,7 +12,7 @@ public:
     CoordinateMatrix(Calibration calibration_);
 
     void update(uint32_t baseplateX, uint32_t baseplateY, uint32_t baseplateWidth, uint32_t baseplateHeight);
-    const PointMatrix& getMatrix();
+    const PointMatrix& getMatrix() const;
 
 private:
     PointMatrix matrix;

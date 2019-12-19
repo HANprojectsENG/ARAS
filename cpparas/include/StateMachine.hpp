@@ -30,10 +30,10 @@ public:
     ~StateMachine() override;
 
     void init() override;
-    int getStep();
-    int getLayer();
+    int getStep() const;
+    int getLayer() const;
 
-    std::shared_ptr<Projection> getProjection();
+    const std::shared_ptr<Projection> getProjection() const;
 
     void setLSFData(const LSFParser::LSFData& data);
 
@@ -41,7 +41,7 @@ public:
     void simulateHand(bool handPresent);
 
 protected:
-    bool exitCondition() override;
+    bool exitCondition() const override;
 
 private:
     void on_start_button_clicked();
