@@ -59,6 +59,8 @@ void scaleImage_rgb888(const image_t* src, image_t* dst);
 
 void crop_rgb888(const image_t* img, image_t* dst, int32_t top_left[2]);
 
+void drawRect_rgb888(image_t* img, const int32_t top_left[2], const int32_t size[2], rgb888_pixel_t value, eShapeDrawType drawType, uint16_t borderSize);
+
 #endif // _OPERATORS_RGB888_H_
 // ----------------------------------------------------------------------------
 // EOF

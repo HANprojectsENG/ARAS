@@ -16,7 +16,7 @@ public:
     void showOutline(Brick brick, int studX, int studY);
     void showInfo(int step, int layer, const std::vector<Brick>& expectedAndNextBricks);
 
-    image_t* getImage() const;
+    const image_t* getImage() const;
 
 private:
     image_t* image;

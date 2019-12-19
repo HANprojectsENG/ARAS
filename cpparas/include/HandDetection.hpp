@@ -3,8 +3,16 @@
 
 #include "operators.h"
 
-namespace HandDetection {
-bool containsHand(const image_t* image);
-}
+class HandDetection {
+public:
+    HandDetection();
+    void update(const image_t* image);
+    void simulateHand(bool handPresent);
+    bool containsHand() const;
+
+private:
+    bool handDetected;
+    bool simulatedHandDetected;
+};
 
 #endif /* HANDDETECTION_HPP */

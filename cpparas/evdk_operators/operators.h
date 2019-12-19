@@ -162,6 +162,13 @@ typedef enum {
 
 } eFilterOperation;
 
+// Shape drawing
+typedef enum {
+    SHAPE_FILL,
+    SHAPE_BORDER,
+    SHAPE_INNER
+} eShapeDrawType;
+
 // BLOB info structure
 typedef struct blobinfo_t {
     uint16_t height;
@@ -499,6 +506,9 @@ void crop(const image_t* img, image_t* dst, int32_t top_left[2]);
 // Precondition: src is filled with zeroes or ones. dst is allocated with the same size as src.
 // Postcondition: dst is eroded and filled with zeroes or ones.
 void binaryErode(const image_t* src, image_t* dst, uint8_t kernelSize);
+
+// Draws a rectangle shape on the image.
+void drawRect(image_t* img, const int32_t top_left[2], const int32_t size[2], pixel_t value, eShapeDrawType drawType, uint16_t borderSize);
 
 #endif // _OPERATORS_H_
 

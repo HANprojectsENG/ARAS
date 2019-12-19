@@ -30,7 +30,7 @@ void Projection::showInfo(int step, int layer, const std::vector<Brick>& expecte
     (void)expectedAndNextBricks;
 }
 
-image_t* Projection::getImage() const
+const image_t* Projection::getImage() const
 {
     return image;
 }

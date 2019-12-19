@@ -65,7 +65,7 @@ protected:
     {
         stateNames[state] = name;
     }
-    virtual bool exitCondition() = 0;
+    virtual bool exitCondition() const = 0;
     void setInitialState(StateT state)
     {
         currentState = state;

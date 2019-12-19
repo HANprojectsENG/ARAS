@@ -13,6 +13,8 @@ const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 ControlUI::ControlUI()
     : displayImage(nullptr)
     , stateMachine(std::make_shared<StateMachine>())
+    , imageLoader(std::make_shared<ImageLoader>())
+    , locator(std::make_shared<Locator>(stateMachine, imageLoader))
     , widgetContainer()
     , selectImageButton("Select image")
     , useLastImageButton("Use last")
@@ -199,7 +201,7 @@ void ControlUI::set_input_image(const std::string& filePath)
 
 void ControlUI::set_sequence_file(const std::string& filePath)
 {
-    lsfData = std::make_shared<LSFParser::LSFData>(LSFParser::Load_LSF_file(filePath));
+    stateMachine->setLSFData(LSFParser::Load_LSF_file(filePath));
 
     Preferences newPreferences;
     newPreferences.lastSequenceFile = filePath;

@@ -6,6 +6,10 @@ StateMachine::StateMachine()
     : GenericStateMachine<State>(State::NOT_STARTED)
     , layer(-1)
     , step(-1)
+    , lsfData()
+    , coordinateMatrix(DEFAULT_CALIBRATION)
+    , handDetection()
+    , projection(std::make_shared<Projection>(DEFAULT_CALIBRATION.projectorResolutionCols, DEFAULT_CALIBRATION.projectorResolutionRows))
 {
     addStateName(State::NOT_STARTED, "Not Started");
     addStateName(State::INIT, "Init");
@@ -64,19 +68,34 @@ void StateMachine::init()
     setInitialState(State::INIT);
 }
 
-bool StateMachine::exitCondition()
+bool StateMachine::exitCondition() const
 {
     return getCurrentState() == State::FINAL_STEP;
 }
 
-int StateMachine::getLayer()
+int StateMachine::getLayer() const
 {
     return layer;
 }
 
-int StateMachine::getStep()
+int StateMachine::getStep() const
 {
     return step;
+}
+
+const std::shared_ptr<Projection> StateMachine::getProjection() const
+{
+    return projection;
+}
+
+void StateMachine::setLSFData(const LSFParser::LSFData& data)
+{
+    lsfData = data;
+}
+
+void StateMachine::simulateHand(bool handPresent)
+{
+    handDetection.simulateHand(handPresent);
 }
 
 // State machine actions
