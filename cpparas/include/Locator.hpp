@@ -12,8 +12,10 @@ public:
     Locator(std::shared_ptr<ImageLoader> imageLoader_);
     ~Locator();
     void Start_Locator_thread();
+    void Stop_Locator_thread();
     void Locator_thread();
     image_t* Get_new_frame();
+    void Send_frame_to_ui(image_t* frame);
 
 private:
     bool locator_running = false;

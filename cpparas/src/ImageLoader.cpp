@@ -43,3 +43,15 @@ image_t* ImageLoader::Get_source_image()
     }
     return nullptr;
 }
+
+void ImageLoader::Set_UI_frame(image_t* frame)
+{
+    ui_image = frame;
+    new_UI_frame_available = true;
+}
+
+image_t* ImageLoader::Get_UI_frame()
+{
+    new_UI_frame_available = false;
+    return ui_image;
+}

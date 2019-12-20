@@ -28,6 +28,14 @@ void Locator::Start_Locator_thread()
     locator_thread = std::thread(&Locator::Locator_thread, this);
 }
 
+void Locator::Stop_Locator_thread()
+{
+    locator_running = false;
+    if (locator_thread.joinable()) {
+        locator_thread.join();
+    }
+}
+
 void Locator::Locator_thread()
 {
     if(source_type == CAMERA){
@@ -53,7 +61,7 @@ void Locator::Locator_thread()
         //find corners, warp and crop image here
 
         //save last frame to be used by main thread
-        new_cut_frame;
+        new_cut_frame = new_full_frame;
 
         //wait a bit, no need to run this at full powaa
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -72,4 +80,13 @@ image_t* Locator::Get_new_frame()
     }
     return new_cut_frame;
     
+}
+
+void Locator::Send_frame_to_ui(image_t* frame)
+{
+    if(!locator_running)
+    {
+        throw std::runtime_error("Camera and locator thread stopped unexpectedly");
+    }
+    imageLoader->Set_UI_frame(frame);
 }
