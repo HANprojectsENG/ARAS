@@ -4,13 +4,12 @@
 #include <thread>
 #include "ImageLoader.hpp"
 #include "RegionExtractor.hpp"
-#include "StateMachine.hpp"
 #include "operators.h"
 #include "Camera.hpp"
 
 class Locator {
 public:
-    Locator(std::shared_ptr<StateMachine> stateMachine_, std::shared_ptr<ImageLoader> imageLoader_);
+    Locator(std::shared_ptr<ImageLoader> imageLoader_);
     ~Locator();
     void Start_Locator_thread();
     void Locator_thread();
@@ -19,10 +18,9 @@ public:
 private:
     bool locator_running = false;
     std::thread locator_thread; 
-    image_t* last_cut_frame;
     image_t* new_cut_frame;
     image_t* new_full_frame;
-    std::shared_ptr<StateMachine> stateMachine;
+    SourceType source_type;
     std::shared_ptr<ImageLoader> imageLoader;
     Camera PiCamera;
 };
