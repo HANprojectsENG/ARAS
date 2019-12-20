@@ -25,9 +25,7 @@ ControlUI::ControlUI()
     , separator2()
     , openDebugUIButton("Debug")
     , separator3()
-    , imageViewport()
-    , stateMachineWidget(stateMachine)
-    , imageArea()
+    , stateMachineWidget(stateMachine, imageLoader)
 {
     this->set_title("Control UI");
 
@@ -36,9 +34,7 @@ ControlUI::ControlUI()
     widgetContainer.set_row_spacing(5);
     separator3.set_hexpand(true);
     stateMachineWidget().set_hexpand(true);
-    stateMachineWidget().set_vexpand(false);
-    imageViewport.set_vexpand(true);
-    imageViewport.set_hexpand(true);
+    stateMachineWidget().set_vexpand(true);
 
     selectImageButton.signal_clicked().connect(sigc::mem_fun(*this,
         &ControlUI::on_select_image_button_clicked));
@@ -53,7 +49,6 @@ ControlUI::ControlUI()
     openDebugUIButton.signal_clicked().connect(sigc::mem_fun(*this,
         &ControlUI::on_open_debug_ui_button_clicked));
 
-    imageViewport.add(imageArea);
     widgetContainer.attach(selectImageButton, 1, 1, 1, 1);
     widgetContainer.attach(useLastImageButton, 2, 1, 1, 1);
     widgetContainer.attach(useCameraButton, 3, 1, 1, 1);
@@ -64,7 +59,6 @@ ControlUI::ControlUI()
     widgetContainer.attach(openDebugUIButton, 8, 1, 1, 1);
     widgetContainer.attach(separator3, 9, 1, 1, 1);
     widgetContainer.attach(stateMachineWidget(), 1, 2, 9, 1);
-    widgetContainer.attach(imageViewport, 1, 3, 9, 1);
     this->add(widgetContainer);
 
     selectImageButton.show();
@@ -77,9 +71,7 @@ ControlUI::ControlUI()
     separator2.show();
     openDebugUIButton.show();
     separator3.show();
-    imageViewport.show();
     stateMachineWidget().show();
-    imageArea.show();
 
     useLastImageButton.grab_focus();
 }
@@ -191,13 +183,6 @@ void ControlUI::set_input_image(const std::string& filePath)
     }else{
         imageLoader->Set_source_type(IMAGE);
         imageLoader->Set_source_image(filePath);
-        image_t* inputImage = imageLoader->Get_source_image();
-
-        if (displayImage)
-            deleteImage(displayImage);
-        displayImage = ImageUtils::performTestOperations(inputImage);
-        deleteImage(inputImage);
-        imageArea.setImage(displayImage);
 
         Preferences newPreferences;
         newPreferences.lastImageFile = filePath;

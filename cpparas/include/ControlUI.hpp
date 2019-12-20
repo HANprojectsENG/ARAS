@@ -6,11 +6,9 @@
 #include "Locator.hpp"
 #include "StateMachine.hpp"
 #include "debug/DebugUI.hpp"
-#include "util/ImageArea.hpp"
 #include "util/StateMachineWidget.hpp"
 #include <gtkmm/button.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/window.h>
 #include <memory>
@@ -47,9 +45,7 @@ private:
     Gtk::Separator separator2;
     Gtk::Button openDebugUIButton;
     Gtk::Separator separator3;
-    Gtk::ScrolledWindow imageViewport;
     StateMachineWidget stateMachineWidget;
-    ImageArea imageArea;
 };
 
 #endif /* CONTROLUI_HPP */
