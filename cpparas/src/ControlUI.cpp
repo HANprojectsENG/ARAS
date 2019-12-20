@@ -192,17 +192,17 @@ void ControlUI::set_input_image(const std::string& filePath)
         imageLoader->Set_source_type(IMAGE);
         imageLoader->Set_source_image(filePath);
         image_t* inputImage = imageLoader->Get_source_image();
-    }
-    
-    if (displayImage)
-        deleteImage(displayImage);
-    displayImage = ImageUtils::performTestOperations(inputImage);
-    deleteImage(inputImage);
-    imageArea.setImage(displayImage);
 
-    Preferences newPreferences;
-    newPreferences.lastImageFile = filePath;
-    newPreferences.saveToFile();
+        if (displayImage)
+            deleteImage(displayImage);
+        displayImage = ImageUtils::performTestOperations(inputImage);
+        deleteImage(inputImage);
+        imageArea.setImage(displayImage);
+
+        Preferences newPreferences;
+        newPreferences.lastImageFile = filePath;
+        newPreferences.saveToFile();
+    }
 }
 
 void ControlUI::set_sequence_file(const std::string& filePath)
