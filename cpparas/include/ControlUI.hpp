@@ -31,9 +31,9 @@ private:
     void on_open_debug_ui_button_clicked();
 
     image_t* displayImage;
-    std::shared_ptr<StateMachine> stateMachine;
     std::shared_ptr<ImageLoader> imageLoader;
     std::shared_ptr<Locator> locator;
+    std::shared_ptr<StateMachine> stateMachine;
 
     std::shared_ptr<DebugUI> debugUI;
 

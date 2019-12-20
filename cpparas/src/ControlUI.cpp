@@ -12,9 +12,9 @@ const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 
 ControlUI::ControlUI()
     : displayImage(nullptr)
-    , stateMachine(std::make_shared<StateMachine>())
     , imageLoader(std::make_shared<ImageLoader>())
-    , locator(std::make_shared<Locator>(stateMachine, imageLoader))
+    , locator(std::make_shared<Locator>(imageLoader))
+    , stateMachine(std::make_shared<StateMachine>(locator))
     , widgetContainer()
     , selectImageButton("Select image")
     , useLastImageButton("Use last")
@@ -186,8 +186,14 @@ void ControlUI::on_open_debug_ui_button_clicked()
 
 void ControlUI::set_input_image(const std::string& filePath)
 {
-    image_t* inputImage = ImageUtils::loadImageFromFile(filePath);
-
+    if(filePath == ""){
+        imageLoader->Set_source_type(CAMERA);
+    }else{
+        imageLoader->Set_source_type(IMAGE);
+        imageLoader->Set_source_image(filePath);
+        image_t* inputImage = imageLoader->Get_source_image();
+    }
+    
     if (displayImage)
         deleteImage(displayImage);
     displayImage = ImageUtils::performTestOperations(inputImage);
