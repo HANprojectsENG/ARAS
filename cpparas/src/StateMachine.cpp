@@ -166,7 +166,14 @@ void StateMachine::PROJECT_OFF_exit() {}
 
 void StateMachine::CAPTURE_entry()
 {
-    // Capture image
+    // Capture image TESTING ONLY
+    //Locator restarted here because locator only checks its source at before starting. 
+    locator->Stop_Locator_thread();
+    locator->Start_Locator_thread();
+    //ask locator for new frame
+    image_t* axne = locator->Get_new_frame();
+    //send received frame to locator to be send over to the ui
+    locator->Send_frame_to_ui(axne);
 
     switchState(State::CHECK_CURRENT_STEP);
 }

@@ -28,6 +28,7 @@ void Locator::Start_Locator_thread()
     locator_thread = std::thread(&Locator::Locator_thread, this);
 }
 
+// Stop Locator thread. Also stops camera thread if active
 void Locator::Stop_Locator_thread()
 {
     locator_running = false;
@@ -72,6 +73,7 @@ void Locator::Locator_thread()
     
 }
 
+//Get latest cut frame from locator
 image_t* Locator::Get_new_frame()
 {
     if(!locator_running)
@@ -82,6 +84,7 @@ image_t* Locator::Get_new_frame()
     
 }
 
+//Send a frame to image loader
 void Locator::Send_frame_to_ui(image_t* frame)
 {
     if(!locator_running)
