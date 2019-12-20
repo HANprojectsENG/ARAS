@@ -2,7 +2,7 @@
 #include "debug/Debug.hpp"
 #include <iostream>
 
-StateMachine::StateMachine()
+StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     : GenericStateMachine<State>(State::NOT_STARTED)
     , layer(-1)
     , step(-1)
@@ -10,6 +10,7 @@ StateMachine::StateMachine()
     , coordinateMatrix(DEFAULT_CALIBRATION)
     , handDetection()
     , projection(std::make_shared<Projection>(DEFAULT_CALIBRATION.projectorResolutionCols, DEFAULT_CALIBRATION.projectorResolutionRows))
+    , locator(locator_)
 {
     addStateName(State::NOT_STARTED, "Not Started");
     addStateName(State::INIT, "Init");
@@ -104,7 +105,8 @@ void StateMachine::INIT_entry()
 {
     // Load save file
 
-    // Spawn camera thread
+    // Spawn camera-locator thread
+    locator->Start_Locator_thread();
 }
 void StateMachine::INIT_do()
 {

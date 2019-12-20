@@ -8,6 +8,7 @@
 #include "Projection.hpp"
 #include "RegionExtractor.hpp"
 #include "StudChecker.hpp"
+#include "Locator.hpp"
 #include "util/GenericStateMachine.hpp"
 #include <map>
 
@@ -26,7 +27,7 @@ enum class State {
 
 class StateMachine : public GenericStateMachine<State> {
 public:
-    StateMachine();
+    StateMachine(std::shared_ptr<Locator> locator_);
     ~StateMachine() override;
 
     void init() override;
@@ -89,6 +90,7 @@ private:
     CoordinateMatrix coordinateMatrix;
     HandDetection handDetection;
     std::shared_ptr<Projection> projection;
+    std::shared_ptr<Locator> locator;
 };
 
 #endif /* STATEMACHINE_HPP */
