@@ -23,9 +23,11 @@ Locator::~Locator()
 //Start locator thread
 void Locator::Start_Locator_thread()
 {
-    locator_running = true;
-    source_type = imageLoader->Get_source_type();
-    locator_thread = std::thread(&Locator::Locator_thread, this);
+    if(!locator_running){
+        locator_running = true;
+        source_type = imageLoader->Get_source_type();
+        locator_thread = std::thread(&Locator::Locator_thread, this);
+    }
 }
 
 // Stop Locator thread. Also stops camera thread if active
@@ -42,15 +44,15 @@ void Locator::Locator_thread()
     if(source_type == CAMERA){
         //start Camera thread
         PiCamera.Camera_thread_worker_start();
-    } else if(source_type == IMAGE){
-        //Load user image
-        new_full_frame = imageLoader->Get_source_image();
     }
     while(locator_running)
     {
         if(source_type == CAMERA){
-            //Get a new frame
+            //Get a new frame from camera
             new_full_frame = PiCamera.Camera_get_frame();
+        } else if(source_type == IMAGE){
+            //Load user image
+            new_full_frame = imageLoader->Get_source_image();
         }
         //if new frame is none, camera is dead, so we need to stop locator
         if(new_full_frame == nullptr)
@@ -67,8 +69,6 @@ void Locator::Locator_thread()
         //wait a bit, no need to run this at full powaa
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    //deleteImage(new_full_frame);
-    //deleteImage(new_cut_frame);
     PiCamera.Camera_thread_worker_stop();
     
 }
@@ -79,6 +79,10 @@ image_t* Locator::Get_new_frame()
     if(!locator_running)
     {
         throw std::runtime_error("Camera and locator thread stopped unexpectedly");
+    }
+    if(new_cut_frame == nullptr)
+    {
+        throw std::runtime_error("Locator tried to return an empty image. You tried to use the camera on a device other than the Pi, didn't you? :)");
     }
     return new_cut_frame;
     
