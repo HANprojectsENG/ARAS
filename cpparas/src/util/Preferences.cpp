@@ -38,7 +38,7 @@ void Preferences::saveToFile(const std::string& filePath)
     Preferences oldPreferences = Preferences::fromFile(filePath);
 
     std::ofstream outFile(filePath);
-    outFile << "lastImageFile " << (this->lastImageFile == "" ? oldPreferences.lastImageFile : this->lastImageFile) << std::endl;
-    outFile << "lastSequenceFile " << (this->lastSequenceFile == "" ? oldPreferences.lastSequenceFile : this->lastSequenceFile) << std::endl;
+    outFile << "lastImageFile " << (lastImageFile == "" ? oldPreferences.lastImageFile : lastImageFile) << std::endl;
+    outFile << "lastSequenceFile " << (lastSequenceFile == "" ? oldPreferences.lastSequenceFile : lastSequenceFile) << std::endl;
     outFile.close();
 }

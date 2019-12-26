@@ -19,7 +19,7 @@ void ImageArea::setImage(const image_t* image)
 {
     try {
         m_image = ImageUtils::imageToPixbuf(image);
-        this->set_size_request(m_image->get_width(), m_image->get_height());
+        set_size_request(m_image->get_width(), m_image->get_height());
     } catch (const Gio::ResourceError& ex) {
         std::cerr << "ResourceError: " << ex.what() << std::endl;
     } catch (const Gdk::PixbufError& ex) {
@@ -41,7 +41,7 @@ bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
     Gdk::Cairo::set_source_pixbuf(cr, m_image,
         (width - m_image->get_width()) / 2, (height - m_image->get_height()) / 2);
     cr->paint();
-    this->queue_draw();
+    queue_draw();
 
     return true;
 }

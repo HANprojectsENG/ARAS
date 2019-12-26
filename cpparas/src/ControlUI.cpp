@@ -27,7 +27,7 @@ ControlUI::ControlUI()
     , separator3()
     , stateMachineWidget(stateMachine, imageLoader)
 {
-    this->set_title("Control UI");
+    set_title("Control UI");
 
     widgetContainer.set_margin_top(5);
     widgetContainer.set_column_spacing(5);
@@ -62,7 +62,7 @@ ControlUI::ControlUI()
     widgetContainer.attach(openDebugUIButton, 9, 1, 1, 1);
     widgetContainer.attach(separator3, 10, 1, 1, 1);
     widgetContainer.attach(stateMachineWidget(), 1, 2, 10, 1);
-    this->add(widgetContainer);
+    add(widgetContainer);
 
     selectImageButton.show();
     useLastImageButton.show();
@@ -107,7 +107,7 @@ void ControlUI::on_select_image_button_clicked()
     switch (result) {
     case (Gtk::RESPONSE_OK): {
         std::string filename = dialog.get_filename();
-        this->set_input_image(filename);
+        set_input_image(filename);
         break;
     }
     default: {
@@ -123,7 +123,7 @@ void ControlUI::on_use_last_image_button_clicked()
     if (preferences.lastImageFile == "") {
         return;
     }
-    this->set_input_image(preferences.lastImageFile);
+    set_input_image(preferences.lastImageFile);
 }
 
 void ControlUI::on_use_camera_button_clicked()
@@ -153,7 +153,7 @@ void ControlUI::on_select_sequence_file_button_clicked()
     switch (result) {
     case (Gtk::RESPONSE_OK): {
         std::string filename = dialog.get_filename();
-        this->set_sequence_file(filename);
+        set_sequence_file(filename);
         break;
     }
     default: {
@@ -169,7 +169,7 @@ void ControlUI::on_use_last_sequence_file_button_clicked()
     if (preferences.lastSequenceFile == "") {
         return;
     }
-    this->set_sequence_file(preferences.lastSequenceFile);
+    set_sequence_file(preferences.lastSequenceFile);
 }
 
 void ControlUI::on_open_projector_ui_button_clicked()

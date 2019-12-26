@@ -12,9 +12,9 @@ DebugUI::DebugUI(std::shared_ptr<StateMachine> stateMachine_)
     , brickPositionLabel("Brick position: 16,16 2x8")
     , expectedValueLabel("Expected colour: -")
 {
-    this->set_title("DebugUI");
-    this->set_default_size(500, 400);
-    this->set_resizable(false);
+    set_title("DebugUI");
+    set_default_size(500, 400);
+    set_resizable(false);
 
     widgetContainer.set_margin_top(5);
     widgetContainer.set_column_spacing(5);
@@ -38,7 +38,7 @@ DebugUI::DebugUI(std::shared_ptr<StateMachine> stateMachine_)
         sigc::mem_fun(*this, &DebugUI::update),
         100);
 
-    this->add(widgetContainer);
+    add(widgetContainer);
     widgetContainer.show();
     logTextView.show();
     logViewport.show();
