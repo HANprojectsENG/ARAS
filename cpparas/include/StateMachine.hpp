@@ -5,10 +5,10 @@
 #include "HandDetection.hpp"
 #include "ImageLoader.hpp"
 #include "LSFParser.hpp"
+#include "Locator.hpp"
 #include "Projection.hpp"
 #include "RegionExtractor.hpp"
 #include "StudChecker.hpp"
-#include "Locator.hpp"
 #include "util/GenericStateMachine.hpp"
 #include <map>
 
@@ -34,7 +34,7 @@ public:
     int getStep() const;
     int getLayer() const;
 
-    const std::shared_ptr<Projection> getProjection() const;
+    std::shared_ptr<Projection> getProjection() const;
 
     void setLSFData(const LSFParser::LSFData& data);
 

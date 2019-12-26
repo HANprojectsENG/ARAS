@@ -11,8 +11,7 @@
 const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 
 ControlUI::ControlUI()
-    : displayImage(nullptr)
-    , imageLoader(std::make_shared<ImageLoader>())
+    : imageLoader(std::make_shared<ImageLoader>())
     , locator(std::make_shared<Locator>(imageLoader))
     , stateMachine(std::make_shared<StateMachine>(locator))
     , widgetContainer()
@@ -23,6 +22,7 @@ ControlUI::ControlUI()
     , selectSequenceFileButton("Select sequence file")
     , useLastSequenceFileButton("Use last")
     , separator2()
+    , openProjectorUIButton("Projector")
     , openDebugUIButton("Debug")
     , separator3()
     , stateMachineWidget(stateMachine, imageLoader)
@@ -46,6 +46,8 @@ ControlUI::ControlUI()
         &ControlUI::on_select_sequence_file_button_clicked));
     useLastSequenceFileButton.signal_clicked().connect(sigc::mem_fun(*this,
         &ControlUI::on_use_last_sequence_file_button_clicked));
+    openProjectorUIButton.signal_clicked().connect(sigc::mem_fun(*this,
+        &ControlUI::on_open_projector_ui_button_clicked));
     openDebugUIButton.signal_clicked().connect(sigc::mem_fun(*this,
         &ControlUI::on_open_debug_ui_button_clicked));
 
@@ -56,9 +58,10 @@ ControlUI::ControlUI()
     widgetContainer.attach(selectSequenceFileButton, 5, 1, 1, 1);
     widgetContainer.attach(useLastSequenceFileButton, 6, 1, 1, 1);
     widgetContainer.attach(separator2, 7, 1, 1, 1);
-    widgetContainer.attach(openDebugUIButton, 8, 1, 1, 1);
-    widgetContainer.attach(separator3, 9, 1, 1, 1);
-    widgetContainer.attach(stateMachineWidget(), 1, 2, 9, 1);
+    widgetContainer.attach(openProjectorUIButton, 8, 1, 1, 1);
+    widgetContainer.attach(openDebugUIButton, 9, 1, 1, 1);
+    widgetContainer.attach(separator3, 10, 1, 1, 1);
+    widgetContainer.attach(stateMachineWidget(), 1, 2, 10, 1);
     this->add(widgetContainer);
 
     selectImageButton.show();
@@ -69,6 +72,7 @@ ControlUI::ControlUI()
     useLastSequenceFileButton.show();
     widgetContainer.show();
     separator2.show();
+    openProjectorUIButton.show();
     openDebugUIButton.show();
     separator3.show();
     stateMachineWidget().show();
@@ -78,8 +82,6 @@ ControlUI::ControlUI()
 
 ControlUI::~ControlUI()
 {
-    if (displayImage)
-        deleteImage(displayImage);
 }
 
 void ControlUI::on_select_image_button_clicked()
@@ -170,6 +172,12 @@ void ControlUI::on_use_last_sequence_file_button_clicked()
     this->set_sequence_file(preferences.lastSequenceFile);
 }
 
+void ControlUI::on_open_projector_ui_button_clicked()
+{
+    projectorUI = std::make_shared<ProjectorUI>(stateMachine->getProjection());
+    projectorUI->show();
+}
+
 void ControlUI::on_open_debug_ui_button_clicked()
 {
     debugUI = std::make_shared<DebugUI>(stateMachine);
@@ -178,9 +186,9 @@ void ControlUI::on_open_debug_ui_button_clicked()
 
 void ControlUI::set_input_image(const std::string& filePath)
 {
-    if(filePath == ""){
+    if (filePath == "") {
         imageLoader->Set_source_type(CAMERA);
-    }else{
+    } else {
         imageLoader->Set_source_type(IMAGE);
         imageLoader->Set_source_image(filePath);
 

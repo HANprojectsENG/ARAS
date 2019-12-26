@@ -9,7 +9,7 @@ class ImageArea : public Gtk::DrawingArea {
 public:
     ImageArea();
     virtual ~ImageArea();
-    void setImage(image_t* image);
+    void setImage(const image_t* image);
 
 protected:
     //Override default signal handler:

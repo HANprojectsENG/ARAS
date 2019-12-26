@@ -15,11 +15,13 @@ public:
     void clear();
     void showOutline(Brick brick, int studX, int studY);
     void showInfo(int step, int layer, const std::vector<Brick>& expectedAndNextBricks);
+    void complete();
 
     const image_t* getImage() const;
 
 private:
     image_t* image;
+    bool isAvailable;
 };
 
 #endif /* PROJECTION_HPP */

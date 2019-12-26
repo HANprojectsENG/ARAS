@@ -84,7 +84,7 @@ int StateMachine::getStep() const
     return step;
 }
 
-const std::shared_ptr<Projection> StateMachine::getProjection() const
+std::shared_ptr<Projection> StateMachine::getProjection() const
 {
     return projection;
 }

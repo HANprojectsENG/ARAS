@@ -15,7 +15,7 @@ ImageArea::~ImageArea()
 {
 }
 
-void ImageArea::setImage(image_t* image)
+void ImageArea::setImage(const image_t* image)
 {
     try {
         m_image = ImageUtils::imageToPixbuf(image);

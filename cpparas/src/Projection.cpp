@@ -2,6 +2,7 @@
 #include "operators.h"
 
 Projection::Projection(uint32_t width, uint32_t height)
+    : isAvailable(false)
 {
     image = newRGB888Image(width, height);
 }
@@ -13,6 +14,7 @@ Projection::~Projection()
 
 void Projection::clear()
 {
+    isAvailable = false;
     erase(image);
 }
 
@@ -30,7 +32,16 @@ void Projection::showInfo(int step, int layer, const std::vector<Brick>& expecte
     (void)expectedAndNextBricks;
 }
 
+void Projection::complete()
+{
+    isAvailable = true;
+}
+
 const image_t* Projection::getImage() const
 {
-    return image;
+    if (!isAvailable) {
+        return nullptr;
+    } else {
+        return image;
+    }
 }

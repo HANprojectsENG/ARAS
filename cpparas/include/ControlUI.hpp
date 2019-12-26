@@ -4,6 +4,7 @@
 #include "ImageLoader.hpp"
 #include "LSFParser.hpp"
 #include "Locator.hpp"
+#include "ProjectorUI.hpp"
 #include "StateMachine.hpp"
 #include "debug/DebugUI.hpp"
 #include "util/StateMachineWidget.hpp"
@@ -26,13 +27,14 @@ private:
     void on_use_camera_button_clicked();
     void on_select_sequence_file_button_clicked();
     void on_use_last_sequence_file_button_clicked();
+    void on_open_projector_ui_button_clicked();
     void on_open_debug_ui_button_clicked();
 
-    image_t* displayImage;
     std::shared_ptr<ImageLoader> imageLoader;
     std::shared_ptr<Locator> locator;
     std::shared_ptr<StateMachine> stateMachine;
 
+    std::shared_ptr<ProjectorUI> projectorUI;
     std::shared_ptr<DebugUI> debugUI;
 
     Gtk::Grid widgetContainer;
@@ -43,6 +45,7 @@ private:
     Gtk::Button selectSequenceFileButton;
     Gtk::Button useLastSequenceFileButton;
     Gtk::Separator separator2;
+    Gtk::Button openProjectorUIButton;
     Gtk::Button openDebugUIButton;
     Gtk::Separator separator3;
     StateMachineWidget stateMachineWidget;
