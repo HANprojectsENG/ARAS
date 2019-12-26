@@ -17,7 +17,8 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addStateName(State::STARTING, "Starting");
     addStateName(State::CHECK_CURRENT_STEP, "Check Current Step");
     addStateName(State::PROJECT_STEP, "Project Step");
-    addStateName(State::WAIT, "Wait");
+    addStateName(State::WAIT_HAND_ENTER, "Wait Hand Enter");
+    addStateName(State::WAIT_HAND_EXIT, "Wait Hand Exit");
     addStateName(State::PROJECT_OFF, "Project Off");
     addStateName(State::CAPTURE, "Capture");
     addStateName(State::CHECK_NEXT_STEP, "Check Next Step");
@@ -39,9 +40,13 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addHandler(State::PROJECT_STEP, StateFuncType::DO, std::bind(&StateMachine::PROJECT_STEP_do, this));
     addHandler(State::PROJECT_STEP, StateFuncType::EXIT, std::bind(&StateMachine::PROJECT_STEP_exit, this));
 
-    addHandler(State::WAIT, StateFuncType::ENTRY, std::bind(&StateMachine::WAIT_entry, this));
-    addHandler(State::WAIT, StateFuncType::DO, std::bind(&StateMachine::WAIT_do, this));
-    addHandler(State::WAIT, StateFuncType::EXIT, std::bind(&StateMachine::WAIT_exit, this));
+    addHandler(State::WAIT_HAND_ENTER, StateFuncType::ENTRY, std::bind(&StateMachine::WAIT_HAND_ENTER_entry, this));
+    addHandler(State::WAIT_HAND_ENTER, StateFuncType::DO, std::bind(&StateMachine::WAIT_HAND_ENTER_do, this));
+    addHandler(State::WAIT_HAND_ENTER, StateFuncType::EXIT, std::bind(&StateMachine::WAIT_HAND_ENTER_exit, this));
+
+    addHandler(State::WAIT_HAND_EXIT, StateFuncType::ENTRY, std::bind(&StateMachine::WAIT_HAND_EXIT_entry, this));
+    addHandler(State::WAIT_HAND_EXIT, StateFuncType::DO, std::bind(&StateMachine::WAIT_HAND_EXIT_do, this));
+    addHandler(State::WAIT_HAND_EXIT, StateFuncType::EXIT, std::bind(&StateMachine::WAIT_HAND_EXIT_exit, this));
 
     addHandler(State::PROJECT_OFF, StateFuncType::ENTRY, std::bind(&StateMachine::PROJECT_OFF_entry, this));
     addHandler(State::PROJECT_OFF, StateFuncType::DO, std::bind(&StateMachine::PROJECT_OFF_do, this));
@@ -137,27 +142,48 @@ void StateMachine::CHECK_CURRENT_STEP_entry()
 void StateMachine::CHECK_CURRENT_STEP_do() {}
 void StateMachine::CHECK_CURRENT_STEP_exit() {}
 
-void StateMachine::PROJECT_STEP_entry() {}
+void StateMachine::PROJECT_STEP_entry()
+{
+    projection->clear();
+    projection->complete();
+}
 void StateMachine::PROJECT_STEP_do()
 {
     // if (timer->expired()) {
-    switchState(State::WAIT);
+    switchState(State::WAIT_HAND_ENTER);
     // }
 }
 void StateMachine::PROJECT_STEP_exit() {}
 
-void StateMachine::WAIT_entry() {}
-void StateMachine::WAIT_do()
+void StateMachine::WAIT_HAND_ENTER_entry() {}
+void StateMachine::WAIT_HAND_ENTER_do()
 {
-    // if (timer->expired()) {
-    switchState(State::PROJECT_OFF);
-    // }
+    image_t* axne = locator->Get_new_frame();
+    handDetection.update(axne);
+    locator->Send_frame_to_ui(axne);
+    if (handDetection.containsHand()) {
+        switchState(State::WAIT_HAND_EXIT);
+    }
 }
-void StateMachine::WAIT_exit() {}
+void StateMachine::WAIT_HAND_ENTER_exit() {}
+
+void StateMachine::WAIT_HAND_EXIT_entry() {}
+void StateMachine::WAIT_HAND_EXIT_do()
+{
+    image_t* axne = locator->Get_new_frame();
+    handDetection.update(axne);
+    locator->Send_frame_to_ui(axne);
+    if (!handDetection.containsHand()) {
+        switchState(State::PROJECT_OFF);
+    }
+}
+void StateMachine::WAIT_HAND_EXIT_exit() {}
 
 void StateMachine::PROJECT_OFF_entry()
 {
     // Turn off projector
+    projection->clear();
+    projection->complete();
 
     switchState(State::CAPTURE);
 }

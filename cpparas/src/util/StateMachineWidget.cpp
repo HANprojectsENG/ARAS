@@ -36,8 +36,8 @@ StateMachineWidget::StateMachineWidget(std::shared_ptr<StateMachine> _stateMachi
 
     startStopButton.signal_clicked().connect(sigc::mem_fun(*this,
         &StateMachineWidget::on_start_stop_button_clicked));
-    simulateHandButton.signal_clicked().connect(sigc::mem_fun(*this,
-        &StateMachineWidget::on_simulate_hand_button_clicked));
+    simulateHandButton.signal_toggled().connect(sigc::mem_fun(*this,
+        &StateMachineWidget::on_simulate_hand_button_toggled));
     Glib::signal_timeout().connect(
         sigc::mem_fun(*this, &StateMachineWidget::update),
         100);
@@ -70,7 +70,7 @@ bool StateMachineWidget::update()
     layerLabel.set_text(std::string("Layer: ") + std::to_string(stateMachine->getLayer()));
     stepLabel.set_text(std::string("Step: ") + std::to_string(stateMachine->getStep()));
     //Check if new frame to show is available, if so, get it from imageLoader and show it
-    if(imageLoader->new_UI_frame_available){
+    if (imageLoader->new_UI_frame_available) {
         imageArea.setImage(imageLoader->Get_UI_frame());
     }
     return true;
@@ -84,6 +84,7 @@ void StateMachineWidget::on_start_stop_button_clicked()
     paused = !paused;
 }
 
-void StateMachineWidget::on_simulate_hand_button_clicked()
+void StateMachineWidget::on_simulate_hand_button_toggled()
 {
+    stateMachine->simulateHand(simulateHandButton.get_active());
 }

@@ -10,6 +10,8 @@ ProjectorUI::ProjectorUI(std::shared_ptr<Projection> projection_)
 
     add(imageArea);
 
+    imageArea.show();
+
     Glib::signal_timeout().connect(
         sigc::mem_fun(*this, &ProjectorUI::update),
         100);

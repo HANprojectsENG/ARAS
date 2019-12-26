@@ -18,7 +18,8 @@ enum class State {
     STARTING,
     CHECK_CURRENT_STEP,
     PROJECT_STEP,
-    WAIT,
+    WAIT_HAND_ENTER,
+    WAIT_HAND_EXIT,
     PROJECT_OFF,
     CAPTURE,
     CHECK_NEXT_STEP,
@@ -64,9 +65,13 @@ private:
     void PROJECT_STEP_do();
     void PROJECT_STEP_exit();
 
-    void WAIT_entry();
-    void WAIT_do();
-    void WAIT_exit();
+    void WAIT_HAND_ENTER_entry();
+    void WAIT_HAND_ENTER_do();
+    void WAIT_HAND_ENTER_exit();
+
+    void WAIT_HAND_EXIT_entry();
+    void WAIT_HAND_EXIT_do();
+    void WAIT_HAND_EXIT_exit();
 
     void PROJECT_OFF_entry();
     void PROJECT_OFF_do();

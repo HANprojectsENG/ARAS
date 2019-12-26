@@ -6,8 +6,9 @@
 #include <gtkmm/button.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
-#include <gtkmm/window.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/togglebutton.h>
+#include <gtkmm/window.h>
 #include <memory>
 
 class StateMachineWidget {
@@ -19,13 +20,13 @@ public:
 private:
     bool update();
     void on_start_stop_button_clicked();
-    void on_simulate_hand_button_clicked();
+    void on_simulate_hand_button_toggled();
 
     std::shared_ptr<StateMachine> stateMachine;
     std::shared_ptr<ImageLoader> imageLoader;
     Gtk::Grid container;
     Gtk::Button startStopButton;
-    Gtk::Button simulateHandButton;
+    Gtk::ToggleButton simulateHandButton;
     Gtk::Label layerLabel;
     Gtk::Label stepLabel;
     Gtk::ScrolledWindow imageViewport;
