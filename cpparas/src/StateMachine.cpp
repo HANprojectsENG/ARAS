@@ -145,6 +145,12 @@ void StateMachine::CHECK_CURRENT_STEP_exit() {}
 void StateMachine::PROJECT_STEP_entry()
 {
     projection->clear();
+    const std::vector<Brick> testBricks = {
+        { Color::ORANGE, 8, 2 },
+        { Color::RED, 2, 2 },
+        { Color::GREEN, 4, 2 }
+    };
+    projection->showInfo(step, layer, testBricks);
     projection->complete();
 }
 void StateMachine::PROJECT_STEP_do()
