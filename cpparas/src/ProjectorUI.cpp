@@ -1,6 +1,8 @@
 #include "ProjectorUI.hpp"
 #include <glibmm/main.h>
 
+namespace cpparas {
+
 ProjectorUI::ProjectorUI(std::shared_ptr<Projection> projection_)
     : projection(projection_)
     , imageArea()
@@ -29,3 +31,5 @@ bool ProjectorUI::update()
     }
     return true;
 }
+
+} // namespace cpparas

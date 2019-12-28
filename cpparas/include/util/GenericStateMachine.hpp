@@ -6,6 +6,8 @@
 #include <functional>
 #include <map>
 
+namespace cpparas {
+
 enum class StateFuncType {
     ENTRY,
     DO,
@@ -90,5 +92,7 @@ private:
     std::map<std::pair<StateT, StateFuncType>, std::function<void()>> handlerFuncs {};
     std::map<StateT, std::string> stateNames {};
 };
+
+} // namespace cpparas
 
 #endif /* GENERICSTATEMACHINE_HPP */

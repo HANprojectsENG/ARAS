@@ -1,5 +1,7 @@
 #include "RegionExtractor.hpp"
 
+namespace cpparas {
+
 RegionExtractor::RegionExtractor(int32_t cols, int32_t rows)
 {
     regionImage = newRGB888Image(cols, rows);
@@ -36,3 +38,5 @@ bool RegionExtractor::updateImage(const image_t* img)
         return true;
     }
 }
+
+} // namespace cpparas

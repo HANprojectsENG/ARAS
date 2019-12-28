@@ -6,6 +6,8 @@
 #include <thread>
 #include <unistd.h>
 
+namespace cpparas {
+
 //MAX SUPPORTED RESOLUTION FOR CONSTRUCTOR IS 1440x1440.
 //IF USING ANYTHING BELOW THAT, MAKE SURE PIXEL ASPECT RATIO IS 1:1
 
@@ -14,17 +16,7 @@ Camera::Camera(uint32_t w, uint32_t h)
     //compose final parameter string for raspivid
     width = w;
     height = h;
-    raspi_parameters = " -md 2 --width " + std::to_string(width) + 
-    " --height " + std::to_string(height) + 
-    " --metering matrix" + 
-    " --ISO 100" + 
-    " --flush" + 
-    " --framerate 15" + 
-    " --initial pause" + 
-    " --timeout 0" + 
-    " --nopreview" + 
-    " --raw -" + 
-    " --raw-format rgb";
+    raspi_parameters = " -md 2 --width " + std::to_string(width) + " --height " + std::to_string(height) + " --metering matrix" + " --ISO 100" + " --flush" + " --framerate 15" + " --initial pause" + " --timeout 0" + " --nopreview" + " --raw -" + " --raw-format rgb";
 }
 
 Camera::~Camera()
@@ -51,8 +43,7 @@ void Camera::Camera_thread_worker()
             // read pipe data into buffer. One whole frame per read
             // if all bytes are in, convert raw data to image_t
             size_t readBytes = fread((uint8_t*)captured_frame->data, 1, bufferSize, fpipe);
-            if(readBytes != bufferSize)
-            {
+            if (readBytes != bufferSize) {
                 threadRunning = false;
             }
             // signal main thread that a new frame is ready, unlock mutex
@@ -87,8 +78,7 @@ void Camera::Camera_thread_worker_stop()
 image_t* Camera::Camera_get_frame()
 {
     //chek if camera is running
-    if(threadRunning)
-    {
+    if (threadRunning) {
         //wait for new frame to be available
         is_ready = false;
         std::unique_lock<std::mutex> locker(mtx);
@@ -97,13 +87,11 @@ image_t* Camera::Camera_get_frame()
         }
     }
     //check camera again, in case camera crashed while getting a new frame
-    if(threadRunning)
-    {
+    if (threadRunning) {
         return captured_frame;
-    }
-    else
-    {
+    } else {
         return nullptr;
     }
-    
 }
+
+} // namespace cpparas

@@ -11,6 +11,8 @@
 #include <gtkmm/window.h>
 #include <memory>
 
+namespace cpparas {
+
 class StateMachineWidget {
 public:
     StateMachineWidget(std::shared_ptr<StateMachine> _stateMachine, std::shared_ptr<ImageLoader> _imageLoader);
@@ -33,5 +35,7 @@ private:
     ImageArea imageArea;
     bool paused;
 };
+
+} // namespace cpparas
 
 #endif /* STATEMACHINEWIDGET_HPP */

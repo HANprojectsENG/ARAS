@@ -4,6 +4,8 @@
 #include "operators.h"
 #include <map>
 
+namespace cpparas {
+
 enum class Color {
     ORANGE = 106,
     GREEN = 37,
@@ -27,5 +29,7 @@ const std::map<Color, rgb888_pixel_t> COLOR_DISPLAY_VALUES = {
     { Color::BLUE, { 0, 0, 255 } },
     { Color::RED, { 255, 0, 0 } }
 };
+
+} // namespace cpparas
 
 #endif /* COLOR_HPP */

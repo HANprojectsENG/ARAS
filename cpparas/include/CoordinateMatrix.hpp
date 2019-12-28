@@ -5,6 +5,8 @@
 #include "types/Point2D.hpp"
 #include <vector>
 
+namespace cpparas {
+
 typedef std::vector<std::vector<std::vector<Point2D>>> PointMatrix;
 
 class CoordinateMatrix {
@@ -18,5 +20,7 @@ private:
     PointMatrix matrix;
     Calibration calibration;
 };
+
+} // namespace cpparas
 
 #endif /* COORDINATEMATRIX_HPP */

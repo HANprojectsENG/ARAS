@@ -2,6 +2,8 @@
 #include "debug/Debug.hpp"
 #include <iostream>
 
+namespace cpparas {
+
 StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     : GenericStateMachine<State>(State::NOT_STARTED)
     , layer(-1)
@@ -228,3 +230,5 @@ void StateMachine::FINAL_STEP_entry()
 }
 void StateMachine::FINAL_STEP_do() {}
 void StateMachine::FINAL_STEP_exit() {}
+
+} // namespace cpparas

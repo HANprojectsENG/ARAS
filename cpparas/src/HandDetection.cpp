@@ -1,5 +1,7 @@
 #include "HandDetection.hpp"
 
+namespace cpparas {
+
 HandDetection::HandDetection()
     : handDetected(false)
     , simulatedHandDetected(false)
@@ -22,3 +24,5 @@ void HandDetection::simulateHand(bool handPresent)
 {
     simulatedHandDetected = handPresent;
 }
+
+} // namespace cpparas

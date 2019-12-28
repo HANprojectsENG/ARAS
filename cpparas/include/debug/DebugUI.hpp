@@ -8,6 +8,8 @@
 #include <gtkmm/window.h>
 #include <memory>
 
+namespace cpparas {
+
 class DebugUI : public Gtk::Window {
 public:
     DebugUI(std::shared_ptr<StateMachine> stateMachine_);
@@ -24,5 +26,7 @@ private:
     Gtk::Label brickPositionLabel;
     Gtk::Label expectedValueLabel;
 };
+
+} // namespace cpparas
 
 #endif /* DEBUGUI_HPP */

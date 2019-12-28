@@ -14,6 +14,8 @@
 #include <gtkmm/window.h>
 #include <memory>
 
+namespace cpparas {
+
 class ControlUI : public Gtk::Window {
 public:
     ControlUI();
@@ -50,5 +52,7 @@ private:
     Gtk::Separator separator3;
     StateMachineWidget stateMachineWidget;
 };
+
+} // namespace cpparas
 
 #endif /* CONTROLUI_HPP */

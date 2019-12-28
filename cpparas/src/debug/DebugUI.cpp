@@ -3,6 +3,8 @@
 #include <glibmm/main.h>
 #include <numeric>
 
+namespace cpparas {
+
 DebugUI::DebugUI(std::shared_ptr<StateMachine> stateMachine_)
     : stateMachine(stateMachine_)
     , widgetContainer()
@@ -68,3 +70,5 @@ bool DebugUI::update()
 
     return true;
 }
+
+} // namespace cpparas

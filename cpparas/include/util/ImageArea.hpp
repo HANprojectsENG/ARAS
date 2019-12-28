@@ -5,6 +5,8 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/drawingarea.h>
 
+namespace cpparas {
+
 class ImageArea : public Gtk::DrawingArea {
 public:
     ImageArea();
@@ -17,5 +19,7 @@ protected:
 
     Glib::RefPtr<Gdk::Pixbuf> m_image;
 };
+
+} // namespace cpparas
 
 #endif /* IMAGEAREA_HPP */

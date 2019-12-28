@@ -8,6 +8,8 @@
 #include <gtkmm/filechooserdialog.h>
 #include <iostream>
 
+namespace cpparas {
+
 const std::string LAST_IMAGE_CONF_PATH = ".cpparas-last-image";
 
 ControlUI::ControlUI()
@@ -206,3 +208,5 @@ void ControlUI::set_sequence_file(const std::string& filePath)
     newPreferences.lastSequenceFile = filePath;
     newPreferences.saveToFile();
 }
+
+} // namespace cpparas

@@ -3,6 +3,8 @@
 
 #include "operators.h"
 
+namespace cpparas {
+
 class HandDetection {
 public:
     HandDetection();
@@ -14,5 +16,7 @@ private:
     bool handDetected;
     bool simulatedHandDetected;
 };
+
+} // namespace cpparas
 
 #endif /* HANDDETECTION_HPP */

@@ -12,6 +12,8 @@
 #include "util/GenericStateMachine.hpp"
 #include <map>
 
+namespace cpparas {
+
 enum class State {
     NOT_STARTED,
     INIT,
@@ -97,5 +99,7 @@ private:
     std::shared_ptr<Projection> projection;
     std::shared_ptr<Locator> locator;
 };
+
+} // namespace cpparas
 
 #endif /* STATEMACHINE_HPP */

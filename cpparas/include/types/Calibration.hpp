@@ -3,8 +3,10 @@
 
 #include <cstdint>
 
-#define with(T, ...) \
+#define constructS(T, ...) \
     ([] { T _{}; __VA_ARGS__; return _; }())
+
+namespace cpparas {
 
 struct Calibration {
     float cameraHorizontalFov;
@@ -35,7 +37,7 @@ struct Calibration {
     uint32_t boardLocationMargin;
 };
 
-const Calibration DEFAULT_CALIBRATION = with(Calibration,
+const Calibration DEFAULT_CALIBRATION = constructS(Calibration,
     _.cameraHorizontalFov = 62.2f,
     _.cameraVerticalFov = 48.8f,
     _.cameraHeight = 0.65f,
@@ -61,5 +63,7 @@ const Calibration DEFAULT_CALIBRATION = with(Calibration,
     _.maxBlockLayers = 20,
 
     _.boardLocationMargin = 2);
+
+} // namespace cpparas
 
 #endif /* CALIBRATION_HPP */

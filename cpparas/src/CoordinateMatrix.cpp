@@ -1,6 +1,8 @@
 #include "CoordinateMatrix.hpp"
 #include <stdexcept>
 
+namespace cpparas {
+
 CoordinateMatrix::CoordinateMatrix(Calibration calibration_)
     : calibration(calibration_)
 {
@@ -57,3 +59,5 @@ const PointMatrix& CoordinateMatrix::getMatrix() const
     }
     return matrix;
 }
+
+} // namespace cpparas

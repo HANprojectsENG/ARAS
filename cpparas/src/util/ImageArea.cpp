@@ -7,6 +7,8 @@
 #include <glibmm/fileutils.h>
 #include <iostream>
 
+namespace cpparas {
+
 ImageArea::ImageArea()
 {
 }
@@ -45,3 +47,5 @@ bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
     return true;
 }
+
+} // namespace cpparas

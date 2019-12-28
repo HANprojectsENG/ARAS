@@ -1,6 +1,8 @@
 #include "Projection.hpp"
 #include "operators.h"
-#include "types/Point.hpp"
+#include "types/Point2D.hpp"
+
+namespace cpparas {
 
 Projection::Projection(uint32_t width, uint32_t height)
     : isAvailable(false)
@@ -68,3 +70,5 @@ const image_t* Projection::getImage() const
         return image;
     }
 }
+
+} // namespace cpparas

@@ -2,6 +2,8 @@
 #include "util/ImageUtils.hpp"
 #include <glibmm/main.h>
 
+namespace cpparas {
+
 StateMachineWidget::StateMachineWidget(std::shared_ptr<StateMachine> _stateMachine, std::shared_ptr<ImageLoader> _imageLoader)
     : stateMachine(_stateMachine)
     , imageLoader(_imageLoader)
@@ -88,3 +90,5 @@ void StateMachineWidget::on_simulate_hand_button_toggled()
 {
     stateMachine->simulateHand(simulateHandButton.get_active());
 }
+
+} // namespace cpparas

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+namespace cpparas {
+
 Preferences Preferences::fromFile(const std::string& filePath)
 {
     std::ifstream inFile(filePath);
@@ -42,3 +44,5 @@ void Preferences::saveToFile(const std::string& filePath)
     outFile << "lastSequenceFile " << (lastSequenceFile == "" ? oldPreferences.lastSequenceFile : lastSequenceFile) << std::endl;
     outFile.close();
 }
+
+} // namespace cpparas

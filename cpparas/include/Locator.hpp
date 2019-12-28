@@ -1,11 +1,13 @@
 #ifndef LOCATOR_HPP
 #define LOCATOR_HPP
 
-#include <thread>
+#include "Camera.hpp"
 #include "ImageLoader.hpp"
 #include "RegionExtractor.hpp"
 #include "operators.h"
-#include "Camera.hpp"
+#include <thread>
+
+namespace cpparas {
 
 class Locator {
 public:
@@ -19,12 +21,14 @@ public:
 
 private:
     bool locator_running = false;
-    std::thread locator_thread; 
+    std::thread locator_thread;
     image_t* new_cut_frame;
     image_t* new_full_frame;
     SourceType source_type;
     std::shared_ptr<ImageLoader> imageLoader;
     Camera PiCamera;
 };
+
+} // namespace cpparas
 
 #endif /* LOCATOR_HPP */

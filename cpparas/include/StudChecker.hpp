@@ -3,7 +3,11 @@
 
 #include "ColorClassifier.hpp"
 
+namespace cpparas {
+
 namespace StudChecker {
 }
+
+} // namespace cpparas
 
 #endif /* STUDCHECKER_HPP */

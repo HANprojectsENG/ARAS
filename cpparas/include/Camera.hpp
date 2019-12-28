@@ -1,12 +1,14 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <string>
-#include <iostream>
-#include <thread>
-#include <mutex> 
-#include <condition_variable>
 #include "operators.h"
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <thread>
+
+namespace cpparas {
 
 class Camera {
 public:
@@ -25,10 +27,12 @@ protected:
     image_t* captured_frame;
     //threads
     bool threadRunning = false;
-    std::thread camera_thread; 
+    std::thread camera_thread;
     bool is_ready = false;
     std::mutex mtx;
     std::condition_variable cond_var;
 };
+
+} // namespace cpparas
 
 #endif /* CAMERA_HPP */

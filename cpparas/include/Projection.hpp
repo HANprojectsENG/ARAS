@@ -7,6 +7,8 @@
 #include <tuple>
 #include <vector>
 
+namespace cpparas {
+
 class Projection {
 public:
     Projection(uint32_t width, uint32_t height);
@@ -23,5 +25,7 @@ private:
     image_t* image;
     bool isAvailable;
 };
+
+} // namespace cpparas
 
 #endif /* PROJECTION_HPP */

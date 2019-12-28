@@ -1,9 +1,11 @@
 #ifndef IMAGELOADER_HPP
 #define IMAGELOADER_HPP
 
-#include <string>
-#include "util/ImageUtils.hpp"
 #include "operators.h"
+#include "util/ImageUtils.hpp"
+#include <string>
+
+namespace cpparas {
 
 enum SourceType {
     CAMERA,
@@ -28,5 +30,7 @@ private:
     image_t* user_image;
     image_t* ui_image;
 };
+
+} // namespace cpparas
 
 #endif /* IMAGELOADER_HPP */

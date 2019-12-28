@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace cpparas {
+
 const std::string DEFAULT_PREFERENCES_PATH = ".cpparas-preferences";
 
 struct Preferences {
@@ -11,5 +13,7 @@ struct Preferences {
     static Preferences fromFile(const std::string& filePath = DEFAULT_PREFERENCES_PATH);
     void saveToFile(const std::string& filePath = DEFAULT_PREFERENCES_PATH);
 };
+
+} // namespace cpparas
 
 #endif /* PREFERENCES_HPP */

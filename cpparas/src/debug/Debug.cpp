@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace cpparas {
+
 std::shared_ptr<std::deque<std::string>> Debug::lines;
 
 void Debug::println(const std::string& message)
@@ -29,3 +31,5 @@ void Debug::println(const std::string& message)
     }
     lines->push_back(line);
 }
+
+} // namespace cpparas
