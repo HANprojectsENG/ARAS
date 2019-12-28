@@ -147,6 +147,7 @@ void StateMachine::CHECK_CURRENT_STEP_exit() {}
 void StateMachine::PROJECT_STEP_entry()
 {
     projection->clear();
+    // TODO: Calculate brick shape from current lsf data, layer and step.
     const std::vector<Brick> testBricks = {
         { Color::ORANGE, 8, 2 },
         { Color::RED, 2, 2 },

@@ -2,7 +2,7 @@
 
 namespace cpparas {
 
-std::vector<Point2D> MarkerDetector::detectMarkers(const image_t* img)
+std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
 {
     image_t* dst_thresh = newBasicImage(img->cols, img->rows);
     image_t* src_basic = newRGB888Image(img->cols, img->rows);
@@ -29,7 +29,7 @@ std::vector<Point2D> MarkerDetector::detectMarkers(const image_t* img)
     uint16_t pos_y[30] = { 0 };
     uint8_t corners = 0;
 
-    std::vector<Point2D> points;
+    std::vector<Point<int32_t>> points;
 
     for (c = 0; c < dst_harris->cols; c++) {
         for (r = 0; r < dst_harris->rows; r++) {
@@ -41,9 +41,9 @@ std::vector<Point2D> MarkerDetector::detectMarkers(const image_t* img)
             }
         }
     }
-    Point2D point1;
-    Point2D point2;
-    Point2D point3;
+    Point<int32_t> point1;
+    Point<int32_t> point2;
+    Point<int32_t> point3;
     if (corners == 3) {
         if (pos_x[0] < pos_x[1] && pos_x[0] < pos_x[2]) {
             point1.col = pos_x[0];

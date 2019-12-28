@@ -20,7 +20,7 @@ const image_t* RegionExtractor::getRegionImage() const
 
 bool RegionExtractor::updateImage(const image_t* img)
 {
-    std::vector<Point2D> corners = MarkerDetector::detectMarkers(img);
+    std::vector<Point<int32_t>> corners = MarkerDetector::detectMarkers(img);
     if (corners.size() < 3) {
         return false;
     } else {

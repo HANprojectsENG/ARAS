@@ -1,6 +1,6 @@
 #include "Projection.hpp"
 #include "operators.h"
-#include "types/Point2D.hpp"
+#include "types/Point.hpp"
 
 namespace cpparas {
 
@@ -33,26 +33,21 @@ void Projection::showInfo(int step, int layer, const std::vector<Brick>& expecte
     (void)step;
     (void)layer;
 
-    const Point2D nextOrigin { static_cast<int>(image->cols * 0.8f), static_cast<int>(image->rows * 0.2f) };
-    const Point2D studSize { static_cast<int>(image->rows * 0.04f), static_cast<int>(image->rows * 0.04f) };
-    const Point2D studInnerSize { static_cast<int>(studSize.col * 0.9f), static_cast<int>(studSize.row * 0.9f) };
-    const int brickDistance = static_cast<int>(studSize.row * 0.3f);
-    const int separatorHeight = static_cast<int>(studSize.row * 2.0f);
     int brickIdx = 0;
-    int brickPosRow = nextOrigin.row;
+    float brickPosRow = PROJECTION_INFO_ORIGIN.row;
     for (const Brick& brick : expectedAndNextBricks) {
         for (int w = 0; w < brick.width; w++) {
             for (int h = 0; h < brick.height; h++) {
-                int pos[2] = { nextOrigin.col + studSize.col * w, brickPosRow + studSize.row * h };
-                int size[2] = { studInnerSize.col, studInnerSize.row };
+                int pos[2] = { static_cast<int>(image->cols * PROJECTION_INFO_ORIGIN.col + image->rows * PROJECTION_STUD_SIZE * w), static_cast<int>(image->rows * brickPosRow + image->rows * PROJECTION_STUD_SIZE * h) };
+                int size[2] = { static_cast<int>(image->rows * PROJECTION_STUD_INNER_SIZE), static_cast<int>(image->rows * PROJECTION_STUD_INNER_SIZE) };
                 pixel_t color;
                 color.rgb888_pixel = COLOR_DISPLAY_VALUES.at(brick.color);
                 drawRect(image, pos, size, color, SHAPE_FILL, 0);
             }
         }
-        brickPosRow += studSize.row * brick.height + brickDistance;
+        brickPosRow += PROJECTION_STUD_SIZE * brick.height + PROJECTION_BRICK_DISTANCE;
         if (brickIdx == 0)
-            brickPosRow += separatorHeight;
+            brickPosRow += PROJECTION_SEPARATOR_HEIGHT;
         brickIdx++;
     }
 }

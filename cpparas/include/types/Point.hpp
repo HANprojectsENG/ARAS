@@ -5,9 +5,10 @@
 
 namespace cpparas {
 
-struct Point2D {
-    int32_t col;
-    int32_t row;
+template <typename T>
+struct Point {
+    T col;
+    T row;
 };
 
 } // namespace cpparas

@@ -2,12 +2,12 @@
 #define COORDINATEMATRIX_HPP
 
 #include "types/Calibration.hpp"
-#include "types/Point2D.hpp"
+#include "types/Point.hpp"
 #include <vector>
 
 namespace cpparas {
 
-typedef std::vector<std::vector<std::vector<Point2D>>> PointMatrix;
+typedef std::vector<std::vector<std::vector<Point<int32_t>>>> PointMatrix;
 
 class CoordinateMatrix {
 public:
