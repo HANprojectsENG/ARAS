@@ -3,26 +3,37 @@
 
 #include "operators.h"
 #include "types/Brick.hpp"
+#include "types/Calibration.hpp"
 #include "types/Color.hpp"
 #include "types/Point.hpp"
+#include "types/Rect.hpp"
 #include <tuple>
 #include <vector>
 
 namespace cpparas {
 
+// The following calibration is not represented in pixels;
+// it's represented in a factor (percentage) of the projection image.
+// For example: (0.8, 0.2) is at the right-top of the projection image.
 const Point<float> PROJECTION_INFO_ORIGIN { 0.8f, 0.2f };
 const float PROJECTION_SEPARATOR_HEIGHT = 0.02f;
+// These are factors of the projection image height.
 const float PROJECTION_STUD_SIZE = 0.04f;
 const float PROJECTION_STUD_INNER_SIZE = 0.035f;
 const float PROJECTION_BRICK_DISTANCE = 0.01f;
+const float PROJECTION_NEXT_FACTOR = 0.6f;
+// This is a factor of the projection image width.
+const float PROJECTION_NEXT_HORIZ_OFFSET = 0.01f;
+
+const Rect<float> PROJECTION_OUTLINE = { { 0.15f, 0.01f }, 0.6f, 0.98f };
 
 class Projection {
 public:
-    Projection(uint32_t width, uint32_t height);
+    Projection(Calibration calibration_);
     ~Projection();
 
     void clear();
-    void showOutline(Brick brick, int studX, int studY);
+    void showOutline(Brick brick, int studX, int studY, int layer);
     void showInfo(int step, int layer, const std::vector<Brick>& expectedAndNextBricks);
     void complete();
 
@@ -31,6 +42,7 @@ public:
 private:
     image_t* image;
     bool isAvailable;
+    Calibration calibration;
 };
 
 } // namespace cpparas

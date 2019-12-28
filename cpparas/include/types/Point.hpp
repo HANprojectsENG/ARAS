@@ -1,5 +1,5 @@
-#ifndef POINT2D_HPP
-#define POINT2D_HPP
+#ifndef POINT_HPP
+#define POINT_HPP
 
 #include <cstdint>
 
@@ -13,4 +13,4 @@ struct Point {
 
 } // namespace cpparas
 
-#endif /* POINT2D_HPP */
+#endif /* POINT_HPP */

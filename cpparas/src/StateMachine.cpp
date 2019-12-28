@@ -11,7 +11,7 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     , lsfData()
     , coordinateMatrix(DEFAULT_CALIBRATION)
     , handDetection()
-    , projection(std::make_shared<Projection>(DEFAULT_CALIBRATION.projectorResolutionCols, DEFAULT_CALIBRATION.projectorResolutionRows))
+    , projection(std::make_shared<Projection>(DEFAULT_CALIBRATION))
     , locator(locator_)
 {
     addStateName(State::NOT_STARTED, "Not Started");
@@ -148,10 +148,15 @@ void StateMachine::PROJECT_STEP_entry()
 {
     projection->clear();
     // TODO: Calculate brick shape from current lsf data, layer and step.
+    const Brick currentBrick = { Color::ORANGE, 6, 2 };
+    projection->showOutline(currentBrick, 20, 30, 0);
     const std::vector<Brick> testBricks = {
-        { Color::ORANGE, 8, 2 },
+        currentBrick,
         { Color::RED, 2, 2 },
-        { Color::GREEN, 4, 2 }
+        { Color::GREEN, 4, 2 },
+        { Color::ORANGE, 2, 2 },
+        { Color::GREEN, 3, 2 },
+        { Color::BLUE, 4, 2 }
     };
     projection->showInfo(step, layer, testBricks);
     projection->complete();
