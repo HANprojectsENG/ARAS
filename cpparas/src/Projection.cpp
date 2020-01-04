@@ -53,9 +53,9 @@ Point<float> blockScreenCoordinate(Calibration calibration, int studX, int studY
     };
     // Map block position to baseplate screen corner coordinates
     Point<float> screenCoord = {
-        mapNumber(studX, std::make_pair(0.0f, calibration.baseplateCols - 1.0f),
+        mapNumber(studX, std::make_pair(0.0f, calibration.baseplateCols),
             std::make_pair(baseplateLayerTopLeftScreenCoords.col, baseplateLayerRightBottomScreenCoords.col)),
-        mapNumber(studY, std::make_pair(0.0f, calibration.baseplateRows - 1.0f),
+        mapNumber(studY, std::make_pair(0.0f, calibration.baseplateRows),
             std::make_pair(baseplateLayerTopLeftScreenCoords.row, baseplateLayerRightBottomScreenCoords.row))
     };
     return screenCoord;
