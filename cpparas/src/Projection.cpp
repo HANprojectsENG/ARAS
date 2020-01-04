@@ -89,13 +89,11 @@ void Projection::showOutline(Brick brick, int studX, int studY, int layer)
 
     Point<float> baseplateCoord = blockScreenCoordinate(calibration, studX, studY, layer);
     Point<float> baseplateCoord2 = blockScreenCoordinate(calibration, studX + brick.width, studY + brick.height, layer);
-    float baseplateCoordDiffCol = baseplateCoord2.col - baseplateCoord.col;
-    float baseplateCoordDiffRow = baseplateCoord2.row - baseplateCoord.row;
-    Point<float> baseplateCoordDiff = { baseplateCoordDiffCol, baseplateCoordDiffRow };
+    Debug::println(std::string("Coords: (") + std::to_string(baseplateCoord.col) + std::string(", ") + std::to_string(baseplateCoord.row) + std::string(") (") + std::to_string(baseplateCoord2.col) + std::string(", ") + std::to_string(baseplateCoord2.row) + std::string(")"));
     Point<int> projectionCoord = baseplateCoordToProjectionCoord(baseplateCoord, image->cols, image->rows);
-    Point<int> projectionCoord2 = baseplateCoordToProjectionCoord(baseplateCoordDiff, image->cols, image->rows);
+    Point<int> projectionCoord2 = baseplateCoordToProjectionCoord(baseplateCoord2, image->cols, image->rows);
     int bpos[2] = { projectionCoord.col, projectionCoord.row };
-    int bsize[2] = { projectionCoord2.col, projectionCoord2.row };
+    int bsize[2] = { projectionCoord2.col - projectionCoord.col, projectionCoord2.row - projectionCoord.row };
     Debug::println(std::string("Brick position: (") + std::to_string(bpos[0]) + std::string(", ") + std::to_string(bpos[1]) + std::string(") ") + std::to_string(bsize[0]) + std::string("x") + std::to_string(bsize[1]));
     pixel_t bcolor;
     bcolor.rgb888_pixel = COLOR_DISPLAY_VALUES.at(brick.color);
