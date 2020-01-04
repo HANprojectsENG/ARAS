@@ -172,7 +172,6 @@ typedef enum {
 // Font drawing
 // Characters are fixed-height but can be variable-length.
 // The range of characters indices is from [offset, offset + length>
-// If a character is drawn that is not within this range, the undefined_character gets drawn.
 // There is no margin between the characters. These need to be incorporated into the character data itself.
 typedef struct {
     uint8_t offset;
@@ -531,10 +530,12 @@ void drawRect(image_t* img, const int32_t top_left[2], const int32_t size[2], pi
 void drawBinaryImage(image_t* img, const image_t* bin_img, const int32_t top_left[2], uint8_t scale, pixel_t value);
 
 // Draws text with a specific color.
-// Useful for drawing text.
+// See comments above font_t.
+// If a character is drawn that is not within the font range, the undefined_character gets drawn.
+// The newline character (\n) gets handled specially: it will shift the position to the start of the next line.
 // Precondition: img is allocated.
 // Postcondition: bin_img is drawn on top of img with the specified color.
-void drawText(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, pixel_t value);
+void drawText(image_t* img, const char* text, const font_t* font, const int32_t top_left[2], uint8_t scale, pixel_t value);
 
 #endif // _OPERATORS_H_
 

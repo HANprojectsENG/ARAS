@@ -26,366 +26,404 @@
 ******************************************************************************/
 #include "operators_fonts.h"
 
-const uint8_t _font_simple6pt_cwidth = 5;
 const uint8_t _font_simple6pt_cheight = 6;
 const uint8_t _font_simple6pt_offset = 0x30;
-const uint8_t _font_simple6pt_data[] = {
-    /*ASCII 0x30*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x31*/
-    0, 1, 1, 0, 0,
-    1, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x32*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 1, 0, 0,
-    0, 1, 0, 0, 0,
-    1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x33*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x34*/
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x35*/
-    1, 1, 1, 1, 0,
-    1, 0, 0, 0, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x36*/
-    0, 1, 1, 1, 0,
-    1, 0, 0, 0, 0,
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x37*/
-    1, 1, 1, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 0, 1, 0, 0,
-    0, 1, 0, 0, 0,
-    0, 1, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x38*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x39*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 1, 0,
-    0, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x3A*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x3B*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x3C*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x3D*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x3E*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x3F*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x40*/
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x41*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x42*/
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x43*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x44*/
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x45*/
-    1, 1, 1, 1, 0,
-    1, 0, 0, 0, 0,
-    1, 1, 1, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x46*/
-    1, 1, 1, 1, 0,
-    1, 0, 0, 0, 0,
-    1, 1, 1, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x47*/
-    0, 1, 1, 1, 0,
-    1, 0, 0, 0, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x48*/
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x49*/
-    1, 1, 1, 1, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x4A*/
-    1, 1, 1, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x4B*/
-    1, 0, 0, 1, 0,
-    1, 0, 1, 0, 0,
-    1, 1, 0, 0, 0,
-    1, 0, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x4C*/
-    1, 0, 0, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x4D*/
-    1, 1, 1, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x4E*/
-    1, 0, 0, 1, 0,
-    1, 1, 0, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x4F*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x50*/
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x51*/
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 1, 0, 0,
-    0, 1, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x52*/
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x53*/
-    0, 1, 1, 1, 0,
-    1, 0, 0, 0, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 1, 0,
-    1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x54*/
-    1, 1, 1, 1, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x55*/
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x56*/
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 0, 1, 0,
-    0, 1, 0, 1, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x57*/
-    1, 0, 0, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 1, 1, 0,
-    0, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x58*/
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    1, 0, 0, 1, 0,
-    1, 0, 0, 1, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x59*/
-    1, 0, 0, 1, 0,
-    0, 1, 0, 1, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 0, 0, 0,
-    /*ASCII 0x5A*/
-    1, 1, 1, 1, 0,
-    0, 0, 0, 1, 0,
-    0, 1, 1, 0, 0,
-    1, 0, 0, 0, 0,
-    1, 1, 1, 1, 0,
-    0, 0, 0, 0, 0,
-};
 
-#define CHARACTER_IMAGE(idx) \
-    {_font_simple6pt_cwidth, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t *)&_font_simple6pt_data[idx * _font_simple6pt_cheight * _font_simple6pt_cwidth]}
-
-
+// clang-format off
 const image_t _font_simple6pt_characters[] = {
-    CHARACTER_IMAGE(0x00),
-    CHARACTER_IMAGE(0x01),
-    CHARACTER_IMAGE(0x02),
-    CHARACTER_IMAGE(0x03),
-    CHARACTER_IMAGE(0x04),
-    CHARACTER_IMAGE(0x05),
-    CHARACTER_IMAGE(0x06),
-    CHARACTER_IMAGE(0x07),
-    CHARACTER_IMAGE(0x08),
-    CHARACTER_IMAGE(0x09),
-    CHARACTER_IMAGE(0x0A),
-    CHARACTER_IMAGE(0x0B),
-    CHARACTER_IMAGE(0x0C),
-    CHARACTER_IMAGE(0x0D),
-    CHARACTER_IMAGE(0x0E),
-    CHARACTER_IMAGE(0x0F),
-    CHARACTER_IMAGE(0x10),
-    CHARACTER_IMAGE(0x11),
-    CHARACTER_IMAGE(0x12),
-    CHARACTER_IMAGE(0x13),
-    CHARACTER_IMAGE(0x14),
-    CHARACTER_IMAGE(0x15),
-    CHARACTER_IMAGE(0x16),
-    CHARACTER_IMAGE(0x17),
-    CHARACTER_IMAGE(0x18),
-    CHARACTER_IMAGE(0x19),
-    CHARACTER_IMAGE(0x1A),
-    CHARACTER_IMAGE(0x1B),
-    CHARACTER_IMAGE(0x1C),
-    CHARACTER_IMAGE(0x1D),
-    CHARACTER_IMAGE(0x1E),
-    CHARACTER_IMAGE(0x1F),
-    CHARACTER_IMAGE(0x20),
-    CHARACTER_IMAGE(0x21),
-    CHARACTER_IMAGE(0x22),
-    CHARACTER_IMAGE(0x23),
-    CHARACTER_IMAGE(0x24),
-    CHARACTER_IMAGE(0x25),
-    CHARACTER_IMAGE(0x26),
-    CHARACTER_IMAGE(0x27),
-    CHARACTER_IMAGE(0x28),
-    CHARACTER_IMAGE(0x29),
-    CHARACTER_IMAGE(0x2A),
+    /*ASCII 0x30*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x31*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 0, 0,
+        1, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        1, 1, 1, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x32*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 1, 0, 0,
+        0, 1, 0, 0, 0,
+        1, 1, 1, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x33*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x34*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x35*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 1, 0,
+        1, 0, 0, 0, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x36*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 1, 0,
+        1, 0, 0, 0, 0,
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x37*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 1, 0,
+        0, 0, 0, 1, 0,
+        0, 0, 1, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x38*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x39*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x3A*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x3B*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x3C*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x3D*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x3E*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x3F*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x40*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x41*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x42*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x43*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x44*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x45*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 1, 0,
+        1, 0, 0, 0, 0,
+        1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0,
+        1, 1, 1, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x46*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 1, 0,
+        1, 0, 0, 0, 0,
+        1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0,
+        1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x47*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 1, 0,
+        1, 0, 0, 0, 0,
+        1, 0, 1, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x48*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x49*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        1, 1, 1, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x4A*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0,
+        0, 0, 1, 0,
+        0, 0, 1, 0,
+        0, 0, 1, 0,
+        1, 1, 0, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x4B*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 1, 0,
+        1, 0, 1, 0, 0,
+        1, 1, 0, 0, 0,
+        1, 0, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x4C*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 0,
+        1, 0, 0, 0,
+        1, 0, 0, 0,
+        1, 0, 0, 0,
+        1, 1, 1, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x4D*/
+    {6, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 0, 1, 0,
+        1, 1, 0, 1, 1, 0,
+        1, 0, 1, 0, 1, 0,
+        1, 0, 1, 0, 1, 0,
+        1, 0, 0, 0, 1, 0,
+        0, 0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x4E*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 1, 0,
+        1, 1, 0, 1, 0,
+        1, 0, 1, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x4F*/
+    {6, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 1, 0, 0,
+        1, 0, 0, 0, 1, 0,
+        1, 0, 0, 0, 1, 0,
+        1, 0, 0, 0, 1, 0,
+        0, 1, 1, 1, 0, 0,
+        0, 0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x50*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0,
+        1, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x51*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 1, 0, 0,
+        0, 1, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x52*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x53*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        0, 1, 1, 1, 0,
+        1, 0, 0, 0, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 1, 0,
+        1, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x54*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x55*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x56*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 1, 0,
+        1, 0, 1, 0,
+        1, 0, 1, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x57*/
+    {6, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 0, 1, 0,
+        1, 0, 1, 0, 1, 0,
+        1, 0, 1, 0, 1, 0,
+        0, 1, 0, 1, 0, 0,
+        0, 1, 0, 1, 0, 0,
+        0, 0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x58*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        1, 0, 0, 1, 0,
+        1, 0, 0, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
+    /*ASCII 0x59*/
+    {4, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 0, 1, 0,
+        1, 0, 1, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 0,
+    }, },
+    /*ASCII 0x5A*/
+    {5, _font_simple6pt_cheight, IMGVIEW_BINARY, IMGTYPE_BASIC, (uint8_t []){
+        1, 1, 1, 1, 0,
+        0, 0, 0, 1, 0,
+        0, 1, 1, 0, 0,
+        1, 0, 0, 0, 0,
+        1, 1, 1, 1, 0,
+        0, 0, 0, 0, 0,
+    }, },
 };
+// clang-format on
 
 const font_t _font_simple6pt = {
     _font_simple6pt_offset, sizeof(_font_simple6pt_characters) / sizeof(image_t), 0x40,
-    (image_t *)_font_simple6pt_characters
+    (image_t*)_font_simple6pt_characters
 };
 
 const font_t* font_simple6pt = &_font_simple6pt;

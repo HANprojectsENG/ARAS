@@ -1,6 +1,7 @@
 #include "Projection.hpp"
 #include "debug/Debug.hpp"
 #include "operators.h"
+#include "operators_fonts.h"
 #include "types/Point.hpp"
 
 namespace cpparas {
@@ -103,8 +104,17 @@ void Projection::showOutline(Brick brick, int studX, int studY, int layer)
 
 void Projection::showInfo(int step, int layer, const std::vector<Brick>& expectedAndNextBricks)
 {
-    (void)step;
-    (void)layer;
+    pixel_t stepcolor;
+    stepcolor.rgb888_pixel.r = 255;
+    stepcolor.rgb888_pixel.g = 255;
+    stepcolor.rgb888_pixel.b = 255;
+    int32_t steppos[] = { static_cast<int>(image->cols * PROJECTION_STEP_INFO_ORIGIN.col), static_cast<int>(image->rows * PROJECTION_STEP_INFO_ORIGIN.row) };
+    uint8_t stepscale = static_cast<uint8_t>(image->cols * PROJECTION_STEP_FONT_SCALE);
+    if (stepscale == 0)
+        stepscale = 1;
+    std::string stepstr = std::string("STEP ") + std::to_string(step)
+        + std::string("\nLAYER ") + std::to_string(layer);
+    drawText(image, stepstr.c_str(), font_simple6pt, steppos, stepscale, stepcolor);
 
     int brickIdx = 0;
     float brickPosRow = PROJECTION_INFO_ORIGIN.row;

@@ -365,19 +365,23 @@ void drawBinaryImage_rgb888(image_t* img, const image_t* bin_img, const int32_t 
     }
 }
 
-void drawText_rgb888(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, rgb888_pixel_t value)
+void drawText_rgb888(image_t* img, const char* text, const font_t* font, const int32_t top_left[2], uint8_t scale, rgb888_pixel_t value)
 {
-    int32_t posCol = top_left[0];
-    char* current = (char *)text;
+    int32_t pos[] = { top_left[0], top_left[1] };
+    char* current = (char*)text;
     do {
         char c = *current;
+        if (c == '\n') {
+            pos[0] = top_left[0];
+            pos[1] += font->characters[0].rows * scale;
+            continue;
+        }
         if (c < font->offset || c >= font->offset + font->length) {
             c = font->undefined_character;
         }
         const image_t* cimg = &font->characters[c - font->offset];
-        const int32_t charPos[] = { posCol, top_left[1] };
-        drawBinaryImage_rgb888(img, cimg, charPos, scale, value);
-        posCol += cimg->cols * scale;
+        drawBinaryImage_rgb888(img, cimg, pos, scale, value);
+        pos[0] += cimg->cols * scale;
     } while (*(++current));
 }
 
