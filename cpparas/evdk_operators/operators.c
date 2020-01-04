@@ -737,11 +737,6 @@ void warp(const image_t* img, image_t* dst, int32_t colpos[3], int32_t rowpos[3]
     case IMGTYPE_RGB888:
         warp_rgb888(img, dst, colpos, rowpos);
         break;
-    case IMGTYPE_BASIC:
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
-    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "warp(): image type %d not supported\n", img->type);
         break;
@@ -754,11 +749,6 @@ void warpAffine(const image_t* img, image_t* dst, float warpMatrix[2][3])
     case IMGTYPE_RGB888:
         warpAffine_rgb888(img, dst, warpMatrix);
         break;
-    case IMGTYPE_BASIC:
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
-    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "warpAffine(): image type %d not supported\n", img->type);
         break;
@@ -774,10 +764,6 @@ void scaleImage(const image_t* src, image_t* dst)
     case IMGTYPE_RGB888:
         scaleImage_rgb888(src, dst);
         break;
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
-    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "scaleImage(): image type %d not supported\n", src->type);
         break;
@@ -790,11 +776,6 @@ void Corner(const image_t* src, image_t* dst, const uint8_t blockSize, const uin
     case IMGTYPE_BASIC:
         Corner_basic(src, dst, blockSize, ksize, k, method);
         break;
-    case IMGTYPE_RGB888:
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
-    case IMGTYPE_UINT16:
     default:
         fprintf(stderr, "Corner(): image type %d not supported\n", src->type);
         break;
@@ -810,9 +791,6 @@ void crop(const image_t* img, image_t* dst, int32_t top_left[2])
     case IMGTYPE_BASIC:
         crop_basic(img, dst, top_left);
         break;
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
     default:
         fprintf(stderr, "crop(): image type %d not supported\n", img->type);
         break;
@@ -825,10 +803,6 @@ void binaryErode(const image_t* src, image_t* dst, uint8_t kernelSize)
     case IMGTYPE_BASIC:
         binaryErode_basic(src, dst, kernelSize);
         break;
-    case IMGTYPE_RGB888:
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
     default:
         fprintf(stderr, "binaryErode(): image type %d not supported\n", src->type);
         break;
@@ -841,12 +815,32 @@ void drawRect(image_t* img, const int32_t top_left[2], const int32_t size[2], pi
     case IMGTYPE_RGB888:
         drawRect_rgb888(img, top_left, size, value.rgb888_pixel, drawType, borderSize);
         break;
-    case IMGTYPE_BASIC:
-    case IMGTYPE_INT16:
-    case IMGTYPE_FLOAT:
-    case IMGTYPE_HSV:
     default:
         fprintf(stderr, "drawRect(): image type %d not supported\n", img->type);
+        break;
+    }
+}
+
+void drawBinaryImage(image_t* img, const image_t* bin_img, const int32_t top_left[2], uint8_t scale, pixel_t value)
+{
+    switch (img->type) {
+    case IMGTYPE_RGB888:
+        drawBinaryImage_rgb888(img, bin_img, top_left, scale, value.rgb888_pixel);
+        break;
+    default:
+        fprintf(stderr, "drawBinaryImage(): image type %d not supported\n", img->type);
+        break;
+    }
+}
+
+void drawText(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, pixel_t value)
+{
+    switch (img->type) {
+    case IMGTYPE_RGB888:
+        drawText_rgb888(img, text, font, top_left, scale, value.rgb888_pixel);
+        break;
+    default:
+        fprintf(stderr, "drawText(): image type %d not supported\n", img->type);
         break;
     }
 }

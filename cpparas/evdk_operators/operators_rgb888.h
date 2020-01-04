@@ -61,6 +61,10 @@ void crop_rgb888(const image_t* img, image_t* dst, int32_t top_left[2]);
 
 void drawRect_rgb888(image_t* img, const int32_t top_left[2], const int32_t size[2], rgb888_pixel_t value, eShapeDrawType drawType, uint16_t borderSize);
 
+void drawBinaryImage_rgb888(image_t* img, const image_t* bin_img, const int32_t top_left[2], uint8_t scale, rgb888_pixel_t value);
+
+void drawText_rgb888(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, rgb888_pixel_t value);
+
 #endif // _OPERATORS_RGB888_H_
 // ----------------------------------------------------------------------------
 // EOF

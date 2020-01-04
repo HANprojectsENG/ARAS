@@ -169,6 +169,18 @@ typedef enum {
     SHAPE_INNER
 } eShapeDrawType;
 
+// Font drawing
+// Characters are fixed-height but can be variable-length.
+// The range of characters indices is from [offset, offset + length>
+// If a character is drawn that is not within this range, the undefined_character gets drawn.
+// There is no margin between the characters. These need to be incorporated into the character data itself.
+typedef struct {
+    uint8_t offset;
+    uint8_t length;
+    uint8_t undefined_character;
+    image_t* characters;
+} font_t;
+
 // BLOB info structure
 typedef struct blobinfo_t {
     uint16_t height;
@@ -508,7 +520,21 @@ void crop(const image_t* img, image_t* dst, int32_t top_left[2]);
 void binaryErode(const image_t* src, image_t* dst, uint8_t kernelSize);
 
 // Draws a rectangle shape on the image.
+// Precondition: img is allocated.
+// Postcondition: a rectangle is drawn on top of img.
 void drawRect(image_t* img, const int32_t top_left[2], const int32_t size[2], pixel_t value, eShapeDrawType drawType, uint16_t borderSize);
+
+// Draws a binary image with a specific color and scale.
+// Useful for drawing text.
+// Precondition: img is allocated. bin_img is a basic image with zero or nonzero values.
+// Postcondition: bin_img is drawn on top of img with the specified color.
+void drawBinaryImage(image_t* img, const image_t* bin_img, const int32_t top_left[2], uint8_t scale, pixel_t value);
+
+// Draws text with a specific color.
+// Useful for drawing text.
+// Precondition: img is allocated.
+// Postcondition: bin_img is drawn on top of img with the specified color.
+void drawText(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, pixel_t value);
 
 #endif // _OPERATORS_H_
 

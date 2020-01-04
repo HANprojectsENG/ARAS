@@ -345,6 +345,42 @@ void drawRect_rgb888(image_t* img, const int32_t top_left[2], const int32_t size
         }
     }
 }
+
+void drawBinaryImage_rgb888(image_t* img, const image_t* bin_img, const int32_t top_left[2], uint8_t scale, rgb888_pixel_t value)
+{
+    for (int32_t brow = 0; brow < bin_img->rows; brow++) {
+        for (int32_t bcol = 0; bcol < bin_img->cols; bcol++) {
+            if (getBasicPixel(bin_img, bcol, brow)) {
+                for (int32_t subRow = 0; subRow < scale; subRow++) {
+                    for (int32_t subCol = 0; subCol < scale; subCol++) {
+                        int32_t col = top_left[0] + bcol * scale + subCol;
+                        int32_t row = top_left[1] + brow * scale + subRow;
+                        if (row < 0 || row >= img->rows || col < 0 || col >= img->cols)
+                            continue;
+                        setRGB888Pixel(img, col, row, value);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void drawText_rgb888(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, rgb888_pixel_t value)
+{
+    int32_t posCol = top_left[0];
+    char* current = (char *)text;
+    do {
+        char c = *current;
+        if (c < font->offset || c >= font->offset + font->length) {
+            c = font->undefined_character;
+        }
+        const image_t* cimg = &font->characters[c - font->offset];
+        const int32_t charPos[] = { posCol, top_left[1] };
+        drawBinaryImage_rgb888(img, cimg, charPos, scale, value);
+        posCol += cimg->cols * scale;
+    } while (*(++current));
+}
+
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------
