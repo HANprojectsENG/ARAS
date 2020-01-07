@@ -32,6 +32,8 @@ void Camera::Camera_thread_worker()
 {
     //init new buffer
     captured_frame = newRGB888Image(width, height);
+    captured_frame->view = IMGVIEW_CLIP;
+    captured_frame->type = IMGTYPE_RGB888;
     uint32_t bufferSize = width * height * 3;
     //start raspivid and pipe
     std::string cmd = "raspivid" + raspi_parameters;
