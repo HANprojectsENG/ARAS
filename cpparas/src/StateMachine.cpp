@@ -6,8 +6,7 @@ namespace cpparas {
 
 StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     : GenericStateMachine<State>(State::NOT_STARTED)
-    , layer(-1)
-    , step(-1)
+    , stateStep()
     , lsfData()
     , coordinateMatrix(DEFAULT_CALIBRATION)
     , handDetection()
@@ -81,14 +80,9 @@ bool StateMachine::exitCondition() const
     return getCurrentState() == State::FINAL_STEP;
 }
 
-int StateMachine::getLayer() const
+StateStep StateMachine::getStateStep() const
 {
-    return layer;
-}
-
-int StateMachine::getStep() const
-{
-    return step;
+    return stateStep;
 }
 
 std::shared_ptr<Projection> StateMachine::getProjection() const
@@ -125,8 +119,11 @@ void StateMachine::INIT_exit() {}
 
 void StateMachine::STARTING_entry()
 {
-    step = 0;
-    layer = 0;
+    stateStep = StateStep::fromFile();
+    if (stateStep.layer == -1)
+        stateStep.layer = 0;
+    if (stateStep.step == -1)
+        stateStep.step = 0;
     switchState(State::CHECK_CURRENT_STEP);
 }
 void StateMachine::STARTING_do() {}
@@ -135,10 +132,10 @@ void StateMachine::STARTING_exit() {}
 void StateMachine::CHECK_CURRENT_STEP_entry()
 {
     // recognise image
-    // if (completed) {
+    // if (step successfully completed) {
     switchState(State::PROJECT_STEP);
     // } else {
-    // switchState(State::CHECK_NEXT_STEP);
+    //switchState(State::CHECK_NEXT_STEP);
     // }
 }
 void StateMachine::CHECK_CURRENT_STEP_do() {}
@@ -158,7 +155,7 @@ void StateMachine::PROJECT_STEP_entry()
         { Color::GREEN, 3, 2 },
         { Color::BLUE, 4, 2 }
     };
-    projection->showInfo(step, layer, testBricks);
+    projection->showInfo(stateStep, testBricks);
     projection->complete();
 }
 void StateMachine::PROJECT_STEP_do()
@@ -212,6 +209,8 @@ void StateMachine::CAPTURE_entry()
     //send received frame to locator to be send over to the ui
     locator->Send_frame_to_ui(axne);
 
+    // Check whether step is completed
+    //
     switchState(State::CHECK_CURRENT_STEP);
 }
 void StateMachine::CAPTURE_do() {}
@@ -220,8 +219,19 @@ void StateMachine::CAPTURE_exit() {}
 void StateMachine::CHECK_NEXT_STEP_entry()
 {
     // Save last step
+    stateStep.saveToFile();
 
     // int nextStep = step + 1;
+    if (lsfData.Layer.count(stateStep.layer) > 0 && lsfData.Layer.at(stateStep.layer).Step.count(stateStep.step + 1) > 0) {
+        stateStep.step += 1;
+        switchState(State::CHECK_CURRENT_STEP);
+    } else if (lsfData.Layer.count(stateStep.layer + 1) > 0) {
+        stateStep.layer += 1;
+        stateStep.step = 0;
+        switchState(State::CHECK_CURRENT_STEP);
+    } else {
+        switchState(State::FINAL_STEP);
+    }
 }
 void StateMachine::CHECK_NEXT_STEP_do() {}
 void StateMachine::CHECK_NEXT_STEP_exit() {}
@@ -229,6 +239,7 @@ void StateMachine::CHECK_NEXT_STEP_exit() {}
 void StateMachine::FINAL_STEP_entry()
 {
     // Clear save file.
+    StateStep::deleteFile();
 
     Debug::println("You reached the end.");
 

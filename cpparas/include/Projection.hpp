@@ -7,6 +7,7 @@
 #include "types/Color.hpp"
 #include "types/Point.hpp"
 #include "types/Rect.hpp"
+#include "util/StateStep.hpp"
 #include <tuple>
 #include <vector>
 
@@ -37,7 +38,7 @@ public:
 
     void clear();
     void showOutline(Brick brick, int studX, int studY, int layer);
-    void showInfo(int step, int layer, const std::vector<Brick>& expectedAndNextBricks);
+    void showInfo(StateStep stateStep, const std::vector<Brick>& expectedAndNextBricks);
     void complete();
 
     const image_t* getImage() const;

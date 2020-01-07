@@ -10,6 +10,7 @@
 #include "RegionExtractor.hpp"
 #include "StudChecker.hpp"
 #include "util/GenericStateMachine.hpp"
+#include "util/StateStep.hpp"
 #include <map>
 
 namespace cpparas {
@@ -34,8 +35,7 @@ public:
     ~StateMachine() override;
 
     void init() override;
-    int getStep() const;
-    int getLayer() const;
+    StateStep getStateStep() const;
 
     std::shared_ptr<Projection> getProjection() const;
 
@@ -91,8 +91,7 @@ private:
     void FINAL_STEP_do();
     void FINAL_STEP_exit();
 
-    int layer;
-    int step;
+    StateStep stateStep;
     LSFParser::LSFData lsfData;
     CoordinateMatrix coordinateMatrix;
     HandDetection handDetection;

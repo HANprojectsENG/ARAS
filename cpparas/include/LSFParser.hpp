@@ -1,6 +1,7 @@
 #ifndef LSFPARSER_HPP
 #define LSFPARSER_HPP
 
+#include <map>
 #include <string>
 
 #define STEPS_PER_LAYER 10
@@ -19,11 +20,11 @@ namespace LSFParser {
     };
 
     struct LSFStepBuffer {
-        LSFDataStruct Step[STEPS_PER_LAYER];
+        std::map<int, LSFDataStruct> Step;
     };
 
     struct LSFData {
-        LSFStepBuffer Layer[TOTAL_LAYERS];
+        std::map<int, LSFStepBuffer> Layer;
     };
 
     LSFData Load_LSF_file(std::string filepath);

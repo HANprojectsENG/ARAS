@@ -57,7 +57,9 @@ Gtk::Grid& StateMachineWidget::operator()()
 bool StateMachineWidget::update()
 {
     if (stateMachine->getCurrentState() != State::NOT_STARTED && !paused) {
-        stateMachine->doCycle();
+        if (!stateMachine->doCycle()) {
+            paused = true;
+        }
     }
 
     if (stateMachine->getCurrentState() == State::NOT_STARTED) {
@@ -69,8 +71,8 @@ bool StateMachineWidget::update()
             startStopButton.set_label("Pause");
         }
     }
-    layerLabel.set_text(std::string("Layer: ") + std::to_string(stateMachine->getLayer()));
-    stepLabel.set_text(std::string("Step: ") + std::to_string(stateMachine->getStep()));
+    layerLabel.set_text(std::string("Layer: ") + std::to_string(stateMachine->getStateStep().layer));
+    stepLabel.set_text(std::string("Step: ") + std::to_string(stateMachine->getStateStep().step));
     //Check if new frame to show is available, if so, get it from imageLoader and show it
     if (imageLoader->new_UI_frame_available) {
         imageArea.setImage(imageLoader->Get_UI_frame());

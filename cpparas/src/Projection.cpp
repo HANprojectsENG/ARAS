@@ -100,7 +100,7 @@ void Projection::showOutline(Brick brick, int studX, int studY, int layer)
     drawRect(image, bpos, bsize, bcolor, SHAPE_BORDER, 3);
 }
 
-void Projection::showInfo(int step, int layer, const std::vector<Brick>& expectedAndNextBricks)
+void Projection::showInfo(StateStep stateStep, const std::vector<Brick>& expectedAndNextBricks)
 {
     pixel_t stepcolor;
     stepcolor.rgb888_pixel.r = 255;
@@ -110,8 +110,8 @@ void Projection::showInfo(int step, int layer, const std::vector<Brick>& expecte
     uint8_t stepscale = static_cast<uint8_t>(image->cols * PROJECTION_STEP_FONT_SCALE);
     if (stepscale == 0)
         stepscale = 1;
-    std::string stepstr = std::string("STEP ") + std::to_string(step)
-        + std::string("\nLAYER ") + std::to_string(layer);
+    std::string stepstr = std::string("STEP ") + std::to_string(stateStep.step)
+        + std::string("\nLAYER ") + std::to_string(stateStep.layer);
     drawText(image, stepstr.c_str(), font_simple6pt, steppos, stepscale, stepcolor);
 
     int brickIdx = 0;
