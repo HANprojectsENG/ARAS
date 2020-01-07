@@ -51,6 +51,7 @@ void Locator::Locator_thread()
         if (source_type == CAMERA) {
             //Get a new frame from camera
             new_full_frame = PiCamera.Camera_get_frame();
+            new_full_frame->type = IMGTYPE_RGB888;
         } else if (source_type == IMAGE) {
             //Load user image
             new_full_frame = imageLoader->Get_source_image();
