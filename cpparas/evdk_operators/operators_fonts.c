@@ -26,8 +26,9 @@
 ******************************************************************************/
 #include "operators_fonts.h"
 
-const uint8_t _font_simple6pt_cheight = 6;
-const uint8_t _font_simple6pt_offset = 0x30;
+// Can't use const uint8_t for these because the compiler is not smart enough to figure out that it is a const.
+#define _font_simple6pt_cheight 6
+#define _font_simple6pt_offset 0x30
 
 // clang-format off
 const image_t _font_simple6pt_characters[] = {
