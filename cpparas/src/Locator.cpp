@@ -29,6 +29,8 @@ void Locator::Start_Locator_thread()
         locator_running = true;
         source_type = imageLoader->Get_source_type();
         locator_thread = std::thread(&Locator::Locator_thread, this);
+        //lock calling thread until locator is running
+        while(locator_thread_starting) {;}
     }
 }
 
@@ -66,6 +68,8 @@ void Locator::Locator_thread()
         //save last frame to be used by main thread
         new_cut_frame = new_full_frame;
 
+        //only unlock the main thread after at least a full frame has been received.
+        locator_thread_starting = false;
         //wait a bit, no need to run this at full powaa
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }

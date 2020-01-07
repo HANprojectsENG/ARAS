@@ -130,6 +130,7 @@ void ControlUI::on_use_last_image_button_clicked()
 
 void ControlUI::on_use_camera_button_clicked()
 {
+    imageLoader->Set_source_type(CAMERA);
 }
 
 void ControlUI::on_select_sequence_file_button_clicked()

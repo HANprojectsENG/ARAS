@@ -21,6 +21,7 @@ public:
 
 private:
     bool locator_running = false;
+    bool locator_thread_starting = true;
     std::thread locator_thread;
     image_t* new_cut_frame;
     image_t* new_full_frame;
