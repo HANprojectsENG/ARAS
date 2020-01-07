@@ -57,6 +57,12 @@ void Locator::Locator_thread()
             //Load user image
             new_full_frame = imageLoader->Get_source_image();
         }
+        else
+        {
+            //smth is wrong I can feel it
+            locator_running = false;
+            break;
+        }
         //if new frame is none, camera is dead, so we need to stop locator
         if (new_full_frame == nullptr) {
             locator_running = false;
@@ -82,8 +88,8 @@ image_t* Locator::Get_new_frame()
     if (!locator_running) {
         throw std::runtime_error("Camera and locator thread stopped unexpectedly");
     }
-    if (new_cut_frame == nullptr) {
-        throw std::runtime_error("Locator tried to return an empty image. You tried to use the camera on a device other than the Pi, didn't you? :)");
+    if (new_cut_frame->type != IMGTYPE_RGB888) {
+        throw std::runtime_error("Locator tried to return wrong type (and probably empty) image. That's not good");
     }
     return new_cut_frame;
 }
