@@ -1,6 +1,7 @@
 #include "util/ImageUtils.hpp"
 #include "operators.h"
 #include <gdkmm/pixbuf.h>
+#include <iostream>
 #include <stdexcept>
 
 namespace cpparas {
@@ -23,11 +24,12 @@ namespace ImageUtils {
         }
         image_t* result = newRGB888Image(pixbuf->get_width(), pixbuf->get_height());
         int rowstride = pixbuf->get_rowstride();
+        int pixelsize = (pixbuf->get_bits_per_sample() * pixbuf->get_n_channels()) / 8;
         guint8* pixels = pixbuf->get_pixels();
         for (int row = 0; row < pixbuf->get_height(); row++) {
             for (int col = 0; col < pixbuf->get_width(); col++) {
                 rgb888_pixel_t color;
-                std::size_t offset = row * rowstride + col * 3;
+                std::size_t offset = row * rowstride + col * pixelsize;
                 color.r = pixels[offset];
                 color.g = pixels[offset + 1];
                 color.b = pixels[offset + 2];
