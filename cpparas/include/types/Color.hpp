@@ -31,6 +31,22 @@ const std::map<Color, rgb888_pixel_t> COLOR_DISPLAY_VALUES = {
     { Color::RED, { 255, 0, 0 } }
 };
 
+const std::map<Color, hsv_pixel_t> COLOR_HSV_MAX = {
+    { Color::ORANGE, { 18, 255, 255 } },
+    { Color::GREEN, { 90, 255, 128 } },
+    { Color::YELLOW, { 35, 200, 255 } },
+    { Color::BLUE, { 120, 255, 255 } },
+    { Color::RED, { 180, 255, 255 } }
+};
+
+const std::map<Color, hsv_pixel_t> COLOR_HSV_MIN = {
+    { Color::ORANGE, { 8, 128, 60 } },
+    { Color::GREEN, { 64, 192, 20 } },
+    { Color::YELLOW, { 18, 108, 148 } },
+    { Color::BLUE, { 100, 192, 128 } },
+    { Color::RED, { 140, 162, 96 } }
+};
+
 } // namespace cpparas
 
 #endif /* COLOR_HPP */
