@@ -8,7 +8,9 @@
 namespace cpparas {
 
 Locator::Locator(std::shared_ptr<ImageLoader> imageLoader_)
-    : imageLoader(imageLoader_)
+    : locator_running(false)
+    , locator_thread_starting(false)
+    , imageLoader(imageLoader_)
     , PiCamera(1440, 1440)
 {
 }
@@ -30,7 +32,9 @@ void Locator::Start_Locator_thread()
         source_type = imageLoader->Get_source_type();
         locator_thread = std::thread(&Locator::Locator_thread, this);
         //lock calling thread until locator is running
-        while(locator_thread_starting) {;}
+        while (locator_thread_starting) {
+            ;
+        }
     }
 }
 
@@ -56,9 +60,7 @@ void Locator::Locator_thread()
         } else if (source_type == IMAGE) {
             //Load user image
             new_full_frame = imageLoader->Get_source_image();
-        }
-        else
-        {
+        } else {
             //smth is wrong I can feel it
             locator_running = false;
             break;

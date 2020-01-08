@@ -5,6 +5,7 @@
 #include "ImageLoader.hpp"
 #include "RegionExtractor.hpp"
 #include "operators.h"
+#include <atomic>
 #include <thread>
 
 namespace cpparas {
@@ -20,8 +21,8 @@ public:
     void Send_frame_to_ui(image_t* frame);
 
 private:
-    bool locator_running = false;
-    bool locator_thread_starting = true;
+    bool locator_running;
+    std::atomic<bool> locator_thread_starting;
     std::thread locator_thread;
     image_t* new_cut_frame;
     image_t* new_full_frame;
