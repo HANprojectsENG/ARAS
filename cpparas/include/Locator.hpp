@@ -21,7 +21,7 @@ public:
     void Send_frame_to_ui(image_t* frame);
 
 private:
-    bool locator_running;
+    std::atomic<bool> locator_running;
     std::atomic<bool> locator_thread_starting;
     std::thread locator_thread;
     image_t* new_cut_frame;
