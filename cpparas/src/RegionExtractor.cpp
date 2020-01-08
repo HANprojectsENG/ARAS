@@ -13,16 +13,16 @@ RegionExtractor::~RegionExtractor()
     deleteImage(regionImage);
 }
 
-const image_t* RegionExtractor::getRegionImage() const
+image_t* RegionExtractor::getRegionImage()
 {
     return regionImage;
 }
 
-bool RegionExtractor::updateImage(const image_t* img)
+std::vector<Point<int32_t>> RegionExtractor::updateImage(const image_t* img)
 {
     std::vector<Point<int32_t>> corners = MarkerDetector::detectMarkers(img);
     if (corners.size() < 3) {
-        return false;
+        return corners;
     } else {
         int32_t colpos[3] = {
             corners[0].col,
@@ -35,7 +35,7 @@ bool RegionExtractor::updateImage(const image_t* img)
             corners[2].row
         };
         warp(img, regionImage, colpos, rowpos);
-        return true;
+        return corners;
     }
 }
 
