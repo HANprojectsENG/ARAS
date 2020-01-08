@@ -7,6 +7,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <atomic>
 
 namespace cpparas {
 
@@ -26,9 +27,9 @@ protected:
     //buffer
     image_t* captured_frame;
     //threads
-    bool threadRunning = false;
+    std::atomic<bool> threadRunning;
+    std::atomic<bool> is_ready;
     std::thread camera_thread;
-    bool is_ready = false;
     std::mutex mtx;
     std::condition_variable cond_var;
 };

@@ -12,6 +12,8 @@ namespace cpparas {
 //IF USING ANYTHING BELOW THAT, MAKE SURE PIXEL ASPECT RATIO IS 1:1
 
 Camera::Camera(uint32_t w, uint32_t h)
+    : threadRunning(false)
+    , is_ready(false)
 {
     //compose final parameter string for raspivid
     width = w;
