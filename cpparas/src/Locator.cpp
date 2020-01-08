@@ -9,7 +9,7 @@ namespace cpparas {
 
 Locator::Locator(std::shared_ptr<ImageLoader> imageLoader_)
     : locator_running(false)
-    , locator_thread_starting(false)
+    , locator_thread_starting(true)
     , imageLoader(imageLoader_)
     , PiCamera(1440, 1440)
 {
