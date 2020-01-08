@@ -148,12 +148,18 @@ void StateMachine::STARTING_exit() {}
 
 void StateMachine::CHECK_CURRENT_STEP_entry()
 {
+    // TODO: determine whether CAPTURE state is unnecessary
+    image_t* axne = locator->Get_new_frame();
+    locator->Send_frame_to_ui(axne);
+
     // recognise image
-    // if (step successfully completed) {
-    switchState(State::PROJECT_STEP);
-    // } else {
-    //switchState(State::CHECK_NEXT_STEP);
-    // }
+    const LSFParser::LSFDataStruct& stepinst = lsfData.Layer.at(stateStep.layer).Step.at(stateStep.step);
+    bool brickPlacedCorrectly = StudChecker::matches(axne, coordinateMatrix, stepinst.coordinates, stepinst.color);
+    if (brickPlacedCorrectly) {
+        switchState(State::CHECK_NEXT_STEP);
+    } else {
+        switchState(State::PROJECT_STEP);
+    }
 }
 void StateMachine::CHECK_CURRENT_STEP_do() {}
 void StateMachine::CHECK_CURRENT_STEP_exit() {}
@@ -245,6 +251,7 @@ void StateMachine::CHECK_NEXT_STEP_entry()
     std::pair<bool, StateStep> nextStep = nextStateStep(stateStep);
     if (nextStep.first) {
         stateStep = nextStep.second;
+        switchState(State::CHECK_CURRENT_STEP);
     } else {
         switchState(State::FINAL_STEP);
     }
