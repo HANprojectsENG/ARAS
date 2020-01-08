@@ -42,6 +42,7 @@
 // ----------------------------------------------------------------------------
 // Function prototypes
 // ----------------------------------------------------------------------------
+// NOTE: dst must be a basic image
 void threshold_hsv(const image_t* src, image_t* dst, const hsv_pixel_t low, const hsv_pixel_t high);
 
 void erase_hsv(const image_t* img);

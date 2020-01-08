@@ -140,37 +140,32 @@ void convertToHSVImage(const image_t* src, image_t* dst)
             double min, max, delta;
 
             //Change R,G,B ranges from 0-255 to 0-1
-            double r_ = (double)r/255;  
-            double g_ = (double)g/255;
-            double b_ = (double)b/255;
+            double r_ = (double)r / 255;
+            double g_ = (double)g / 255;
+            double b_ = (double)b / 255;
 
             //find max and min values between R,G,B
             max = ((r_ > g_ ? r_ : g_) > b_ ? (r_ > g_ ? r_ : g_) : b_);
             min = ((r_ < g_ ? r_ : g_) < b_ ? (r_ < g_ ? r_ : g_) : b_);
             delta = max - min;
-            
 
             //Calculate Hue
-            if (max == r_){
+            if (max == r_) {
                 d->h = (fmod(((g_ - b_) / delta), 6.0)) * 60;
-            }
-            else if (max == g_ ){
+            } else if (max == g_) {
                 d->h = (((b_ - r_) / delta) + 2.0) * 60;
-            }
-            else{
+            } else {
                 d->h = (((r_ - g_) / delta) + 4.0) * 60;
             }
 
-            
-            if (d->h > 360){
+            if (d->h > 360) {
                 d->h = 360 - (0 - d->h);
             }
 
             //Calculate Saturation
-            if (max == 0.0){
+            if (max == 0.0) {
                 d->s = 0;
-            }
-            else{
+            } else {
                 d->s = ((delta / max) * 100);
             }
 
@@ -211,16 +206,24 @@ void threshold_hsv(const image_t* src,
     const hsv_pixel_t low,
     const hsv_pixel_t high)
 {
-    // ********************************************
-    // Added to prevent compiler warnings
-    // Remove these when implementation starts
-    (void)src;
-    (void)dst;
-    (void)low;
-    (void)high;
+    if (dst->type != IMGTYPE_BASIC) {
+        dbg_printf("threshold_hsv: dst is not of type basic but of type %d\n", dst->type);
+        return;
+    }
 
-    return;
-    // ********************************************
+    register long int i = src->rows * src->cols;
+    register hsv_pixel_t* s = (hsv_pixel_t*)src->data;
+    register basic_pixel_t* d = (basic_pixel_t*)dst->data;
+
+    while (i-- != 0) {
+        hsv_pixel_t value = *s++;
+        if (value.h >= low.h && value.s >= low.s && value.v >= low.v
+            && value.h <= high.h && value.s <= high.s && value.v <= high.v) {
+            *d++ = 1;
+        } else {
+            *d++ = 0;
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -241,11 +244,9 @@ void copy_hsv(const image_t* src, image_t* dst)
         *d++ = *s++;
 }
 
-
 // ----------------------------------------------------------------------------
 // Custom operators
 // ----------------------------------------------------------------------------
-
 
 // ----------------------------------------------------------------------------
 // EOF
