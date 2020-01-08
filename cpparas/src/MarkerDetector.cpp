@@ -35,8 +35,8 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
         for (r = 0; r < dst_harris->rows; r++) {
             pixel = getBasicPixel(dst_harris, c, r);
             if (pixel == 0) {
-                pos_x[corners] = c;
-                pos_y[corners] = r;
+                pos_x[corners] = c * 8;
+                pos_y[corners] = r * 8;
                 corners++;
             }
         }
