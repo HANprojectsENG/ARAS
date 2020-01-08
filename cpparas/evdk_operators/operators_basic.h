@@ -151,6 +151,8 @@ void crop_basic(const image_t* img, image_t* dst, int32_t top_left[2]);
 
 void binaryErode_basic(const image_t* src, image_t* dst, uint8_t kernelSize);
 
+uint32_t pixelCount_basic(const image_t* img, const basic_pixel_t value);
+
 #endif // _OPERATORS_BASIC_H_
 // ----------------------------------------------------------------------------
 // EOF

@@ -34,6 +34,10 @@
     > Updated for EVDK3.0
 
 ******************************************************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef _OPERATORS_HSV_H_
 #define _OPERATORS_HSV_H_
 
@@ -50,6 +54,9 @@ void erase_hsv(const image_t* img);
 void copy_hsv(const image_t* src, image_t* dst);
 
 #endif // _OPERATORS_HSV_H_
+#ifdef __cplusplus
+}
+#endif
 // ----------------------------------------------------------------------------
 // EOF
 // ----------------------------------------------------------------------------

@@ -833,7 +833,7 @@ void drawBinaryImage(image_t* img, const image_t* bin_img, const int32_t top_lef
     }
 }
 
-void drawText(image_t* img, const char *text, const font_t *font, const int32_t top_left[2], uint8_t scale, pixel_t value)
+void drawText(image_t* img, const char* text, const font_t* font, const int32_t top_left[2], uint8_t scale, pixel_t value)
 {
     switch (img->type) {
     case IMGTYPE_RGB888:
@@ -842,6 +842,18 @@ void drawText(image_t* img, const char *text, const font_t *font, const int32_t 
     default:
         fprintf(stderr, "drawText(): image type %d not supported\n", img->type);
         break;
+    }
+}
+
+uint32_t pixelCount(const image_t* img, const pixel_t value)
+{
+    switch (img->type) {
+    case IMGTYPE_BASIC:
+        return pixelCount_basic(img, value.basic_pixel);
+        break;
+    default:
+        fprintf(stderr, "pixelCount(): image type %d not supported\n", img->type);
+        return 0;
     }
 }
 

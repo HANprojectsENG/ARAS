@@ -437,17 +437,16 @@ void invert_basic(const image_t* src, image_t* dst)
 {
     uint16_t c;
     uint16_t r;
-    if (max_basic(src) > 1){
+    if (max_basic(src) > 1) {
         for (r = 0; r < src->rows; r++) {
             for (c = 0; c < src->cols; c++) {
-                setBasicPixel(dst, c, r, 255 - getBasicPixel(src,c,r));
+                setBasicPixel(dst, c, r, 255 - getBasicPixel(src, c, r));
             }
         }
-    }
-    else{
+    } else {
         for (r = 0; r < src->rows; r++) {
             for (c = 0; c < src->cols; c++) {
-                setBasicPixel(dst, c, r, 1 - getBasicPixel(src,c,r));
+                setBasicPixel(dst, c, r, 1 - getBasicPixel(src, c, r));
             }
         }
     }
@@ -697,24 +696,23 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
 
                 if (corner[0] < result) {
                     corner[0] = result;
-                    printf("Result1:%d\n",result);
+                    printf("Result1:%d\n", result);
                 } //Find 4 max values in image
                 else if (corner[1] < result) {
                     corner[1] = result;
-                    printf("Result2:%d\n",result);
+                    printf("Result2:%d\n", result);
                 } else if (corner[2] < result) {
                     corner[2] = result;
-                    printf("Result3:%d\n",result);
+                    printf("Result3:%d\n", result);
                 } else if (corner[3] < result) {
                     corner[3] = result;
-                    printf("Result4:%d\n",result);
+                    printf("Result4:%d\n", result);
                 }
                 setBasicPixel(dst, c, r, result); //fill dst with R values;
             }
         }
-    threshold_basic(dst,dst,corner[2],255, 255); //threshold for highest R values 
-    }
-    else if (method == 1){// Shi-Tomasi method
+        threshold_basic(dst, dst, corner[2], 255, 255); //threshold for highest R values
+    } else if (method == 1) { // Shi-Tomasi method
         /*R = score
         R =  min(𝜆1,𝜆2)
         */
@@ -727,23 +725,23 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
 
                 if (corner[0] < result) {
                     corner[0] = result;
-                    printf("Result:%d\n",result);
+                    printf("Result:%d\n", result);
                 } //Find 4 max values in image
                 else if (corner[1] < result) {
                     corner[1] = result;
-                    printf("Result:%d\n",result);
+                    printf("Result:%d\n", result);
                 } else if (corner[2] < result) {
                     corner[2] = result;
-                    printf("Result:%d\n",result);
+                    printf("Result:%d\n", result);
                 } else if (corner[3] < result) {
                     corner[3] = result;
-                    printf("Result:%d\n",result);
+                    printf("Result:%d\n", result);
                 }
                 setBasicPixel(dst, c, r, result);
             }
         }
-    threshold_basic(dst,dst,corner[2],255, 255); //threshold for highest R values 
-    }   
+        threshold_basic(dst, dst, corner[2], 255, 255); //threshold for highest R values
+    }
     deleteImage(Ix);
     deleteImage(Iy);
     deleteImage(Ix2);
@@ -1093,6 +1091,19 @@ void binaryErode_basic(const image_t* src, image_t* dst, uint8_t kernelSize)
             setBasicPixel(dst, col, row, result);
         }
     }
+}
+
+uint32_t pixelCount_basic(const image_t* img, const basic_pixel_t value)
+{
+    uint32_t count = 0;
+    register basic_pixel_t* s = (basic_pixel_t*)img->data;
+    register long int i = img->rows * img->cols;
+    while (i-- != 0) {
+        if (*s++ == value) {
+            count++;
+        }
+    }
+    return count;
 }
 
 // ----------------------------------------------------------------------------

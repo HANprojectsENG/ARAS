@@ -76,7 +76,7 @@ image_t* newHSVImage(const uint32_t cols, const uint32_t rows)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-image_t* toHSVImage(image_t* src)
+image_t* toHSVImage(const image_t* src)
 {
 
     image_t* dst = newHSVImage(src->cols, src->rows);

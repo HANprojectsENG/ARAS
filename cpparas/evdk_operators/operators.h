@@ -236,7 +236,7 @@ image_t* toBasicImage(image_t* src);
 image_t* toInt16Image(image_t* src);
 image_t* toFloatImage(image_t* src);
 image_t* toRGB888Image(image_t* src);
-image_t* toHSVImage(image_t* src);
+image_t* toHSVImage(const image_t* src);
 image_t* toUInt16Image(image_t* src);
 
 // Use the function deleteImage() for freeing memory
@@ -536,6 +536,11 @@ void drawBinaryImage(image_t* img, const image_t* bin_img, const int32_t top_lef
 // Precondition: img is allocated.
 // Postcondition: bin_img is drawn on top of img with the specified color.
 void drawText(image_t* img, const char* text, const font_t* font, const int32_t top_left[2], uint8_t scale, pixel_t value);
+
+// Counts the number of pixels whose value is equal to the specified value.
+// Precondition: img is allocated.
+// Postcondition: -
+uint32_t pixelCount(const image_t* img, const pixel_t value);
 
 #endif // _OPERATORS_H_
 

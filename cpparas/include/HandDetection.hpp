@@ -5,6 +5,18 @@
 
 namespace cpparas {
 
+const hsv_pixel_t HAND_THRESHOLD_LOW = {
+    0, // H
+    30, // S
+    50 // V
+};
+const hsv_pixel_t HAND_THRESHOLD_HIGH = {
+    25, // H
+    50, // S
+    80 // V
+};
+const uint32_t HAND_THRESHOLD_AREA = 10000;
+
 class HandDetection {
 public:
     HandDetection();
