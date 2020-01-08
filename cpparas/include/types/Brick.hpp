@@ -7,8 +7,8 @@ namespace cpparas {
 
 struct Brick {
     Color color;
-    int width;
-    int height;
+    uint32_t width;
+    uint32_t height;
 };
 
 } // namespace cpparas

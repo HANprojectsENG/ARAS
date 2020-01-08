@@ -1,6 +1,7 @@
 #ifndef LSFPARSER_HPP
 #define LSFPARSER_HPP
 
+#include "types/Brick.hpp"
 #include "types/Color.hpp"
 #include "types/Point.hpp"
 #include <map>
@@ -29,6 +30,8 @@ namespace LSFParser {
 
     LSFData Load_LSF_file(std::string filepath);
     LSFDataStruct LSF_line_parse(std::string line);
+
+    std::pair<Point<uint32_t>, Brick> Data_to_brick(const LSFDataStruct& dataStruct);
 
 }
 

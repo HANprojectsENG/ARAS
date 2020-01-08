@@ -118,8 +118,8 @@ void Projection::showInfo(StateStep stateStep, const std::vector<Brick>& expecte
     float brickPosRow = PROJECTION_INFO_ORIGIN.row;
     for (const Brick& brick : expectedAndNextBricks) {
         float factor = brickIdx == 0 ? 1.0f : PROJECTION_NEXT_FACTOR;
-        for (int w = 0; w < brick.width; w++) {
-            for (int h = 0; h < brick.height; h++) {
+        for (uint32_t w = 0; w < brick.width; w++) {
+            for (uint32_t h = 0; h < brick.height; h++) {
                 int pos[2] = { static_cast<int>(image->cols * (PROJECTION_INFO_ORIGIN.col + (brickIdx == 0 ? 0.0f : PROJECTION_NEXT_HORIZ_OFFSET)) + factor * image->rows * PROJECTION_STUD_SIZE * w), static_cast<int>(image->rows * brickPosRow + factor * image->rows * PROJECTION_STUD_SIZE * h) };
                 int size[2] = { static_cast<int>(factor * (image->rows * PROJECTION_STUD_INNER_SIZE)), static_cast<int>(factor * (image->rows * PROJECTION_STUD_INNER_SIZE)) };
                 pixel_t color;

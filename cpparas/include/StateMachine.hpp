@@ -48,8 +48,10 @@ protected:
     bool exitCondition() const override;
 
 private:
-    void on_start_button_clicked();
-    void on_simulate_hand_button_clicked();
+    /**
+     * @brief Returns the next step in the sequence if available.
+     */
+    std::pair<bool, StateStep> nextStateStep(StateStep fromStep) const;
 
     void INIT_entry();
     void INIT_do();

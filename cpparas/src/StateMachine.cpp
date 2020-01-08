@@ -100,6 +100,23 @@ void StateMachine::simulateHand(bool handPresent)
     handDetection.simulateHand(handPresent);
 }
 
+// Private functions
+
+std::pair<bool, StateStep> StateMachine::nextStateStep(StateStep fromStep) const
+{
+    StateStep nextStep = fromStep;
+    if (lsfData.Layer.count(fromStep.layer) > 0 && lsfData.Layer.at(fromStep.layer).Step.count(fromStep.step + 1) > 0) {
+        nextStep.step += 1;
+        return std::make_pair(true, nextStep);
+    } else if (lsfData.Layer.count(fromStep.layer + 1) > 0) {
+        nextStep.layer += 1;
+        nextStep.step = 0;
+        return std::make_pair(true, nextStep);
+    } else {
+        return std::make_pair(false, nextStep);
+    }
+}
+
 // State machine actions
 
 void StateMachine::INIT_entry()
@@ -144,18 +161,21 @@ void StateMachine::CHECK_CURRENT_STEP_exit() {}
 void StateMachine::PROJECT_STEP_entry()
 {
     projection->clear();
-    // TODO: Calculate brick shape from current lsf data, layer and step.
-    const Brick currentBrick = { Color::ORANGE, 6, 2 };
-    projection->showOutline(currentBrick, 20, 30, 0);
-    const std::vector<Brick> testBricks = {
+
+    std::pair<Point<uint32_t>, Brick> brickAndCoord = LSFParser::Data_to_brick(lsfData.Layer.at(stateStep.layer).Step.at(stateStep.step));
+    const Brick currentBrick = brickAndCoord.second;
+    projection->showOutline(currentBrick, brickAndCoord.first.col, brickAndCoord.first.row, 0);
+
+    std::vector<Brick> displayBricks = {
         currentBrick,
-        { Color::RED, 2, 2 },
-        { Color::GREEN, 4, 2 },
-        { Color::ORANGE, 2, 2 },
-        { Color::GREEN, 3, 2 },
-        { Color::BLUE, 4, 2 }
     };
-    projection->showInfo(stateStep, testBricks);
+    std::pair<bool, StateStep> nextStep = nextStateStep(stateStep);
+    while (nextStep.first) {
+        displayBricks.push_back(LSFParser::Data_to_brick(lsfData.Layer.at(nextStep.second.layer).Step.at(nextStep.second.step)).second);
+        nextStep = nextStateStep(nextStep.second);
+    }
+    projection->showInfo(stateStep, displayBricks);
+
     projection->complete();
 }
 void StateMachine::PROJECT_STEP_do()
@@ -222,13 +242,9 @@ void StateMachine::CHECK_NEXT_STEP_entry()
     stateStep.saveToFile();
 
     // int nextStep = step + 1;
-    if (lsfData.Layer.count(stateStep.layer) > 0 && lsfData.Layer.at(stateStep.layer).Step.count(stateStep.step + 1) > 0) {
-        stateStep.step += 1;
-        switchState(State::CHECK_CURRENT_STEP);
-    } else if (lsfData.Layer.count(stateStep.layer + 1) > 0) {
-        stateStep.layer += 1;
-        stateStep.step = 0;
-        switchState(State::CHECK_CURRENT_STEP);
+    std::pair<bool, StateStep> nextStep = nextStateStep(stateStep);
+    if (nextStep.first) {
+        stateStep = nextStep.second;
     } else {
         switchState(State::FINAL_STEP);
     }

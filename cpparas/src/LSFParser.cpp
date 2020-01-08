@@ -50,6 +50,28 @@ namespace LSFParser {
         return lineData;
     }
 
+    std::pair<Point<uint32_t>, Brick> Data_to_brick(const LSFDataStruct& dataStruct)
+    {
+        Point<uint32_t> minPoint = { UINT32_MAX, UINT32_MAX };
+        Point<uint32_t> maxPoint = { 0, 0 };
+        for (const Point<uint32_t>& point : dataStruct.coordinates) {
+            if (point.col < minPoint.col)
+                minPoint.col = point.col;
+            if (point.row < minPoint.row)
+                minPoint.row = point.row;
+            if (point.col > maxPoint.col)
+                maxPoint.col = point.col;
+            if (point.row > maxPoint.row)
+                maxPoint.row = point.row;
+        }
+        Brick brick = {
+            dataStruct.color,
+            maxPoint.col - minPoint.col + 1,
+            maxPoint.row - minPoint.row + 1,
+        };
+        return std::make_pair(minPoint, brick);
+    }
+
 } // namespace LSFParser
 
 } // namespace cpparas
