@@ -1,11 +1,11 @@
 #ifndef LSFPARSER_HPP
 #define LSFPARSER_HPP
 
+#include "types/Color.hpp"
+#include "types/Point.hpp"
 #include <map>
 #include <string>
-
-#define STEPS_PER_LAYER 10
-#define TOTAL_LAYERS 10
+#include <vector>
 
 namespace cpparas {
 
@@ -15,8 +15,8 @@ namespace LSFParser {
         uint32_t layer = 0;
         uint32_t step = 0;
         uint32_t legosize = 0;
-        uint32_t color = 0;
-        uint32_t coordinates[24] = {};
+        Color color = Color::NONE;
+        std::vector<Point<uint32_t>> coordinates = {};
     };
 
     struct LSFStepBuffer {

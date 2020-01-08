@@ -7,6 +7,7 @@
 namespace cpparas {
 
 enum class Color {
+    NONE = 0,
     ORANGE = 106,
     GREEN = 37,
     YELLOW = 24,

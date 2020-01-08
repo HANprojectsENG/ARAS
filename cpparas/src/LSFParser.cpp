@@ -14,7 +14,7 @@ namespace LSFParser {
         LSFData data;
         LSFDataStruct lineData;
 
-        std::ifstream file(filepath);
+        std::ifstream file { filepath };
         std::string line;
         uint32_t current_line = 0;
 
@@ -33,14 +33,19 @@ namespace LSFParser {
     LSFDataStruct LSF_line_parse(std::string line)
     {
         std::replace(line.begin(), line.end(), ',', ' ');
-        std::stringstream splited_string(line);
+        std::stringstream splitted_string { line };
         LSFDataStruct lineData;
-        splited_string >> lineData.layer;
-        splited_string >> lineData.step;
-        splited_string >> lineData.legosize;
-        splited_string >> lineData.color;
-        for (uint32_t i = 0; i < lineData.legosize * 2; i++) {
-            splited_string >> lineData.coordinates[i];
+        splitted_string >> lineData.layer;
+        splitted_string >> lineData.step;
+        splitted_string >> lineData.legosize;
+        uint32_t icolor;
+        splitted_string >> icolor;
+        lineData.color = (Color)icolor;
+        for (uint32_t i = 0; i < lineData.legosize; i++) {
+            Point<uint32_t> coordinate;
+            splitted_string >> coordinate.col;
+            splitted_string >> coordinate.row;
+            lineData.coordinates.push_back(coordinate);
         }
         return lineData;
     }
