@@ -21,7 +21,6 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addStateName(State::WAIT_HAND_ENTER, "Wait Hand Enter");
     addStateName(State::WAIT_HAND_EXIT, "Wait Hand Exit");
     addStateName(State::PROJECT_OFF, "Project Off");
-    addStateName(State::CAPTURE, "Capture");
     addStateName(State::CHECK_NEXT_STEP, "Check Next Step");
     addStateName(State::FINAL_STEP, "Final Step");
 
@@ -52,10 +51,6 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addHandler(State::PROJECT_OFF, StateFuncType::ENTRY, std::bind(&StateMachine::PROJECT_OFF_entry, this));
     addHandler(State::PROJECT_OFF, StateFuncType::DO, std::bind(&StateMachine::PROJECT_OFF_do, this));
     addHandler(State::PROJECT_OFF, StateFuncType::EXIT, std::bind(&StateMachine::PROJECT_OFF_exit, this));
-
-    addHandler(State::CAPTURE, StateFuncType::ENTRY, std::bind(&StateMachine::CAPTURE_entry, this));
-    addHandler(State::CAPTURE, StateFuncType::DO, std::bind(&StateMachine::CAPTURE_do, this));
-    addHandler(State::CAPTURE, StateFuncType::EXIT, std::bind(&StateMachine::CAPTURE_exit, this));
 
     addHandler(State::CHECK_NEXT_STEP, StateFuncType::ENTRY, std::bind(&StateMachine::CHECK_NEXT_STEP_entry, this));
     addHandler(State::CHECK_NEXT_STEP, StateFuncType::DO, std::bind(&StateMachine::CHECK_NEXT_STEP_do, this));
@@ -121,34 +116,38 @@ std::pair<bool, StateStep> StateMachine::nextStateStep(StateStep fromStep) const
 
 void StateMachine::INIT_entry()
 {
-    // Load save file
-
     // Spawn camera-locator thread
     locator->Start_Locator_thread();
+
+    // Load save file
+    stateStep = StateStep::fromFile();
 }
 void StateMachine::INIT_do()
 {
-    // if (cameraWarmUpTimer->expired()) {
-    switchState(State::STARTING);
-    // }
+    if (stateStep.layer != -1 && stateStep.step != -1) {
+        switchState(State::CHECK_NEXT_STEP);
+    } else {
+        switchState(State::STARTING);
+    }
 }
 void StateMachine::INIT_exit() {}
 
 void StateMachine::STARTING_entry()
 {
-    stateStep = StateStep::fromFile();
     if (stateStep.layer == -1)
         stateStep.layer = 0;
     if (stateStep.step == -1)
         stateStep.step = 0;
+}
+void StateMachine::STARTING_do()
+{
     switchState(State::CHECK_CURRENT_STEP);
 }
-void StateMachine::STARTING_do() {}
 void StateMachine::STARTING_exit() {}
 
-void StateMachine::CHECK_CURRENT_STEP_entry()
+void StateMachine::CHECK_CURRENT_STEP_entry() {}
+void StateMachine::CHECK_CURRENT_STEP_do()
 {
-    // TODO: determine whether CAPTURE state is unnecessary
     image_t* axne = locator->Get_new_frame();
     locator->Send_frame_to_ui(axne);
 
@@ -161,7 +160,6 @@ void StateMachine::CHECK_CURRENT_STEP_entry()
         switchState(State::PROJECT_STEP);
     }
 }
-void StateMachine::CHECK_CURRENT_STEP_do() {}
 void StateMachine::CHECK_CURRENT_STEP_exit() {}
 
 void StateMachine::PROJECT_STEP_entry()
@@ -186,9 +184,7 @@ void StateMachine::PROJECT_STEP_entry()
 }
 void StateMachine::PROJECT_STEP_do()
 {
-    // if (timer->expired()) {
     switchState(State::WAIT_HAND_ENTER);
-    // }
 }
 void StateMachine::PROJECT_STEP_exit() {}
 
@@ -221,33 +217,20 @@ void StateMachine::PROJECT_OFF_entry()
     // Turn off projector
     projection->clear();
     projection->complete();
-
-    switchState(State::CAPTURE);
 }
-void StateMachine::PROJECT_OFF_do() {}
-void StateMachine::PROJECT_OFF_exit() {}
-
-void StateMachine::CAPTURE_entry()
+void StateMachine::PROJECT_OFF_do()
 {
-    // Capture image TESTING ONLY
-    //ask locator for new frame
-    image_t* axne = locator->Get_new_frame();
-    //send received frame to locator to be send over to the ui
-    locator->Send_frame_to_ui(axne);
-
-    // Check whether step is completed
-    //
     switchState(State::CHECK_CURRENT_STEP);
 }
-void StateMachine::CAPTURE_do() {}
-void StateMachine::CAPTURE_exit() {}
+void StateMachine::PROJECT_OFF_exit() {}
 
 void StateMachine::CHECK_NEXT_STEP_entry()
 {
     // Save last step
     stateStep.saveToFile();
-
-    // int nextStep = step + 1;
+}
+void StateMachine::CHECK_NEXT_STEP_do()
+{
     std::pair<bool, StateStep> nextStep = nextStateStep(stateStep);
     if (nextStep.first) {
         stateStep = nextStep.second;
@@ -256,7 +239,6 @@ void StateMachine::CHECK_NEXT_STEP_entry()
         switchState(State::FINAL_STEP);
     }
 }
-void StateMachine::CHECK_NEXT_STEP_do() {}
 void StateMachine::CHECK_NEXT_STEP_exit() {}
 
 void StateMachine::FINAL_STEP_entry()
@@ -266,7 +248,7 @@ void StateMachine::FINAL_STEP_entry()
 
     Debug::println("You reached the end.");
 
-    // Join camera thread.
+    // We don't support restarting the state machine, so we don't need to join the camera thread.
 }
 void StateMachine::FINAL_STEP_do() {}
 void StateMachine::FINAL_STEP_exit() {}
