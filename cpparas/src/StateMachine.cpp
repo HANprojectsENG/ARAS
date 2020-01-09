@@ -153,7 +153,7 @@ void StateMachine::CHECK_CURRENT_STEP_do()
 
     // recognise image
     const LSFParser::LSFDataStruct& stepinst = lsfData.Layer.at(stateStep.layer).Step.at(stateStep.step);
-    bool brickPlacedCorrectly = StudChecker::matches(axne, coordinateMatrix, stepinst.coordinates, stepinst.color);
+    bool brickPlacedCorrectly = StudChecker::matches(axne, coordinateMatrix, stepinst.coordinates, stepinst.layer, stepinst.color);
     if (brickPlacedCorrectly) {
         switchState(State::CHECK_NEXT_STEP);
     } else {
