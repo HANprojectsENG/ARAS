@@ -4,7 +4,6 @@
 #include "types/Color.hpp"
 #include "CoordinateMatrix.hpp"
 #include "operators.h"
-#include <map>
 
 namespace cpparas {
 
