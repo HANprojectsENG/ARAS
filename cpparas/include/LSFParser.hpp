@@ -22,6 +22,7 @@ namespace LSFParser {
         Color color = Color::NONE;
         std::vector<Point<uint32_t>> coordinates = {};
     };
+    bool operator==(const LSFDataStruct& lhs, const LSFDataStruct& rhs);
 
     /**
      * Collection of steps to be executed on one layer.

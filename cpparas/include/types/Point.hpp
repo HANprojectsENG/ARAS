@@ -14,6 +14,13 @@ struct Point {
     T row;
 };
 
+template <typename T>
+bool operator==(const Point<T>& lhs, const Point<T>& rhs)
+{
+    return lhs.col == rhs.col
+        && lhs.row == rhs.row;
+}
+
 } // namespace cpparas
 
 #endif /* POINT_HPP */
