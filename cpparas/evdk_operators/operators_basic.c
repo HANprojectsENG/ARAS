@@ -696,17 +696,13 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
 
                 if (corner[0] < result) {
                     corner[0] = result;
-                    printf("Result1:%d\n", result);
                 } //Find 4 max values in image
                 else if (corner[1] < result) {
                     corner[1] = result;
-                    printf("Result2:%d\n", result);
                 } else if (corner[2] < result) {
                     corner[2] = result;
-                    printf("Result3:%d\n", result);
                 } else if (corner[3] < result) {
                     corner[3] = result;
-                    printf("Result4:%d\n", result);
                 }
                 setBasicPixel(dst, c, r, result); //fill dst with R values;
             }
@@ -725,17 +721,13 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
 
                 if (corner[0] < result) {
                     corner[0] = result;
-                    printf("Result:%d\n", result);
                 } //Find 4 max values in image
                 else if (corner[1] < result) {
                     corner[1] = result;
-                    printf("Result:%d\n", result);
                 } else if (corner[2] < result) {
                     corner[2] = result;
-                    printf("Result:%d\n", result);
                 } else if (corner[3] < result) {
                     corner[3] = result;
-                    printf("Result:%d\n", result);
                 }
                 setBasicPixel(dst, c, r, result);
             }
@@ -763,7 +755,6 @@ uint8_t max_basic(const image_t* src)
             max = max < getBasicPixel(src, c, r) ? getBasicPixel(src, c, r) : max;
         }
     }
-    printf("Max:%d\n", max);
     return max;
 }
 
