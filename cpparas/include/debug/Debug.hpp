@@ -10,6 +10,10 @@ namespace cpparas {
 namespace Debug {
     const uint32_t MAX_MEMORY_LOG_LINES = 200;
 
+    /**
+     * @brief Adds a line to the debug log.
+     *        Prints the line to the standard output.
+     */
     void println(const std::string& line);
     extern std::shared_ptr<std::deque<std::string>> lines;
 }

@@ -9,6 +9,9 @@ namespace cpparas {
 
 class ImageArea : public Gtk::DrawingArea {
 public:
+    /**
+     * @brief Creates a GTK widget that displays an image_t image.
+     */
     ImageArea();
     virtual ~ImageArea();
     void setImage(const image_t* image);

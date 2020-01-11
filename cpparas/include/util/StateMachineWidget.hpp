@@ -15,8 +15,14 @@ namespace cpparas {
 
 class StateMachineWidget {
 public:
+    /**
+     * @brief Creates a GTK widget that allows the user to control the state machine and see its results.
+     */
     StateMachineWidget(std::shared_ptr<StateMachine> _stateMachine, std::shared_ptr<ImageLoader> _imageLoader);
     virtual ~StateMachineWidget();
+    /**
+     * @brief Returns the GTK widget object.
+     */
     Gtk::Grid& operator()();
 
 private:

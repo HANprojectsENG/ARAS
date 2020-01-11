@@ -5,6 +5,9 @@
 
 namespace cpparas {
 
+/**
+ * @brief A position in 2-dimensional euclidean space.
+ */
 template <typename T>
 struct Point {
     T col;

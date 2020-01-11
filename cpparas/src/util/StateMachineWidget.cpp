@@ -79,7 +79,7 @@ bool StateMachineWidget::update()
     layerLabel.set_text(std::string("Layer: ") + std::to_string(stateMachine->getStateStep().layer));
     stepLabel.set_text(std::string("Step: ") + std::to_string(stateMachine->getStateStep().step));
     //Check if new frame to show is available, if so, get it from imageLoader and show it
-    if (imageLoader->new_UI_frame_available) {
+    if (imageLoader->Get_new_UI_frame_available()) {
         imageArea.setImage(imageLoader->Get_UI_frame());
     }
     return true;

@@ -3,6 +3,7 @@
 namespace cpparas {
 
 ImageLoader::ImageLoader()
+    : new_UI_frame_available(false)
 {
 }
 
@@ -51,6 +52,11 @@ image_t* ImageLoader::Get_UI_frame()
 {
     new_UI_frame_available = false;
     return ui_image;
+}
+
+bool ImageLoader::Get_new_UI_frame_available() const
+{
+    return new_UI_frame_available;
 }
 
 } // namespace cpparas

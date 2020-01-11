@@ -5,6 +5,9 @@
 
 namespace cpparas {
 
+/**
+ * @brief A rectangular brick with no positional information.
+ */
 struct Brick {
     Color color;
     uint32_t width;
