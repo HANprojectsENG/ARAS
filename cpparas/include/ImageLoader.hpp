@@ -7,10 +7,10 @@
 
 namespace cpparas {
 
-enum SourceType {
+enum class SourceType {
     CAMERA,
     IMAGE,
-    DUNNO,
+    UNKNOWN,
 };
 
 class ImageLoader {

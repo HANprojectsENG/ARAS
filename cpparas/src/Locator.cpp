@@ -14,7 +14,7 @@ Locator::Locator(std::shared_ptr<ImageLoader> imageLoader_)
     , moved_interupt(false)
     , imageLoader(imageLoader_)
     , PiCamera(1440, 1440)
-    , RegExtractor(800,800)
+    , RegExtractor(800, 800)
 {
 }
 
@@ -52,17 +52,17 @@ void Locator::Stop_Locator_thread()
 
 void Locator::Locator_thread()
 {
-    if (source_type == CAMERA) {
+    if (source_type == SourceType::CAMERA) {
         //start Camera thread
         PiCamera.Camera_thread_worker_start();
     }
-    image_t* old_cut_frame = newRGB888Image(800,800);
+    image_t* old_cut_frame = newRGB888Image(800, 800);
 
     while (locator_running) {
-        if (source_type == CAMERA) {
+        if (source_type == SourceType::CAMERA) {
             //Get a new frame from camera
             new_full_frame = PiCamera.Camera_get_frame();
-        } else if (source_type == IMAGE) {
+        } else if (source_type == SourceType::IMAGE) {
             //Load user image
             new_full_frame = imageLoader->Get_source_image();
         } else {
@@ -82,18 +82,18 @@ void Locator::Locator_thread()
 
         //find corners
         corner_points = RegExtractor.updateImage(new_full_frame);
-        if(corner_points.size() == 3){
-            
+        if (corner_points.size() == 3) {
+
             //caclulate center point based on 3 points
             Central_board_point.col = (corner_points[0].col + corner_points[2].col) / 2;
             Central_board_point.row = (corner_points[0].row + corner_points[2].row) / 2;
-            
+
             //compare those points with the camera central point
-            if((Central_board_point.col - Central_camera_point.col) > MAX_DIVIATION || (Central_board_point.col - Central_camera_point.col) < -MAX_DIVIATION){
+            if ((Central_board_point.col - Central_camera_point.col) > MAX_DIVIATION || (Central_board_point.col - Central_camera_point.col) < -MAX_DIVIATION) {
                 moved_interupt = true;
             }
-                    
-            if((Central_board_point.row - Central_camera_point.row) > MAX_DIVIATION || (Central_board_point.row - Central_camera_point.row) < -MAX_DIVIATION){
+
+            if ((Central_board_point.row - Central_camera_point.row) > MAX_DIVIATION || (Central_board_point.row - Central_camera_point.row) < -MAX_DIVIATION) {
                 moved_interupt = true;
             }
 
@@ -101,16 +101,14 @@ void Locator::Locator_thread()
             new_cut_frame = RegExtractor.getRegionImage();
 
             // Set first frame accuaried bool
-            if(!first_frame){
+            if (!first_frame) {
                 first_frame = true;
             }
 
             // Save a frame copy
             old_cut_frame = new_cut_frame;
-        } 
-        else
-        {
-            if(old_cut_frame->data != nullptr){
+        } else {
+            if (old_cut_frame->data != nullptr) {
                 //No points found but buffer has older, saved image, so use that instead
                 new_cut_frame = old_cut_frame;
             }
@@ -118,7 +116,7 @@ void Locator::Locator_thread()
         }
 
         //only unlock the main thread after at least a full frame has been received.
-        if(locator_thread_starting){
+        if (locator_thread_starting) {
             locator_thread_starting = false;
         }
         //wait a bit, no need to run this at full powaa

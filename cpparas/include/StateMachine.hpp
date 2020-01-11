@@ -31,18 +31,25 @@ enum class State {
 
 class StateMachine : public GenericStateMachine<State> {
 public:
+    /**
+     * @brief Creates a state machine as seen in the Activity Diagram.
+     * @image html ActivityDiagram.png
+     */
     StateMachine(std::shared_ptr<Locator> locator_);
     ~StateMachine() override;
 
     void init() override;
-    StateStep getStateStep() const;
 
+    StateStep getStateStep() const;
     std::shared_ptr<Projection> getProjection() const;
 
+    /**
+     * @brief Sets the sequence data to be used in the program.
+     * @note Needs to be called before calling the first .update().
+     */
     void setLSFData(const LSFParser::LSFData& data);
 
     void simulateBaseplateShifted(bool baseplateShifted);
-    // Encapsulating functions.
     void simulateHand(bool handPresent);
 
 protected:

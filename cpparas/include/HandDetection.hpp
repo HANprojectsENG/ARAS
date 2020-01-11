@@ -19,9 +19,22 @@ const uint32_t HAND_THRESHOLD_AREA = 10000;
 
 class HandDetection {
 public:
+    /**
+     * @brief Creates a hand detection checker.
+     */
     HandDetection();
+    /**
+     * @brief Runs the hand detection on the given image.
+     */
     void update(const image_t* image);
+    /**
+     * @brief Sets whether a simulated hand is present.
+     */
     void simulateHand(bool handPresent);
+    /**
+     * @brief Returns whether a hand was detected on the previous .update
+     *        or if a simulated hand is present.
+     */
     bool containsHand() const;
 
 private:

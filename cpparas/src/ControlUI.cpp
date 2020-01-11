@@ -130,7 +130,7 @@ void ControlUI::on_use_last_image_button_clicked()
 
 void ControlUI::on_use_camera_button_clicked()
 {
-    imageLoader->Set_source_type(CAMERA);
+    imageLoader->Set_source_type(SourceType::CAMERA);
 }
 
 void ControlUI::on_select_sequence_file_button_clicked()
@@ -190,9 +190,9 @@ void ControlUI::on_open_debug_ui_button_clicked()
 void ControlUI::set_input_image(const std::string& filePath)
 {
     if (filePath == "") {
-        imageLoader->Set_source_type(CAMERA);
+        imageLoader->Set_source_type(SourceType::CAMERA);
     } else {
-        imageLoader->Set_source_type(IMAGE);
+        imageLoader->Set_source_type(SourceType::IMAGE);
         imageLoader->Set_source_image(filePath);
 
         Preferences newPreferences;
