@@ -27,6 +27,22 @@ Replace the `cmake` invocation with:
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 ```
 
+## Unit tests
+
+The testing framework used is GoogleTest. This needs to be installed in order
+to compile the unit tests.
+To build the project with unit tests enabled, the cmake flag
+`BUILD_TESTS` needs to be enabled.
+Replace the `cmake` invocation with:
+```
+cmake -DBUILD_TESTS=1 ..
+```
+
+After compiling, the unit tests can be executed with
+```
+./cpparas_tests
+```
+
 ## Documentation
 
 The following dependencies are required to build the Doxygen documentation for
