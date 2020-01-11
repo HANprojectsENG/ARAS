@@ -10,6 +10,7 @@ StateMachineWidget::StateMachineWidget(std::shared_ptr<StateMachine> _stateMachi
     , container()
     , startStopButton()
     , simulateHandButton("Simulate hand")
+    , simulateBaseplateShiftedButton("Simulate baseplate shifted")
     , layerLabel()
     , stepLabel()
     , imageViewport()
@@ -25,13 +26,15 @@ StateMachineWidget::StateMachineWidget(std::shared_ptr<StateMachine> _stateMachi
     container.set_column_spacing(5);
     container.attach(startStopButton, 1, 1, 1, 1);
     container.attach(simulateHandButton, 2, 1, 1, 1);
-    container.attach(layerLabel, 3, 1, 1, 1);
-    container.attach(stepLabel, 4, 1, 1, 1);
-    container.attach(imageViewport, 1, 3, 9, 1);
+    container.attach(simulateBaseplateShiftedButton, 3, 1, 1, 1);
+    container.attach(layerLabel, 4, 1, 1, 1);
+    container.attach(stepLabel, 5, 1, 1, 1);
+    container.attach(imageViewport, 1, 2, 9, 1);
 
     imageViewport.show();
     startStopButton.show();
     simulateHandButton.show();
+    simulateBaseplateShiftedButton.show();
     layerLabel.show();
     stepLabel.show();
     imageArea.show();
@@ -40,6 +43,8 @@ StateMachineWidget::StateMachineWidget(std::shared_ptr<StateMachine> _stateMachi
         &StateMachineWidget::on_start_stop_button_clicked));
     simulateHandButton.signal_toggled().connect(sigc::mem_fun(*this,
         &StateMachineWidget::on_simulate_hand_button_toggled));
+    simulateBaseplateShiftedButton.signal_toggled().connect(sigc::mem_fun(*this,
+        &StateMachineWidget::on_simulate_baseplate_shifted_button_toggled));
     Glib::signal_timeout().connect(
         sigc::mem_fun(*this, &StateMachineWidget::update),
         100);
@@ -91,6 +96,11 @@ void StateMachineWidget::on_start_stop_button_clicked()
 void StateMachineWidget::on_simulate_hand_button_toggled()
 {
     stateMachine->simulateHand(simulateHandButton.get_active());
+}
+
+void StateMachineWidget::on_simulate_baseplate_shifted_button_toggled()
+{
+    stateMachine->simulateBaseplateShifted(simulateBaseplateShiftedButton.get_active());
 }
 
 } // namespace cpparas

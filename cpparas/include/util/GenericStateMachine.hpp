@@ -126,6 +126,7 @@ protected:
     void switchState(StateT newState)
     {
         if (currentFuncType != StateFuncType::DO) {
+            Debug::println(std::string("Performing state " + getCurrentStateName() + std::string(" ") + STATE_FUNC_TYPE_NAMES.at(currentFuncType)));
             throw std::logic_error("cannot switch states outside of a do-handler");
         }
         perform(StateFuncType::EXIT);
@@ -148,7 +149,7 @@ private:
         std::string stateName = getCurrentStateName();
         Debug::println(std::string("Performing state " + stateName + std::string(" ") + STATE_FUNC_TYPE_NAMES.at(type)));
         currentFuncType = type;
-        if (doHookFunc) {
+        if (currentFuncType == StateFuncType::DO && doHookFunc) {
             doHookFunc();
         }
         this->handlerFuncs.at(std::make_pair(currentState, type))();

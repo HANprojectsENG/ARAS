@@ -25,6 +25,7 @@ enum class State {
     WAIT_HAND_EXIT,
     PROJECT_OFF,
     CHECK_NEXT_STEP,
+    MOVE_BASEPLATE,
     FINAL_STEP
 };
 
@@ -40,6 +41,7 @@ public:
 
     void setLSFData(const LSFParser::LSFData& data);
 
+    void simulateBaseplateShifted(bool baseplateShifted);
     // Encapsulating functions.
     void simulateHand(bool handPresent);
 
@@ -51,6 +53,8 @@ private:
      * @brief Returns the next step in the sequence if available.
      */
     std::pair<bool, StateStep> nextStateStep(StateStep fromStep) const;
+
+    void doHook();
 
     void INIT_entry();
     void INIT_do();
@@ -84,10 +88,15 @@ private:
     void CHECK_NEXT_STEP_do();
     void CHECK_NEXT_STEP_exit();
 
+    void MOVE_BASEPLATE_entry();
+    void MOVE_BASEPLATE_do();
+    void MOVE_BASEPLATE_exit();
+
     void FINAL_STEP_entry();
     void FINAL_STEP_do();
     void FINAL_STEP_exit();
 
+    bool simulatedBaseplateShifted;
     StateStep stateStep;
     LSFParser::LSFData lsfData;
     CoordinateMatrix coordinateMatrix;

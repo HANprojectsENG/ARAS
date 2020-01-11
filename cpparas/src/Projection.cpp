@@ -70,14 +70,8 @@ Point<int> baseplateCoordToProjectionCoord(Point<float> baseplateCoord, int imag
     return result;
 }
 
-void Projection::showOutline(Brick brick, int studX, int studY, int layer)
+void Projection::showBaseplateOutline()
 {
-    (void)brick;
-    (void)studX;
-    (void)studY;
-    (void)layer;
-
-    // Draw baseplate outline
     int opos[2] = { static_cast<int>(image->cols * PROJECTION_OUTLINE.origin.col), static_cast<int>(image->rows * PROJECTION_OUTLINE.origin.row) };
     int osize[2] = { static_cast<int>(image->cols * PROJECTION_OUTLINE.width), static_cast<int>(image->rows * PROJECTION_OUTLINE.height) };
     pixel_t ocolor;
@@ -86,7 +80,10 @@ void Projection::showOutline(Brick brick, int studX, int studY, int layer)
     ocolor.rgb888_pixel.b = 255;
 
     drawRect(image, opos, osize, ocolor, SHAPE_BORDER, 5);
+}
 
+void Projection::showBrickOutline(Brick brick, int studX, int studY, int layer)
+{
     Point<float> baseplateCoord = blockScreenCoordinate(calibration, studX, studY, layer);
     Point<float> baseplateCoord2 = blockScreenCoordinate(calibration, studX + brick.width, studY + brick.height, layer);
     Debug::println(std::string("Coords: (") + std::to_string(baseplateCoord.col) + std::string(", ") + std::to_string(baseplateCoord.row) + std::string(") (") + std::to_string(baseplateCoord2.col) + std::string(", ") + std::to_string(baseplateCoord2.row) + std::string(")"));
@@ -132,6 +129,17 @@ void Projection::showInfo(StateStep stateStep, const std::vector<Brick>& expecte
             brickPosRow += PROJECTION_SEPARATOR_HEIGHT;
         brickIdx++;
     }
+}
+
+void Projection::showMoveBaseplateWarning()
+{
+    pixel_t stepcolor;
+    stepcolor.rgb888_pixel.r = 255;
+    stepcolor.rgb888_pixel.g = 64;
+    stepcolor.rgb888_pixel.b = 64;
+    int32_t steppos[] = { static_cast<int>(image->cols * PROJECTION_MOVE_BASEPLATE_WARNING_ORIGIN.col), static_cast<int>(image->rows * PROJECTION_MOVE_BASEPLATE_WARNING_ORIGIN.row) };
+    uint8_t stepscale = static_cast<uint8_t>(image->cols * PROJECTION_MOVE_BASEPLATE_WARNING_FONT_SCALE);
+    drawText(image, "ALIGN THE\nBASEPLATE WITH\nTHE OUTLINE", font_simple6pt, steppos, stepscale, stepcolor);
 }
 
 void Projection::complete()

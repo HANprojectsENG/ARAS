@@ -23,12 +23,14 @@ private:
     bool update();
     void on_start_stop_button_clicked();
     void on_simulate_hand_button_toggled();
+    void on_simulate_baseplate_shifted_button_toggled();
 
     std::shared_ptr<StateMachine> stateMachine;
     std::shared_ptr<ImageLoader> imageLoader;
     Gtk::Grid container;
     Gtk::Button startStopButton;
     Gtk::ToggleButton simulateHandButton;
+    Gtk::ToggleButton simulateBaseplateShiftedButton;
     Gtk::Label layerLabel;
     Gtk::Label stepLabel;
     Gtk::ScrolledWindow imageViewport;

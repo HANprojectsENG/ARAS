@@ -18,8 +18,10 @@ namespace cpparas {
 // For example: (0.8, 0.2) is at the right-top of the projection image.
 const Point<float> PROJECTION_INFO_ORIGIN { 0.8f, 0.2f };
 const Point<float> PROJECTION_STEP_INFO_ORIGIN { 0.8f, 0.07f };
+const Point<float> PROJECTION_MOVE_BASEPLATE_WARNING_ORIGIN { 0.77f, 0.1f };
 // This is a factor of the projection image width.
 const float PROJECTION_STEP_FONT_SCALE = 0.004f;
+const float PROJECTION_MOVE_BASEPLATE_WARNING_FONT_SCALE = 0.0033f;
 // These are factors of the projection image height.
 const float PROJECTION_SEPARATOR_HEIGHT = 0.02f;
 const float PROJECTION_STUD_SIZE = 0.04f;
@@ -37,8 +39,10 @@ public:
     ~Projection();
 
     void clear();
-    void showOutline(Brick brick, int studX, int studY, int layer);
+    void showBaseplateOutline();
+    void showBrickOutline(Brick brick, int studX, int studY, int layer);
     void showInfo(StateStep stateStep, const std::vector<Brick>& expectedAndNextBricks);
+    void showMoveBaseplateWarning();
     void complete();
 
     const image_t* getImage() const;

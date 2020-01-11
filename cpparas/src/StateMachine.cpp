@@ -6,6 +6,7 @@ namespace cpparas {
 
 StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     : GenericStateMachine<State>(State::NOT_STARTED)
+    , simulatedBaseplateShifted(false)
     , stateStep()
     , lsfData()
     , coordinateMatrix(DEFAULT_CALIBRATION)
@@ -22,7 +23,10 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addStateName(State::WAIT_HAND_EXIT, "Wait Hand Exit");
     addStateName(State::PROJECT_OFF, "Project Off");
     addStateName(State::CHECK_NEXT_STEP, "Check Next Step");
+    addStateName(State::MOVE_BASEPLATE, "Move Board");
     addStateName(State::FINAL_STEP, "Final Step");
+
+    setDoHook(std::bind(&StateMachine::doHook, this));
 
     addHandler(State::INIT, StateFuncType::ENTRY, std::bind(&StateMachine::INIT_entry, this));
     addHandler(State::INIT, StateFuncType::DO, std::bind(&StateMachine::INIT_do, this));
@@ -55,6 +59,10 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addHandler(State::CHECK_NEXT_STEP, StateFuncType::ENTRY, std::bind(&StateMachine::CHECK_NEXT_STEP_entry, this));
     addHandler(State::CHECK_NEXT_STEP, StateFuncType::DO, std::bind(&StateMachine::CHECK_NEXT_STEP_do, this));
     addHandler(State::CHECK_NEXT_STEP, StateFuncType::EXIT, std::bind(&StateMachine::CHECK_NEXT_STEP_exit, this));
+
+    addHandler(State::MOVE_BASEPLATE, StateFuncType::ENTRY, std::bind(&StateMachine::MOVE_BASEPLATE_entry, this));
+    addHandler(State::MOVE_BASEPLATE, StateFuncType::DO, std::bind(&StateMachine::MOVE_BASEPLATE_do, this));
+    addHandler(State::MOVE_BASEPLATE, StateFuncType::EXIT, std::bind(&StateMachine::MOVE_BASEPLATE_exit, this));
 
     addHandler(State::FINAL_STEP, StateFuncType::ENTRY, std::bind(&StateMachine::FINAL_STEP_entry, this));
     addHandler(State::FINAL_STEP, StateFuncType::DO, std::bind(&StateMachine::FINAL_STEP_do, this));
@@ -95,6 +103,11 @@ void StateMachine::simulateHand(bool handPresent)
     handDetection.simulateHand(handPresent);
 }
 
+void StateMachine::simulateBaseplateShifted(bool shifted)
+{
+    simulatedBaseplateShifted = shifted;
+}
+
 // Private functions
 
 std::pair<bool, StateStep> StateMachine::nextStateStep(StateStep fromStep) const
@@ -113,6 +126,16 @@ std::pair<bool, StateStep> StateMachine::nextStateStep(StateStep fromStep) const
 }
 
 // State machine actions
+
+void StateMachine::doHook()
+{
+    State currentState = getCurrentState();
+    if (currentState != State::INIT && currentState != State::STARTING && currentState != State::FINAL_STEP && currentState != State::MOVE_BASEPLATE) {
+        if (simulatedBaseplateShifted || locator->Location_checker()) {
+            switchState(State::MOVE_BASEPLATE);
+        }
+    }
+}
 
 void StateMachine::INIT_entry()
 {
@@ -151,6 +174,9 @@ void StateMachine::CHECK_CURRENT_STEP_do()
     image_t* axne = locator->Get_new_frame();
     locator->Send_frame_to_ui(axne);
 
+    // Calculate coordinate matrix
+    coordinateMatrix.update(0, 0, axne->cols, axne->rows);
+
     // recognise image
     const LSFParser::LSFDataStruct& stepinst = lsfData.Layer.at(stateStep.layer).Step.at(stateStep.step);
     bool brickPlacedCorrectly = StudChecker::matches(axne, coordinateMatrix, stepinst.coordinates, stepinst.layer, stepinst.color);
@@ -168,7 +194,8 @@ void StateMachine::PROJECT_STEP_entry()
 
     std::pair<Point<uint32_t>, Brick> brickAndCoord = LSFParser::Data_to_brick(lsfData.Layer.at(stateStep.layer).Step.at(stateStep.step));
     const Brick currentBrick = brickAndCoord.second;
-    projection->showOutline(currentBrick, brickAndCoord.first.col, brickAndCoord.first.row, 0);
+    projection->showBaseplateOutline();
+    projection->showBrickOutline(currentBrick, brickAndCoord.first.col, brickAndCoord.first.row, 0);
 
     std::vector<Brick> displayBricks = {
         currentBrick,
@@ -240,6 +267,26 @@ void StateMachine::CHECK_NEXT_STEP_do()
     }
 }
 void StateMachine::CHECK_NEXT_STEP_exit() {}
+
+void StateMachine::MOVE_BASEPLATE_entry()
+{
+    projection->clear();
+    projection->showBaseplateOutline();
+    projection->showMoveBaseplateWarning();
+    projection->complete();
+}
+void StateMachine::MOVE_BASEPLATE_do()
+{
+
+    if (!simulatedBaseplateShifted && !locator->Location_checker()) {
+        switchState(getPreviousState());
+    }
+}
+void StateMachine::MOVE_BASEPLATE_exit()
+{
+    projection->clear();
+    projection->complete();
+}
 
 void StateMachine::FINAL_STEP_entry()
 {
