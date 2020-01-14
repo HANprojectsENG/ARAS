@@ -647,6 +647,7 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
     uint8_t corner[4] = { 0 };
     //find max value in image for scaling factor
     max = max_basic(src);
+    add_basic_value(src,1);
 
     //1. Calculate x and y derivative of image via sobel
     sobelX_basic(src, Ix); //input uint8 output uint8
@@ -756,6 +757,16 @@ uint8_t max_basic(const image_t* src)
         }
     }
     return max;
+}
+
+void add_basic_value( const image_t *src, uint8_t value)
+{
+    register long int i = src->rows * src->cols;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+
+    // Loop all pixels and add
+    while(i-- > 0)
+        *s++ += value;
 }
 
 void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize)

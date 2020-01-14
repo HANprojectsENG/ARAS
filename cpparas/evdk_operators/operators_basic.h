@@ -127,6 +127,8 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
 
 uint8_t max_basic(const image_t* src);
 
+void add_basic_value( const image_t *src, uint8_t value);
+
 void edge_basic(const image_t* src, image_t* dst, const uint8_t blockSize);
 
 void sobelX_basic(const image_t* src, image_t* dst);
