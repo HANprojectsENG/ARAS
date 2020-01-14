@@ -23,7 +23,7 @@ StateMachine::StateMachine(std::shared_ptr<Locator> locator_)
     addStateName(State::WAIT_HAND_EXIT, "Wait Hand Exit");
     addStateName(State::PROJECT_OFF, "Project Off");
     addStateName(State::CHECK_NEXT_STEP, "Check Next Step");
-    addStateName(State::MOVE_BASEPLATE, "Move Board");
+    addStateName(State::MOVE_BASEPLATE, "Move Baseplate");
     addStateName(State::FINAL_STEP, "Final Step");
 
     setDoHook(std::bind(&StateMachine::doHook, this));
@@ -277,7 +277,8 @@ void StateMachine::MOVE_BASEPLATE_entry()
 }
 void StateMachine::MOVE_BASEPLATE_do()
 {
-
+    image_t* axne = locator->Get_new_frame();
+    locator->Send_frame_to_ui(axne);
     if (!simulatedBaseplateShifted && !locator->Location_checker()) {
         switchState(getPreviousState());
     }
