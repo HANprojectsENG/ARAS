@@ -1,4 +1,5 @@
 #include "MarkerDetector.hpp"
+#include "debug/Debug.hpp"
 
 namespace cpparas {
 
@@ -25,8 +26,8 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     uint16_t c;
     uint16_t r;
     basic_pixel_t pixel;
-    uint16_t pos_x[30] = { 0 };
-    uint16_t pos_y[30] = { 0 };
+    std::vector<uint16_t> pos_x;
+    std::vector<uint16_t> pos_y;
     uint8_t corners = 0;
 
     std::vector<Point<int32_t>> points;
@@ -35,9 +36,10 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
         for (r = 0; r < dst_harris->rows; r++) {
             pixel = getBasicPixel(dst_harris, c, r);
             if (pixel == 0) {
-                pos_x[corners] = c * 8;
-                pos_y[corners] = r * 8;
+                pos_x.push_back(c * 8);
+                pos_y.push_back(r * 8);
                 corners++;
+                Debug::println(std::string("Corner at (") + std::to_string(c) + std::string(", ") + std::to_string(r) + std::string(")"));
             }
         }
     }
