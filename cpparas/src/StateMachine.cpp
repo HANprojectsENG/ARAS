@@ -147,10 +147,13 @@ void StateMachine::INIT_entry()
 }
 void StateMachine::INIT_do()
 {
-    if (stateStep.layer != -1 && stateStep.step != -1) {
-        switchState(State::CHECK_NEXT_STEP);
-    } else {
-        switchState(State::STARTING);
+    if(locator->First_frame_received())
+    {
+        if (stateStep.layer != -1 && stateStep.step != -1) {
+            switchState(State::CHECK_NEXT_STEP);
+        } else {
+            switchState(State::STARTING);
+        }
     }
 }
 void StateMachine::INIT_exit() {}
