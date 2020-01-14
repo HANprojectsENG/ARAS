@@ -10,6 +10,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 
 option(BUILD_DOC "Build documentation" OFF)
+option(BUILD_TESTS "Build unit tests" OFF)
 
 if (BUILD_DOC)
   # check if Doxygen is installed
@@ -48,3 +49,16 @@ file(GLOB SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} ${GTKMM_LIBRARIES})
+
+if (BUILD_TESTS)
+  pkg_check_modules(GTEST gtest>=1.6.0)
+  include_directories(${GTEST_INCLUDE_DIRS})
+
+  file(GLOB TEST_SOURCES
+	  ${SOURCES}
+          "${PROJECT_SOURCE_DIR}/tests/*.cpp")
+  list(REMOVE_ITEM TEST_SOURCES "${PROJECT_SOURCE_DIR}/src/main.cpp")
+  add_executable(${PROJECT_NAME}_tests ${TEST_SOURCES})
+
+  target_link_libraries(${PROJECT_NAME}_tests ${GTEST_LIBRARIES} ${GTKMM_LIBRARIES})
+endif()

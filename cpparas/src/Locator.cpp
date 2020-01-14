@@ -56,7 +56,6 @@ void Locator::Locator_thread()
         //start Camera thread
         PiCamera.Camera_thread_worker_start();
     }
-    image_t* old_cut_frame = newRGB888Image(800, 800);
 
     while (locator_running) {
         if (source_type == SourceType::CAMERA) {
@@ -105,14 +104,28 @@ void Locator::Locator_thread()
                 first_frame = true;
             }
 
-            // Save a frame copy
-            old_cut_frame = new_cut_frame;
+            // Save good coordinates
+            corner_points_old = corner_points;
+
         } else {
-            if (old_cut_frame->data != nullptr) {
-                //No points found but buffer has older, saved image, so use that instead
-                new_cut_frame = old_cut_frame;
+            //No new points found but we have older coordinates
+            if (corner_points_old.size() == 3) {
+                int32_t colpos[3] = {
+                    corner_points_old[0].col,
+                    corner_points_old[1].col,
+                    corner_points_old[2].col,
+                };
+                int32_t rowpos[3] = {
+                    corner_points_old[0].row,
+                    corner_points_old[1].row,
+                    corner_points_old[2].row
+                };
+                //cut and warp frame using old coordinates
+                warp(new_full_frame, new_cut_frame, colpos, rowpos);
+            } else {
+                // If no points were found at all, do nothing and try again
+                std::cout<<"No coordinates found, like at all, not even once since we started:/"<<std::endl;
             }
-            // If no picture was found at all, do nothing and try again
         }
 
         //only unlock the main thread after at least a full frame has been received.
@@ -122,7 +135,6 @@ void Locator::Locator_thread()
         //wait a bit, no need to run this at full powaa
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    deleteImage(old_cut_frame);
     PiCamera.Camera_thread_worker_stop();
 }
 
@@ -153,7 +165,7 @@ bool Locator::First_frame_received()
     return first_frame;
 }
 
-// Check if at least one frame is available
+// Check if board or camera has moved
 bool Locator::Location_checker()
 {
     return moved_interupt;

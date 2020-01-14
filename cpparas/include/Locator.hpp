@@ -57,6 +57,7 @@ private:
     RegionExtractor RegExtractor;
     int32_t MAX_DIVIATION = 20;
     std::vector<Point<int32_t>> corner_points;
+    std::vector<Point<int32_t>> corner_points_old;
     Point<int32_t> Central_camera_point;
     Point<int32_t> Central_board_point;
 };

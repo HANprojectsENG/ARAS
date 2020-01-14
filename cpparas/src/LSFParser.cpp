@@ -9,6 +9,15 @@ namespace cpparas {
 
 namespace LSFParser {
 
+    bool operator==(const LSFDataStruct& lhs, const LSFDataStruct& rhs)
+    {
+        return lhs.layer == rhs.layer
+            && lhs.step == rhs.step
+            && lhs.legosize == rhs.legosize
+            && lhs.color == rhs.color
+            && lhs.coordinates == rhs.coordinates;
+    }
+
     LSFData Load_LSF_file(std::string filepath)
     {
         LSFData data;

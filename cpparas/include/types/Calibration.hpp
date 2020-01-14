@@ -8,33 +8,45 @@
 
 namespace cpparas {
 
+/**
+ * @brief Calibration parameters
+ */
 struct Calibration {
+    /* Camera FOV */
     float cameraHorizontalFov;
     float cameraVerticalFov;
+    /** Camera height in meters */
     float cameraHeight;
 
+    /* Camera capture resolution */
+    /* TODO: Use this in Camera */
     uint32_t captureResolutionCols;
     uint32_t captureResolutionRows;
 
+    /** Projection width in meters */
     float projectionWidth;
+    /** Projection height in meters */
     float projectionHeight;
 
+    /** Projector height from the baseplate in meters */
     float projectorHeight;
+    /** Projector resolution width in pixels */
     uint32_t projectorResolutionCols;
+    /** Projector resolution height in pixels */
     uint32_t projectorResolutionRows;
 
+    /** Max number of layers in a building */
     uint32_t maxLayers;
-    uint32_t legoPerLayer;
-    uint32_t dataPerLego;
 
+    /** Width of the baseplate in studs */
     uint32_t baseplateCols;
+    /** Length of the baseplate in studs */
     uint32_t baseplateRows;
 
+    /** Height of a block in meters */
     float blockHeight;
+    /** Length of one block unit (width or length) in meters */
     float blockUnitLength;
-    float maxBlockLayers;
-
-    uint32_t boardLocationMargin;
 };
 
 const Calibration DEFAULT_CALIBRATION = constructS(Calibration,
@@ -52,17 +64,12 @@ const Calibration DEFAULT_CALIBRATION = constructS(Calibration,
     _.projectorResolutionRows = 720,
 
     _.maxLayers = 20,
-    _.legoPerLayer = 50,
-    _.dataPerLego = 28,
 
     _.baseplateCols = 48,
     _.baseplateRows = 48,
 
     _.blockHeight = 0.0096,
-    _.blockUnitLength = 0.008,
-    _.maxBlockLayers = 20,
-
-    _.boardLocationMargin = 2);
+    _.blockUnitLength = 0.008);
 
 } // namespace cpparas
 

@@ -5,6 +5,9 @@
 
 namespace cpparas {
 
+/**
+ * @brief A 2-dimensional rectangle with a position and size.
+ */
 template <typename T>
 struct Rect {
     Point<T> origin;
