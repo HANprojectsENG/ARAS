@@ -9,7 +9,6 @@ namespace cpparas {
 
 Locator::Locator(std::shared_ptr<ImageLoader> imageLoader_)
     : locator_running(false)
-    , locator_thread_starting(true)
     , first_frame(false)
     , moved_interupt(false)
     , imageLoader(imageLoader_)
@@ -34,10 +33,6 @@ void Locator::Start_Locator_thread()
         locator_running = true;
         source_type = imageLoader->Get_source_type();
         locator_thread = std::thread(&Locator::Locator_thread, this);
-        //lock calling thread until locator is running
-        while (locator_thread_starting) {
-            ;
-        }
     }
 }
 
@@ -99,13 +94,13 @@ void Locator::Locator_thread()
             // Get the new cut frame
             new_cut_frame = RegExtractor.getRegionImage();
 
+            // Save good coordinates
+            corner_points_old = corner_points;
+
             // Set first frame accuaried bool
             if (!first_frame) {
                 first_frame = true;
             }
-
-            // Save good coordinates
-            corner_points_old = corner_points;
 
         } else {
             //No new points found but we have older coordinates
@@ -128,10 +123,6 @@ void Locator::Locator_thread()
             }
         }
 
-        //only unlock the main thread after at least a full frame has been received.
-        if (locator_thread_starting) {
-            locator_thread_starting = false;
-        }
         //wait a bit, no need to run this at full powaa
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }

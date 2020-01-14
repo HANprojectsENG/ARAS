@@ -45,7 +45,6 @@ private:
     void Locator_thread();
 
     std::atomic<bool> locator_running;
-    std::atomic<bool> locator_thread_starting;
     std::atomic<bool> first_frame;
     std::atomic<bool> moved_interupt;
     std::thread locator_thread;
