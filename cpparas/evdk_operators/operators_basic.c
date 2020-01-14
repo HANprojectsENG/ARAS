@@ -141,7 +141,8 @@ void convertToBasicImage(const image_t* src, image_t* dst)
             unsigned char g = s->g;
             unsigned char b = s->b;
 
-            *d++ = (basic_pixel_t)(0.212671f * r + 0.715160f * g + 0.072169f * b);
+            //*d++ = (basic_pixel_t)(0.172671f * r + 0.655160f * g + 0.072169f * b);
+            *d++ = (basic_pixel_t)(0.33 * r + 0.33 * g + 0.33 * b);
             s++;
         }
 
@@ -695,15 +696,20 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
                 result = result < 0 ? 0 : result; //ignore negative results
                 result = max > 2 ? result / 16581375 : result; //check if binary image, scale range down to 0-255
 
-                if (corner[0] < result) {
-                    corner[0] = result;
-                } //Find 4 max values in image
-                else if (corner[1] < result) {
-                    corner[1] = result;
-                } else if (corner[2] < result) {
-                    corner[2] = result;
-                } else if (corner[3] < result) {
-                    corner[3] = result;
+                if (corner[3] < result) {
+                    corner[3] = (uint8_t)result;
+                    if (corner[2] < result) {
+                        corner[3] = corner[2];
+                        corner[2] = (uint8_t)result;
+                        if (corner[1] < result) {
+                            corner[2] = corner[1];
+                            corner[1] = (uint8_t)result;
+                            if (corner[0] < result) {
+                                corner[1] = corner[0];
+                                corner[0] = (uint8_t)result;
+                            }
+                        }
+                    }
                 }
                 setBasicPixel(dst, c, r, result); //fill dst with R values;
             }
@@ -720,15 +726,20 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
                 result = x2y2 > xy2 ? xy2 : x2y2; //Find min value
                 result = max > 2 ? result / 16581375 : result;
 
-                if (corner[0] < result) {
-                    corner[0] = result;
-                } //Find 4 max values in image
-                else if (corner[1] < result) {
-                    corner[1] = result;
-                } else if (corner[2] < result) {
-                    corner[2] = result;
-                } else if (corner[3] < result) {
-                    corner[3] = result;
+                if (corner[3] < result) {
+                    corner[3] = (uint8_t)result;
+                    if (corner[2] < result) {
+                        corner[3] = corner[2];
+                        corner[2] = (uint8_t)result;
+                        if (corner[1] < result) {
+                            corner[2] = corner[1];
+                            corner[1] = (uint8_t)result;
+                            if (corner[0] < result) {
+                                corner[1] = corner[0];
+                                corner[0] = (uint8_t)result;
+                            }
+                        }
+                    }
                 }
                 setBasicPixel(dst, c, r, result);
             }
