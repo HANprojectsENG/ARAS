@@ -39,7 +39,7 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
                 pos_x.push_back(c * 8);
                 pos_y.push_back(r * 8);
                 corners++;
-                Debug::println(std::string("Corner at (") + std::to_string(c) + std::string(", ") + std::to_string(r) + std::string(")"));
+                //Debug::println(std::string("Corner at (") + std::to_string(c) + std::string(", ") + std::to_string(r) + std::string(")"));
             }
         }
     }
