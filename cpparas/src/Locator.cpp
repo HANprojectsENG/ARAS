@@ -11,6 +11,7 @@ Locator::Locator(std::shared_ptr<ImageLoader> imageLoader_)
     : locator_running(false)
     , first_frame(false)
     , moved_interupt(false)
+    , active_corner_detection(true)
     , imageLoader(imageLoader_)
     , PiCamera(1440, 1440)
     , RegExtractor(800, 800)
@@ -79,7 +80,9 @@ void Locator::Locator_thread()
         Central_camera_point.row = new_full_frame_copy->rows / 2;
 
         //find corners
-        corner_points = RegExtractor.updateImage(new_full_frame_copy);
+        if(active_corner_detection){
+            corner_points = RegExtractor.updateImage(new_full_frame_copy);
+        }
         if (corner_points.size() == 3) {
 
             //caclulate center point based on 3 points
@@ -165,6 +168,11 @@ bool Locator::First_frame_received()
 bool Locator::Location_checker()
 {
     return moved_interupt;
+}
+
+void Locator::Active_corner_detection(bool state)
+{
+    active_corner_detection = state;
 }
 
 } // namespace cpparas

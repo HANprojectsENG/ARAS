@@ -40,6 +40,10 @@ public:
      * @brief Returns whether the baseplate is shifted and needs to be adjusted by the user.
      */
     bool Location_checker();
+        /**
+     * @brief Can disable or enable active corner detection for when instant frames are needed
+     */
+    void Active_corner_detection(bool state);
 
 private:
     void Locator_thread();
@@ -47,6 +51,7 @@ private:
     std::atomic<bool> locator_running;
     std::atomic<bool> first_frame;
     std::atomic<bool> moved_interupt;
+    std::atomic<bool> active_corner_detection;
     std::thread locator_thread;
     image_t* new_cut_frame;
     image_t* new_full_frame;
@@ -55,7 +60,7 @@ private:
     std::shared_ptr<ImageLoader> imageLoader;
     Camera PiCamera;
     RegionExtractor RegExtractor;
-    int32_t MAX_DIVIATION = 20;
+    int32_t MAX_DIVIATION = 50;
     std::vector<Point<int32_t>> corner_points;
     std::vector<Point<int32_t>> corner_points_old;
     Point<int32_t> Central_camera_point;
