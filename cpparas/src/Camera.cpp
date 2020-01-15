@@ -37,6 +37,7 @@ void Camera::Camera_thread_worker()
     captured_frame->view = IMGVIEW_CLIP;
     captured_frame->type = IMGTYPE_RGB888;
     uint32_t bufferSize = width * height * 3;
+    uint32_t init_counter = 0;
     //start raspivid and pipe
     std::string cmd = "raspivid" + raspi_parameters;
     FILE* fpipe = popen(cmd.c_str(), "r");
@@ -50,10 +51,14 @@ void Camera::Camera_thread_worker()
             if (readBytes != bufferSize) {
                 threadRunning = false;
             }
-            // signal main thread that a new frame is ready, unlock mutex
-            std::unique_lock<std::mutex> locker(mtx);
-            is_ready = true;
-            cond_var.notify_one();
+            if(init_counter > 3){
+                // signal main thread that a new frame is ready, unlock mutex
+                std::unique_lock<std::mutex> locker(mtx);
+                is_ready = true;
+                cond_var.notify_one();
+            } else {
+                init_counter++;
+            }
         }
         // close pipe, also kill raspivid in the process by starving mmal, sorry raspivid :(
         pclose(fpipe);
