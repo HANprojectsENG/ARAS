@@ -1,5 +1,6 @@
 #include "MarkerDetector.hpp"
 #include "debug/Debug.hpp"
+#include <algorithm>  
 
 namespace cpparas {
 
@@ -13,7 +14,7 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     image_t* dst_harris = newBasicImage(dst_scaled->cols, dst_scaled->rows);
     image_t* dst_eroded = newBasicImage(img->cols, img->rows);
 
-    threshold(src_basic, dst_thresh, 187, 255, 1);
+    threshold(src_basic, dst_thresh, 226, 255, 1);
     invert(dst_thresh, dst_thresh);
     binaryErode(dst_thresh, dst_eroded, 8);
     binaryErode(dst_eroded, dst_thresh, 8);
@@ -26,8 +27,8 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     uint16_t c;
     uint16_t r;
     basic_pixel_t pixel;
-    std::vector<uint16_t> pos_x;
-    std::vector<uint16_t> pos_y;
+    std::vector<uint32_t> pos_x;
+    std::vector<uint32_t> pos_y;
     uint8_t corners = 0;
 
     std::vector<Point<int32_t>> points;
@@ -43,56 +44,24 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
             }
         }
     }
+    Point<int32_t> point0;
     Point<int32_t> point1;
     Point<int32_t> point2;
-    Point<int32_t> point3;
+    //sort points by size if we have 3 points
     if (corners == 3) {
-        if (pos_x[0] < pos_x[1] && pos_x[0] < pos_x[2]) {
-            point1.col = pos_x[0];
-            point1.row = pos_y[0];
-            if (pos_y[1] > pos_y[2]) {
-                point3.col = pos_x[1];
-                point3.row = pos_y[1];
-                point2.col = pos_x[2];
-                point2.row = pos_y[2];
-            } else {
-                point2.col = pos_x[2];
-                point2.row = pos_y[2];
-                point3.col = pos_x[1];
-                point3.row = pos_y[1];
-            }
-        } else if (pos_x[1] < pos_x[2]) {
-            point1.col = pos_x[1];
-            point1.row = pos_y[1];
-            if (pos_y[0] > pos_y[2]) {
-                point2.col = pos_x[0];
-                point2.row = pos_y[0];
-                point3.col = pos_x[2];
-                point3.row = pos_y[2];
-            } else {
-                point3.col = pos_x[2];
-                point3.row = pos_y[2];
-                point2.col = pos_x[0];
-                point2.row = pos_y[0];
-            }
-        } else {
-            point1.col = pos_x[2];
-            point1.row = pos_y[2];
-            if (pos_y[0] > pos_y[1]) {
-                point2.col = pos_x[0];
-                point2.row = pos_y[0];
-                point3.col = pos_x[1];
-                point3.row = pos_y[1];
-            } else {
-                point2.col = pos_x[1];
-                point2.row = pos_y[1];
-                point3.col = pos_x[0];
-                point3.row = pos_y[0];
-            }
-        }
+        point0.col = pos_x[0];
+        point0.row = pos_y[0];
+        point1.col = pos_x[1];
+        point1.row = pos_y[1];
+        point2.col = pos_x[2];
+        point2.row = pos_y[2];
+
+        if ((point0.col + point0.row) > (point1.col + point1.row)){ std::swap(point0,point1);}
+        if ((point1.col + point1.row) > (point2.col + point2.row)){ std::swap(point1,point2);}
+        if ((point0.col + point0.row) > (point1.col + point1.row)){ std::swap(point0,point1);}
+        points.push_back(point0);
         points.push_back(point1);
         points.push_back(point2);
-        points.push_back(point3);
     }
     deleteImage(dst_eroded);
     deleteImage(dst_thresh);
