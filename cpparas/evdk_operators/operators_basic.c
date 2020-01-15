@@ -717,25 +717,16 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
                 //find 4 max values in image
                 if (corner[3] < result) {
                     corner[3] = (uint8_t)result;
-                    printf("Corner3:%d at c:%d r:%d \n",corner[3],c,r);
                     if (corner[2] < result) {
                         corner[3] = corner[2];
                         corner[2] = (uint8_t)result;
-                        printf("Corner3:%d\n",corner[2]);
-                        printf("Corner2:%d at c:%d r:%d \n",corner[2],c,r);
                         if (corner[1] < result) {
                             corner[2] = corner[1];
                             corner[1] = (uint8_t)result;
-                            printf("Corner3:%d\n",corner[3]);
-                            printf("Corner2:%d\n",corner[2]);
-                            printf("Corner1:%d at c:%d r:%d \n",corner[1],c,r);
                             if (corner[0] < result) {
                                 corner[1] = corner[0];
                                 corner[0] = (uint8_t)result;
-                                printf("Corner3:%d\n",corner[3]);
-                                printf("Corner2:%d\n",corner[2]);
-                                printf("Corner1:%d\n",corner[1]);
-                                printf("Corner0:%d at c:%d r:%d \n",corner[0],c,r);
+
                             }
                         }
                     }
@@ -758,19 +749,15 @@ void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, con
                 //find 4 max values in image
                 if (corner[3] < result) {
                     corner[3] = (uint8_t)result;
-                    printf("Result4:%d\n",result);
                     if (corner[2] < result) {
                         corner[3] = corner[2];
                         corner[2] = (uint8_t)result;
-                        printf("Result3:%d\n",result);
                         if (corner[1] < result) {
                             corner[2] = corner[1];
                             corner[1] = (uint8_t)result;
-                            printf("Result2:%d\n",result);
                             if (corner[0] < result) {
                                 corner[1] = corner[0];
                                 corner[0] = (uint8_t)result;
-                                printf("Result1:%d\n",result);
                             }
                         }
                     }
