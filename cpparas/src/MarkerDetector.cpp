@@ -6,6 +6,20 @@ namespace cpparas {
 
 std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
 {
+    std::vector<Point<int32_t>> points;
+    uint8_t increment = 5;
+    for (uint8_t thresh = 180; thresh < 220; thresh += increment ){
+        points = detectPoints(img,thresh);
+        if (points.size() == 3){
+            printf("thresh:%d\n",thresh);
+            return points;
+        }
+    }
+    return points;
+}
+
+std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, const uint8_t thresh_val){
+
     image_t* dst_thresh = newBasicImage(img->cols, img->rows);
     image_t* src_basic = newRGB888Image(img->cols, img->rows);
     copy(img, src_basic);
@@ -14,7 +28,7 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     image_t* dst_harris = newBasicImage(dst_scaled->cols, dst_scaled->rows);
     image_t* dst_eroded = newBasicImage(img->cols, img->rows);
 
-    threshold(src_basic, dst_thresh, 200, 255, 1);
+    threshold(src_basic, dst_thresh, thresh_val, 255, 1);
     clear_center(dst_thresh);
     invert(dst_thresh, dst_thresh);
     binaryErode(dst_thresh, dst_eroded, 8);
@@ -60,9 +74,33 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
         if ((point0.col + point0.row) > (point1.col + point1.row)){ std::swap(point0,point1);}
         if ((point1.col + point1.row) > (point2.col + point2.row)){ std::swap(point1,point2);}
         if ((point0.col + point0.row) > (point1.col + point1.row)){ std::swap(point0,point1);}
-        points.push_back(point0);
-        points.push_back(point1);
-        points.push_back(point2);
+
+        //Check distance between points are correct distance
+        int distance_x;
+        int distance_y;
+        double distance_01;
+        double distance_12;
+        double distance_02;
+
+        distance_x = (point1.col - point0.col) * (point1.col - point0.col);
+        distance_y = (point1.row - point0.row) * (point1.row - point0.row);
+        distance_01 = sqrt(distance_x + distance_y);
+
+        distance_x = (point2.col - point1.col) * (point2.col - point1.col);
+        distance_y = (point2.row - point1.row) * (point2.row - point1.row);
+        distance_12 = sqrt(distance_x + distance_y);
+
+        distance_x = (point2.col - point0.col) * (point2.col - point0.col);
+        distance_y = (point2.row - point0.row) * (point2.row - point0.row);
+        distance_02 = sqrt(distance_x + distance_y);
+
+        if(distance_01 > 500 && distance_01 < 1100 &&
+           distance_12 > 500 && distance_12 < 1100 &&
+           distance_02 > 700 && distance_02 < 1300){
+            points.push_back(point0);
+            points.push_back(point1);
+            points.push_back(point2);
+        }
     }
     deleteImage(dst_eroded);
     deleteImage(dst_thresh);
@@ -71,5 +109,6 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     deleteImage(dst_harris);
     return points;
 }
+
 
 } // namespace cpparas

@@ -16,6 +16,7 @@ namespace MarkerDetector {
      *         In other words: left-top, right-top, right-bottom.
      */
     std::vector<Point<int32_t>> detectMarkers(const image_t* img);
+    std::vector<Point<int32_t>> detectPoints(const image_t* img, const uint8_t thresh_val);
 }
 
 } // namespace cpparas
