@@ -17,7 +17,7 @@ namespace Debug {
      *        Prints the line to the standard output.
      */
     void println(const std::string& line);
-    void showImage(const std::string& name, const image_t* image);
+    void showImage(const image_t* image);
 
     const std::shared_ptr<std::deque<std::string>>& getLines();
     const image_t* getImage();
