@@ -123,6 +123,8 @@ float normalizedCentralMoments_basic(const image_t* img, const uint8_t blobnr, c
 
 void scaleImage_basic(const image_t* src, image_t* dst);
 
+void clear_center_basic(image_t *src);
+
 void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k, const uint8_t method);
 
 uint8_t max_basic(const image_t* src);

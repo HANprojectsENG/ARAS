@@ -626,6 +626,23 @@ void scaleImage_basic(const image_t* src, image_t* dst)
     return;
 }
 
+void clear_center_basic(image_t *src)
+{
+    uint16_t c;
+    uint16_t r;
+    //set center values to 0 to avoid reflections
+
+    //Cycle through all pixels in image
+    for (r = (uint16_t)src->rows / 3; r < src->rows/ 3 * 2; r++) {
+        for (c = (uint16_t)src->cols / 3; c < src->cols / 3 * 2; c++) {
+            //Set every pixel to the multiple of src and dst pixel
+            setBasicPixel(src,c,r,1);
+        }
+    }
+    return;
+
+}
+
 void Corner_basic(const image_t* src, image_t* dst, const uint8_t blockSize, const uint8_t ksize, const float k, const uint8_t method)
 {
     //method 0 = Harris

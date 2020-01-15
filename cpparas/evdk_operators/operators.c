@@ -857,6 +857,18 @@ uint32_t pixelCount(const image_t* img, const pixel_t value)
     }
 }
 
+void clear_center(image_t* src)
+{
+    switch (src->type) {
+    case IMGTYPE_BASIC:
+        clear_center_basic(src);
+        break;
+    default:
+        fprintf(stderr, "clear_center(): image type %d not supported\n", src->type);
+        break;
+    }
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -542,6 +542,12 @@ void drawText(image_t* img, const char* text, const font_t* font, const int32_t 
 // Postcondition: -
 uint32_t pixelCount(const image_t* img, const pixel_t value);
 
+// Clears center pixels in an image.
+//
+// Precondition : src is basic
+// Postcondition: src center pixels are cleared
+void clear_center(image_t* src);
+
 #endif // _OPERATORS_H_
 
 #ifdef __cplusplus

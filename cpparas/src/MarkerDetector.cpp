@@ -14,7 +14,8 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     image_t* dst_harris = newBasicImage(dst_scaled->cols, dst_scaled->rows);
     image_t* dst_eroded = newBasicImage(img->cols, img->rows);
 
-    threshold(src_basic, dst_thresh, 226, 255, 1);
+    threshold(src_basic, dst_thresh, 200, 255, 1);
+    clear_center(dst_thresh);
     invert(dst_thresh, dst_thresh);
     binaryErode(dst_thresh, dst_eroded, 8);
     binaryErode(dst_eroded, dst_thresh, 8);
