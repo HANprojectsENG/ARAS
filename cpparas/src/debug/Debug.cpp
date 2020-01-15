@@ -7,7 +7,8 @@
 
 namespace cpparas {
 
-std::shared_ptr<std::deque<std::string>> Debug::lines;
+std::shared_ptr<std::deque<std::string>> lines;
+image_t* image = nullptr;
 
 void Debug::println(const std::string& message)
 {
@@ -30,6 +31,25 @@ void Debug::println(const std::string& message)
         lines->pop_front();
     }
     lines->push_back(line);
+}
+
+void Debug::showImage(const std::string& name, const image_t* newImage)
+{
+    if (image) {
+        deleteImage(image);
+    }
+    image = newRGB888Image(newImage->cols, newImage->rows);
+    convertToRGB888Image(newImage, image);
+}
+
+const std::shared_ptr<std::deque<std::string>>& Debug::getLines()
+{
+    return lines;
+}
+
+const image_t* Debug::getImage()
+{
+    return image;
 }
 
 } // namespace cpparas

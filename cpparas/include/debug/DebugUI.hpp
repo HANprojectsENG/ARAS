@@ -2,6 +2,7 @@
 #define DEBUGUI_HPP
 
 #include "StateMachine.hpp"
+#include "util/ImageArea.hpp"
 #include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
@@ -23,8 +24,10 @@ private:
     Gtk::ScrolledWindow logViewport;
     Gtk::TextView logTextView;
     Gtk::Label stateNameLabel;
-    Gtk::Label brickPositionLabel;
-    Gtk::Label expectedValueLabel;
+    Gtk::ScrolledWindow imageViewport;
+    Gtk::Grid imageContainer;
+    ImageArea imageArea;
+    const image_t* currentImage;
 };
 
 } // namespace cpparas
