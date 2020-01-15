@@ -33,7 +33,7 @@ void Debug::println(const std::string& message)
     lines->push_back(line);
 }
 
-void Debug::showImage(const std::string& name, const image_t* newImage)
+void Debug::showImage(const image_t* newImage)
 {
     if (image) {
         deleteImage(image);
