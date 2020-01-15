@@ -70,12 +70,16 @@ void Locator::Locator_thread()
             break;
         }
 
+        // Copy image to buffer
+        new_full_frame_copy = newRGB888Image(new_full_frame->cols, new_full_frame->rows);
+        copy(new_full_frame,new_full_frame_copy);
+
         //Get cameras center point
-        Central_camera_point.col = new_full_frame->cols / 2;
-        Central_camera_point.row = new_full_frame->rows / 2;
+        Central_camera_point.col = new_full_frame_copy->cols / 2;
+        Central_camera_point.row = new_full_frame_copy->rows / 2;
 
         //find corners
-        corner_points = RegExtractor.updateImage(new_full_frame);
+        corner_points = RegExtractor.updateImage(new_full_frame_copy);
         if (corner_points.size() == 3) {
 
             //caclulate center point based on 3 points
@@ -122,6 +126,7 @@ void Locator::Locator_thread()
                 std::cout<<"No coordinates found, like at all, not even once since we started:/"<<std::endl;
             }
         }
+        deleteImage(new_full_frame_copy);
 
         //wait a bit, no need to run this at full powaa
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
