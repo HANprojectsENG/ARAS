@@ -137,17 +137,17 @@ void sobelX_basic(const image_t* src, image_t* dst);
 
 void sobelY_basic(const image_t* src, image_t* dst);
 
-void power_uint16(const image_t* src, image_t* dst, const uint8_t p);
+void power(const image_t* src, image_t* dst, const uint8_t p);
 
 void multiply_basic_2(const image_t* src, const image_t* src2, image_t* dst);
 
 void subtract_basic(const image_t* src, image_t* dst);
 
-void gaussian_uint16_x(image_t* src, const uint8_t ksize);
+void gaussian_x(image_t* src, const uint8_t ksize);
 
-void gaussian_uint16_y(image_t* src, const uint8_t ksize);
+void gaussian_y(image_t* src, const uint8_t ksize);
 
-void gaussian_uint16_xy(image_t* src, const uint8_t ksize);
+void gaussian_xy(image_t* src, const uint8_t ksize);
 
 void mtrace_basic(const image_t* src, const image_t* src2, image_t* dst, const float K);
 
