@@ -1,7 +1,9 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
+#include "operators.h"
 #include <deque>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -15,7 +17,10 @@ namespace Debug {
      *        Prints the line to the standard output.
      */
     void println(const std::string& line);
-    extern std::shared_ptr<std::deque<std::string>> lines;
+    void showImage(const std::string& name, const image_t* image);
+
+    const std::shared_ptr<std::deque<std::string>>& getLines();
+    const image_t* getImage();
 }
 
 } // namespace cpparas

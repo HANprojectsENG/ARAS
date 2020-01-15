@@ -1,0 +1,42 @@
+@startuml
+
+[*] -> Init
+Init : entry/ Start camera and load state file
+Init : do/ Check if camera is warmed up
+
+Init --> Starting : Camera is warmed up and there is no state file
+Starting : entry/ Set current step and layer to 0
+
+Init --> CheckCurrentStep : Camera is warmed up and there is a state file
+Starting --> CheckCurrentStep : -
+CheckNextStep --> CheckCurrentStep : The current step is not the last step
+MoveBaseplate -r-> CheckCurrentStep : Baseplate is in the correct place
+CheckCurrentStep : do/ Fetch new frame and check if baseplate is shifted
+CheckCurrentStep : do/ Check if brick is placed correctly
+
+CheckCurrentStep -l-> MoveBaseplate : Baseplate is shifted
+MoveBaseplate : entry/ Project warning
+MoveBaseplate : do/ Check if baseplate is shifted
+MoveBaseplate : exit/ Clear projection
+
+CheckCurrentStep --> ProjectStep : Current step is not executed correctly
+ProjectStep : entry/ Project brick outline
+
+ProjectStep --> WaitHandEnter : Projection is done
+WaitHandEnter : do/ Fetch new frame and check for hand
+
+WaitHandEnter --> WaitHandExit : Hand has entered the cropped image
+WaitHandExit : do/ Fetch new frame and check for hand
+
+WaitHandExit --> ProjectOff : Hand has exited the cropped image
+ProjectOff : entry/ Clear projection
+
+ProjectOff --> CheckNextStep : Projection is cleared
+CheckNextStep : do/ Check whether the current step is the last step
+CheckNextStep : exit/ Increment step if possible. Otherwise, increment layer and set step to 0
+
+CheckNextStep --> Final : The current step is the last step
+Final : do/ Display building done message
+Final --> [*]
+
+@enduml
