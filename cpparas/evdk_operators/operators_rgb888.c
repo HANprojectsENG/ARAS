@@ -44,6 +44,20 @@
 // ----------------------------------------------------------------------------
 // Function implementations
 // ----------------------------------------------------------------------------
+static inline rgb888_pixel_t getRGB888PixelI(const image_t* img,
+    int32_t col,
+    int32_t row)
+{
+    return ((rgb888_pixel_t*)(img->data))[row * img->cols + col];
+}
+
+static inline void setRGB888PixelI(image_t* img,
+    int32_t col,
+    int32_t row,
+    rgb888_pixel_t value)
+{
+    ((rgb888_pixel_t*)(img->data))[row * img->cols + col] = value;
+}
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -283,7 +297,7 @@ void warpAffine_rgb888(const image_t* img, image_t* dst, float warpMatrix[2][3])
                         || wCol < 0 || wCol >= dst->cols) {
                         continue;
                     } else {
-                        setRGB888Pixel(dst, wCol, wRow, getRGB888Pixel((image_t*)img, col, row));
+                        setRGB888PixelI(dst, wCol, wRow, getRGB888PixelI((image_t*)img, col, row));
                     }
                 }
             }
@@ -302,7 +316,7 @@ void scaleImage_rgb888(const image_t* src, image_t* dst)
         for (int col = 0; col < dst->cols; col++) {
             int srcCol = (int)((float)col * scaleFactorX);
             int srcRow = (int)((float)row * scaleFactorY);
-            setRGB888Pixel(dst, col, row, getRGB888Pixel(src, srcCol, srcRow));
+            setRGB888PixelI(dst, col, row, getRGB888PixelI(src, srcCol, srcRow));
         }
     }
 }
@@ -323,7 +337,7 @@ void crop_rgb888(const image_t* img, image_t* dst, int32_t top_left[2])
 
     for (int32_t row = destStartRow; row < destEndRow; row++) {
         for (int32_t col = destStartCol; col < destEndCol; col++) {
-            setRGB888Pixel(dst, col, row, getRGB888Pixel((image_t*)img, top_left[0] + col, top_left[1] + row));
+            setRGB888PixelI(dst, col, row, getRGB888PixelI((image_t*)img, top_left[0] + col, top_left[1] + row));
         }
     }
 }
@@ -340,7 +354,7 @@ void drawRect_rgb888(image_t* img, const int32_t top_left[2], const int32_t size
             if (drawType == SHAPE_FILL
                 || (drawType == SHAPE_BORDER && isBorder)
                 || (drawType == SHAPE_INNER && !isBorder)) {
-                setRGB888Pixel(img, col, row, value);
+                setRGB888PixelI(img, col, row, value);
             }
         }
     }
@@ -357,7 +371,7 @@ void drawBinaryImage_rgb888(image_t* img, const image_t* bin_img, const int32_t 
                         int32_t row = top_left[1] + brow * scale + subRow;
                         if (row < 0 || row >= img->rows || col < 0 || col >= img->cols)
                             continue;
-                        setRGB888Pixel(img, col, row, value);
+                        setRGB888PixelI(img, col, row, value);
                     }
                 }
             }
