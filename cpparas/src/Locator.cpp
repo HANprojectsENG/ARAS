@@ -95,7 +95,7 @@ void Locator::Locator_thread()
                 moved_interupt = true;
             }
             //Founds corners within bounds
-            moved_interupt = true;
+            moved_interupt = false;
 
             // Get the new cut frame
             new_cut_frame = RegExtractor.getRegionImage();
