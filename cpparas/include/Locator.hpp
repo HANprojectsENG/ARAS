@@ -55,7 +55,6 @@ private:
     std::thread locator_thread;
     image_t* new_cut_frame;
     image_t* new_full_frame;
-    image_t* new_full_frame_copy;
     SourceType source_type;
     std::shared_ptr<ImageLoader> imageLoader;
     Camera PiCamera;
