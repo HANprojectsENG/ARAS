@@ -7,10 +7,11 @@
 namespace cpparas {
 
 Projection::Projection(Calibration calibration_)
-    : isAvailable(false)
+    : isAvailable(true)
     , calibration(calibration_)
 {
     image = newRGB888Image(calibration.projectorResolutionCols, calibration.projectorResolutionRows);
+    erase(image);
 }
 
 Projection::~Projection()
