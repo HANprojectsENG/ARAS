@@ -58,7 +58,9 @@ if (BUILD_TESTS)
 	  ${SOURCES}
           "${PROJECT_SOURCE_DIR}/tests/*.cpp")
   list(REMOVE_ITEM TEST_SOURCES "${PROJECT_SOURCE_DIR}/src/main.cpp")
+
   add_executable(${PROJECT_NAME}_tests ${TEST_SOURCES})
+  target_compile_definitions(${PROJECT_NAME}_tests PRIVATE CPPARAS_TEST_DATA_DIR="${PROJECT_SOURCE_DIR}/tests/data")
 
   target_link_libraries(${PROJECT_NAME}_tests ${GTEST_LIBRARIES} ${GTKMM_LIBRARIES})
 endif()
