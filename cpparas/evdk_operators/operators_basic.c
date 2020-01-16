@@ -1143,21 +1143,34 @@ void binaryErode_basic(const image_t* src, image_t* dst, uint8_t kernelSize)
     int32_t kernelOffset = kernelSize / 2;
     batch_t batchMask = 0;
     for (batch_t i = 0; i < kernelSize; i++) {
-        batchMask |= 1ULL << (i * 8ULL);
+        batchMask |= (batch_t)1 << (i * (batch_t)8);
     }
 
-    for (int32_t row = 0; row < src->rows; row++) {
+    // Copy top and bottom border pixels
+    for (int32_t row = 0; row < kernelSize; row++) {
         for (int32_t col = 0; col < src->cols; col++) {
-            if (row < batchSize || row >= src->rows - batchSize
-                || col < batchSize || col >= src->cols - batchSize) {
-                // Don't attempt erosion on edge pixels.
-                setBasicPixelI(dst, col, row, getBasicPixelI(src, col, row));
-                continue;
-            }
+            // Don't attempt erosion on edge pixels.
+            setBasicPixelI(dst, col, row, getBasicPixelI(src, col, row));
+            setBasicPixelI(dst, col, src->rows - row - 1, getBasicPixelI(src, col, src->rows - row - 1));
+        }
+    }
+    // Copy left and right border pixels
+    for (int32_t row = kernelSize; row < src->rows - kernelSize; row++) {
+        for (int32_t col = 0; col < batchSize; col++) {
+            // Don't attempt erosion on edge pixels.
+            setBasicPixelI(dst, col, row, getBasicPixelI(src, col, row));
+            setBasicPixelI(dst, src->cols - col - 1, row, getBasicPixelI(src, src->cols - col - 1, row));
+        }
+    }
 
+    basic_pixel_t* srcData = (basic_pixel_t*)src->data;
+    int32_t srcCols = src->cols;
+    int32_t srcRows = src->rows;
+    for (int32_t row = kernelSize; row < srcRows - kernelSize; row++) {
+        for (int32_t col = batchSize; col < srcCols - batchSize; col++) {
             basic_pixel_t result = 1;
             for (int32_t innerRow = row - kernelOffset; innerRow < row - kernelOffset + kernelSize; innerRow++) {
-                batch_t batch = *(batch_t*)(((basic_pixel_t*)src->data) + (innerRow * src->cols + col - kernelOffset));
+                batch_t batch = *(batch_t*)(srcData + (innerRow * srcCols + col - kernelOffset));
                 if ((batch & batchMask) != batchMask) {
                     result = 0;
                     break;
