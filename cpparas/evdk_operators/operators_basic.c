@@ -231,20 +231,21 @@ void rotate180_basic(const image_t* img)
 // ----------------------------------------------------------------------------
 void threshold_basic(const image_t* src, image_t* dst, const basic_pixel_t low, const basic_pixel_t high, const uint8_t output)
 {
-    uint16_t i;
-    uint16_t x;
-    basic_pixel_t pixel;
-    for (x = 0; x < src->rows; x++) {
-        for (i = 0; i < src->cols; i++) {
-            pixel = getBasicPixel(src, i, x);
-            if ((pixel >= low) && (pixel <= high)) {
-                setBasicPixel(dst, i, x, (basic_pixel_t)0);
-            } else {
-                setBasicPixel(dst, i, x, output);
-            }
+    register long int i = src->rows * src->cols;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
+
+    while(i-- > 0)
+    {
+        if((*s >= low) && (*s <= high))
+        {
+            *d++ = 0;
         }
+        else {
+            *d++ = output;
+        }
+        s++;
     }
-    return;
 }
 
 // ----------------------------------------------------------------------------
@@ -381,20 +382,20 @@ void histogram_basic(const image_t* img, uint16_t* hist)
 // ----------------------------------------------------------------------------
 void add_basic(const image_t* src, image_t* dst)
 {
-    uint16_t c;
-    uint16_t r;
-    uint16_t sum;
+    int32_t i = src->rows * src->cols;
+    uint32_t sum;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
 
-    //Cycle through all pixels in image
-    for (r = 0; r < src->rows; r++) {
-        for (c = 0; c < src->cols; c++) {
-            //Set every pixel to the multiple of src and dst pixel
-            sum = getBasicPixel(src, c, r) + getBasicPixel(dst, c, r);
-            sum = sum > 255 ? 255 : sum;
-            setBasicPixel(dst, c, r, sum);
+    while(i-- > 0)
+    {
+        sum = *d + *s++;
+        if(sum > 255)
+        {
+            sum = 255;
         }
+        *d++ = (uint8_t)sum;
     }
-    return;
 }
 
 // ----------------------------------------------------------------------------
@@ -416,42 +417,41 @@ uint32_t sum_basic(const image_t* img)
 // ----------------------------------------------------------------------------
 void multiply_basic(const image_t* src, image_t* dst)
 {
-    uint16_t c;
-    uint16_t r;
-    uint16_t sum;
+    int32_t i = src->rows * src->cols;
+    uint32_t sum;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
 
-    //Cycle through all pixels in image
-    for (r = 0; r < src->rows; r++) {
-        for (c = 0; c < src->cols; c++) {
-            //Set every pixel to the multiple of src and dst pixel
-            sum = (getBasicPixel(src, c, r) * getBasicPixel(dst, c, r));
-            sum = sum > 255 ? 255 : sum;
-            setBasicPixel(dst, c, r, sum);
+    while(i-- > 0)
+    {
+        sum = *d * *s++;
+        if(sum > 255)
+        {
+            sum = 255;
         }
+        *d++ = (uint8_t)sum;
     }
-    return;
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void invert_basic(const image_t* src, image_t* dst)
+void invert_basic(const image_t* src, image_t* dst, uint8_t is_binary)
 {
-    uint16_t c;
-    uint16_t r;
-    if (max_basic(src) > 1) {
-        for (r = 0; r < src->rows; r++) {
-            for (c = 0; c < src->cols; c++) {
-                setBasicPixel(dst, c, r, 255 - getBasicPixel(src, c, r));
-            }
-        }
+    int32_t i = src->rows * src->cols;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
+    uint8_t maxValue = 0;
+    
+    if(is_binary == 1) {
+        maxValue = 1;
     } else {
-        for (r = 0; r < src->rows; r++) {
-            for (c = 0; c < src->cols; c++) {
-                setBasicPixel(dst, c, r, 1 - getBasicPixel(src, c, r));
-            }
-        }
+        maxValue = max_basic(src);
     }
-    return;
+
+    while(i-- > 0)
+    {
+        *d++ = maxValue - *s++;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -907,7 +907,7 @@ void sobelY_basic(const image_t* src, image_t* dst)
 
 void power(const image_t* src, image_t* dst, const uint8_t blockSize)
 {
-    int32_t c;
+   /* int32_t c;
     int32_t r;
     double pix;
 
@@ -919,12 +919,24 @@ void power(const image_t* src, image_t* dst, const uint8_t blockSize)
             setBasicPixel(dst, c, r, (uint8_t)pix);
         }
     }
-    return;
+    return;*/
+
+
+    int32_t i = src->rows * src->cols;
+    float sum;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
+
+    while(i-- > 0)
+    {
+        sum = pow((float)*s++, (float)blockSize);
+        *d++ = (uint8_t)sum;
+    }
 }
 
 void multiply_basic_2(const image_t* src, const image_t* src2, image_t* dst)
 {
-    int32_t c;
+    /*int32_t c;
     int32_t r;
 
     //Cycle through all pixels in image
@@ -934,12 +946,22 @@ void multiply_basic_2(const image_t* src, const image_t* src2, image_t* dst)
             setBasicPixel(dst, c, r, (getBasicPixel(src, c, r) * getBasicPixel(src2, c, r)));
         }
     }
-    return;
+    return;*/
+
+    int32_t i = src->rows * src->cols;
+    register basic_pixel_t *s1 = (basic_pixel_t *)src->data;
+    register basic_pixel_t *s2 = (basic_pixel_t *)src2->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
+
+    while(i-- > 0)
+    {
+        *d++ = *s1++ * *s2++;
+    }
 }
 
 void subtract_basic(const image_t* src, image_t* dst)
 {
-    uint16_t c;
+    /*uint16_t c;
     uint16_t r;
     int16_t sum;
 
@@ -952,7 +974,19 @@ void subtract_basic(const image_t* src, image_t* dst)
             setBasicPixel(dst, c, r, sum);
         }
     }
-    return;
+    return;*/
+
+    int32_t i = src->rows * src->cols;
+    int32_t sum;
+    register basic_pixel_t *s = (basic_pixel_t *)src->data;
+    register basic_pixel_t *d = (basic_pixel_t *)dst->data;
+
+    while(i-- > 0)
+    {
+        sum = *s++ - *d;
+        sum = sum < 0 ? 0 : sum;
+        *d++ = sum;
+    }
 }
 
 void gaussian_x(image_t* src, const uint8_t ksize)

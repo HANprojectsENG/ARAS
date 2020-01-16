@@ -517,7 +517,7 @@ void multiply(const image_t* src, image_t* dst)
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-void invert(const image_t* src, image_t* dst)
+void invert(const image_t* src, image_t* dst, uint8_t is_binary)
 {
     if (src->type != dst->type) {
         fprintf(stderr, "invert(): src and dst are of different type\n");
@@ -533,7 +533,7 @@ void invert(const image_t* src, image_t* dst)
     };
 
     // Call the function
-    fp[src->type](src, dst);
+    fp[src->type](src, dst, is_binary);
 }
 
 // ----------------------------------------------------------------------------

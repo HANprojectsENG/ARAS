@@ -30,10 +30,10 @@ std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, con
 
     threshold(src_basic, dst_thresh, thresh_val, 255, 1);
     clear_center(dst_thresh);
-    invert(dst_thresh, dst_thresh);
+    invert(dst_thresh, dst_thresh, 1);
     binaryErode(dst_thresh, dst_eroded, 8);
     binaryErode(dst_eroded, dst_thresh, 8);
-    invert(dst_thresh, dst_thresh);
+    invert(dst_thresh, dst_thresh, 1);
     binaryErode(dst_thresh, dst_eroded, 8);
     scaleImage(dst_eroded, dst_scaled);
 

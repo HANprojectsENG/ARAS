@@ -396,7 +396,7 @@ void multiply(const image_t* src, image_t* dst);
 //
 // Precondition : img is a binary image
 // Postcondition: dst is a binary image
-void invert(const image_t* src, image_t* dst);
+void invert(const image_t* src, image_t* dst, uint8_t is_binary);
 
 // ----------------------------------------------------------------------------
 // Filters
