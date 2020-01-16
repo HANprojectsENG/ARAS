@@ -71,23 +71,20 @@ void Locator::Locator_thread()
             break;
         }
 
-        // Copy image to buffer
-        new_full_frame_copy = newRGB888Image(new_full_frame->cols, new_full_frame->rows);
-        copy(new_full_frame,new_full_frame_copy);
-
         //Get cameras center point
-        Central_camera_point.col = new_full_frame_copy->cols / 2;
-        Central_camera_point.row = new_full_frame_copy->rows / 2;
+        Central_camera_point.col = new_full_frame->cols / 2;
+        Central_camera_point.row = new_full_frame->rows / 2;
 
         //find corners
         if(active_corner_detection){
-            corner_points = RegExtractor.updateImage(new_full_frame_copy);
+            corner_points = RegExtractor.updateImage(new_full_frame);
         }
         if (corner_points.size() == 3) {
 
             //caclulate center point based on 3 points
             Central_board_point.col = (corner_points[0].col + corner_points[2].col) / 2;
-            Central_board_point.row = (corner_points[0].row + corner_points[2].row) / 2;
+            // the magic number 50 is an offset because the camera is not perfectly centered to the projector
+            Central_board_point.row = ((corner_points[0].row + corner_points[2].row) / 2) + 50;
 
             //compare those points with the camera central point
             if ((Central_board_point.col - Central_camera_point.col) > MAX_DIVIATION || (Central_board_point.col - Central_camera_point.col) < -MAX_DIVIATION) {
@@ -97,6 +94,8 @@ void Locator::Locator_thread()
             if ((Central_board_point.row - Central_camera_point.row) > MAX_DIVIATION || (Central_board_point.row - Central_camera_point.row) < -MAX_DIVIATION) {
                 moved_interupt = true;
             }
+            //Founds corners within bounds
+            moved_interupt = false;
 
             // Get the new cut frame
             new_cut_frame = RegExtractor.getRegionImage();
@@ -129,10 +128,9 @@ void Locator::Locator_thread()
                 std::cout<<"No coordinates found, like at all, not even once since we started:/"<<std::endl;
             }
         }
-        deleteImage(new_full_frame_copy);
 
         //wait a bit, no need to run this at full powaa
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     PiCamera.Camera_thread_worker_stop();
 }

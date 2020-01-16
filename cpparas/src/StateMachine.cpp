@@ -221,6 +221,7 @@ void StateMachine::PROJECT_STEP_exit() {}
 void StateMachine::WAIT_HAND_ENTER_entry() {}
 void StateMachine::WAIT_HAND_ENTER_do()
 {
+    locator->Active_corner_detection(false);
     image_t* axne = locator->Get_new_frame();
     handDetection.update(axne);
     locator->Send_frame_to_ui(axne);
@@ -237,6 +238,7 @@ void StateMachine::WAIT_HAND_EXIT_do()
     handDetection.update(axne);
     locator->Send_frame_to_ui(axne);
     if (!handDetection.containsHand()) {
+        locator->Active_corner_detection(true);
         switchState(State::PROJECT_OFF);
     }
 }
