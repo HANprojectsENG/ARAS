@@ -8,7 +8,7 @@
 namespace cpparas {
 
 namespace ColorClassifier {
-    bool setColors(const image_t* image, const CoordinateMatrix& coordinateMatrix);
+    std::vector<hsv_pixel_t> setColors(const image_t* image, const CoordinateMatrix& coordinateMatrix,Color expectedColor);
 }
 
 } // namespace cpparas
