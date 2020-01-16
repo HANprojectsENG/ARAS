@@ -7,10 +7,11 @@
 namespace cpparas {
 
 Projection::Projection(Calibration calibration_)
-    : isAvailable(false)
+    : isAvailable(true)
     , calibration(calibration_)
 {
     image = newRGB888Image(calibration.projectorResolutionCols, calibration.projectorResolutionRows);
+    erase(image);
 }
 
 Projection::~Projection()
@@ -94,7 +95,7 @@ void Projection::showBrickOutline(Brick brick, int studX, int studY, int layer)
     Debug::println(std::string("Brick position: (") + std::to_string(bpos[0]) + std::string(", ") + std::to_string(bpos[1]) + std::string(") ") + std::to_string(bsize[0]) + std::string("x") + std::to_string(bsize[1]));
     pixel_t bcolor;
     bcolor.rgb888_pixel = COLOR_DISPLAY_VALUES.at(brick.color);
-    drawRect(image, bpos, bsize, bcolor, SHAPE_BORDER, 3);
+    drawRect(image, bpos, bsize, bcolor, SHAPE_FILL, 3);
 }
 
 void Projection::showInfo(StateStep stateStep, const std::vector<Brick>& expectedAndNextBricks)

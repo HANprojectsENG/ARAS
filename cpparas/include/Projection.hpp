@@ -16,8 +16,8 @@ namespace cpparas {
 // The following calibration is not represented in pixels;
 // it's represented in a factor (percentage) of the projection image.
 // For example: (0.8, 0.2) is at the right-top of the projection image.
-const Point<float> PROJECTION_INFO_ORIGIN { 0.8f, 0.2f };
-const Point<float> PROJECTION_STEP_INFO_ORIGIN { 0.8f, 0.07f };
+const Point<float> PROJECTION_INFO_ORIGIN { 0.87f, 0.2f };
+const Point<float> PROJECTION_STEP_INFO_ORIGIN { 0.87f, 0.07f };
 const Point<float> PROJECTION_MOVE_BASEPLATE_WARNING_ORIGIN { 0.77f, 0.1f };
 // This is a factor of the projection image width.
 const float PROJECTION_STEP_FONT_SCALE = 0.004f;
@@ -31,7 +31,7 @@ const float PROJECTION_NEXT_FACTOR = 0.6f;
 // This is a factor of the projection image width.
 const float PROJECTION_NEXT_HORIZ_OFFSET = 0.01f;
 
-const Rect<float> PROJECTION_OUTLINE = { { 0.15f, 0.01f }, 0.6f, 0.98f };
+const Rect<float> PROJECTION_OUTLINE = { { 0.08f, -0.18f }, 0.76f, 1.34f };
 
 class Projection {
 public:

@@ -87,7 +87,7 @@ uint32_t sum_basic(const image_t* img);
 
 void multiply_basic(const image_t* src, image_t* dst);
 
-void invert_basic(const image_t* src, image_t* dst);
+void invert_basic(const image_t* src, image_t* dst, uint8_t is_binary);
 
 // ----------------------------------------------------------------------------
 // Filters
