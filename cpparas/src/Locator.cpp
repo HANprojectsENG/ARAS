@@ -86,6 +86,9 @@ void Locator::Locator_thread()
             // the magic number 50 is an offset because the camera is not perfectly centered to the projector
             Central_board_point.row = ((corner_points[0].row + corner_points[2].row) / 2) + 50;
 
+            // Reset flag
+            moved_interupt = false;
+
             //compare those points with the camera central point
             if ((Central_board_point.col - Central_camera_point.col) > MAX_DIVIATION || (Central_board_point.col - Central_camera_point.col) < -MAX_DIVIATION) {
                 moved_interupt = true;
@@ -94,8 +97,6 @@ void Locator::Locator_thread()
             if ((Central_board_point.row - Central_camera_point.row) > MAX_DIVIATION || (Central_board_point.row - Central_camera_point.row) < -MAX_DIVIATION) {
                 moved_interupt = true;
             }
-            //Founds corners within bounds
-            moved_interupt = false;
 
             // Get the new cut frame
             new_cut_frame = RegExtractor.getRegionImage();
