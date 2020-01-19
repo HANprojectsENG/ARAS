@@ -30,7 +30,7 @@ float mapNumber(float value, std::pair<float, float> src, std::pair<float, float
     return ((value - src.first) / (src.second - src.first)) * (dst.second - dst.first) + dst.first;
 }
 
-Point<float> blockScreenCoordinate(Calibration calibration, int studX, int studY, int layer)
+Point<float> blockScreenCoordinate(const Calibration& calibration, int studX, int studY, int layer)
 {
     float layerFactor = 1.0f / ((calibration.cameraHeight - (float)layer * calibration.blockHeight) / calibration.cameraHeight);
     // Baseplate corner screen distance from the center
@@ -62,19 +62,19 @@ Point<float> blockScreenCoordinate(Calibration calibration, int studX, int studY
     return screenCoord;
 }
 
-Point<int> baseplateCoordToProjectionCoord(Point<float> baseplateCoord, int imageWidth, int imageHeight)
+Point<int> baseplateCoordToProjectionCoord(const Calibration& calibration, Point<float> baseplateCoord, int imageWidth, int imageHeight)
 {
     Point<int> result = {
-        static_cast<int>(mapNumber(baseplateCoord.col, std::make_pair(0.0f, 1.0f), std::make_pair(imageWidth * PROJECTION_OUTLINE.origin.col, imageWidth * (PROJECTION_OUTLINE.origin.col + PROJECTION_OUTLINE.width)))),
-        static_cast<int>(mapNumber(baseplateCoord.row, std::make_pair(0.0f, 1.0f), std::make_pair(imageHeight * PROJECTION_OUTLINE.origin.row, imageHeight * (PROJECTION_OUTLINE.origin.row + PROJECTION_OUTLINE.height))))
+        static_cast<int>(mapNumber(baseplateCoord.col, std::make_pair(0.0f, 1.0f), std::make_pair(imageWidth * calibration.projectionOutline.origin.col, imageWidth * (calibration.projectionOutline.origin.col + calibration.projectionOutline.width)))),
+        static_cast<int>(mapNumber(baseplateCoord.row, std::make_pair(0.0f, 1.0f), std::make_pair(imageHeight * calibration.projectionOutline.origin.row, imageHeight * (calibration.projectionOutline.origin.row + calibration.projectionOutline.height))))
     };
     return result;
 }
 
 void Projection::showBaseplateOutline()
 {
-    int opos[2] = { static_cast<int>(image->cols * PROJECTION_OUTLINE.origin.col), static_cast<int>(image->rows * PROJECTION_OUTLINE.origin.row) };
-    int osize[2] = { static_cast<int>(image->cols * PROJECTION_OUTLINE.width), static_cast<int>(image->rows * PROJECTION_OUTLINE.height) };
+    int opos[2] = { static_cast<int>(image->cols * calibration.projectionOutline.origin.col), static_cast<int>(image->rows * calibration.projectionOutline.origin.row) };
+    int osize[2] = { static_cast<int>(image->cols * calibration.projectionOutline.width), static_cast<int>(image->rows * calibration.projectionOutline.height) };
     pixel_t ocolor;
     ocolor.rgb888_pixel.r = 255;
     ocolor.rgb888_pixel.g = 255;
@@ -88,8 +88,8 @@ void Projection::showBrickOutline(Brick brick, int studX, int studY, int layer)
     Point<float> baseplateCoord = blockScreenCoordinate(calibration, studX, studY, layer);
     Point<float> baseplateCoord2 = blockScreenCoordinate(calibration, studX + brick.width, studY + brick.height, layer);
     Debug::println(std::string("Coords: (") + std::to_string(baseplateCoord.col) + std::string(", ") + std::to_string(baseplateCoord.row) + std::string(") (") + std::to_string(baseplateCoord2.col) + std::string(", ") + std::to_string(baseplateCoord2.row) + std::string(")"));
-    Point<int> projectionCoord = baseplateCoordToProjectionCoord(baseplateCoord, image->cols, image->rows);
-    Point<int> projectionCoord2 = baseplateCoordToProjectionCoord(baseplateCoord2, image->cols, image->rows);
+    Point<int> projectionCoord = baseplateCoordToProjectionCoord(calibration, baseplateCoord, image->cols, image->rows);
+    Point<int> projectionCoord2 = baseplateCoordToProjectionCoord(calibration, baseplateCoord2, image->cols, image->rows);
     int bpos[2] = { projectionCoord.col, projectionCoord.row };
     int bsize[2] = { projectionCoord2.col - projectionCoord.col, projectionCoord2.row - projectionCoord.row };
     Debug::println(std::string("Brick position: (") + std::to_string(bpos[0]) + std::string(", ") + std::to_string(bpos[1]) + std::string(") ") + std::to_string(bsize[0]) + std::string("x") + std::to_string(bsize[1]));
@@ -104,8 +104,8 @@ void Projection::showInfo(StateStep stateStep, const std::vector<Brick>& expecte
     stepcolor.rgb888_pixel.r = 255;
     stepcolor.rgb888_pixel.g = 255;
     stepcolor.rgb888_pixel.b = 255;
-    int32_t steppos[] = { static_cast<int>(image->cols * PROJECTION_STEP_INFO_ORIGIN.col), static_cast<int>(image->rows * PROJECTION_STEP_INFO_ORIGIN.row) };
-    uint8_t stepscale = static_cast<uint8_t>(image->cols * PROJECTION_STEP_FONT_SCALE);
+    int32_t steppos[] = { static_cast<int>(image->cols * calibration.projectionStepInfoOrigin.col), static_cast<int>(image->rows * calibration.projectionStepInfoOrigin.row) };
+    uint8_t stepscale = static_cast<uint8_t>(image->cols * calibration.projectionStepFontScale);
     if (stepscale == 0)
         stepscale = 1;
     std::string stepstr = std::string("STEP ") + std::to_string(stateStep.step)
@@ -113,21 +113,21 @@ void Projection::showInfo(StateStep stateStep, const std::vector<Brick>& expecte
     drawText(image, stepstr.c_str(), font_simple6pt, steppos, stepscale, stepcolor);
 
     int brickIdx = 0;
-    float brickPosRow = PROJECTION_INFO_ORIGIN.row;
+    float brickPosRow = calibration.projectionInfoOrigin.row;
     for (const Brick& brick : expectedAndNextBricks) {
-        float factor = brickIdx == 0 ? 1.0f : PROJECTION_NEXT_FACTOR;
+        float factor = brickIdx == 0 ? 1.0f : calibration.projectionNextFactor;
         for (uint32_t w = 0; w < brick.width; w++) {
             for (uint32_t h = 0; h < brick.height; h++) {
-                int pos[2] = { static_cast<int>(image->cols * (PROJECTION_INFO_ORIGIN.col + (brickIdx == 0 ? 0.0f : PROJECTION_NEXT_HORIZ_OFFSET)) + factor * image->rows * PROJECTION_STUD_SIZE * w), static_cast<int>(image->rows * brickPosRow + factor * image->rows * PROJECTION_STUD_SIZE * h) };
-                int size[2] = { static_cast<int>(factor * (image->rows * PROJECTION_STUD_INNER_SIZE)), static_cast<int>(factor * (image->rows * PROJECTION_STUD_INNER_SIZE)) };
+                int pos[2] = { static_cast<int>(image->cols * (calibration.projectionInfoOrigin.col + (brickIdx == 0 ? 0.0f : calibration.projectionNextHorizOffset)) + factor * image->rows * calibration.projectionStudSize * w), static_cast<int>(image->rows * brickPosRow + factor * image->rows * calibration.projectionStudSize * h) };
+                int size[2] = { static_cast<int>(factor * (image->rows * calibration.projectionStudInnerSize)), static_cast<int>(factor * (image->rows * calibration.projectionStudInnerSize)) };
                 pixel_t color;
                 color.rgb888_pixel = COLOR_DISPLAY_VALUES.at(brick.color);
                 drawRect(image, pos, size, color, SHAPE_FILL, 0);
             }
         }
-        brickPosRow += factor * PROJECTION_STUD_SIZE * brick.height + PROJECTION_BRICK_DISTANCE;
+        brickPosRow += factor * calibration.projectionStudSize * brick.height + calibration.projectionBrickDistance;
         if (brickIdx == 0)
-            brickPosRow += PROJECTION_SEPARATOR_HEIGHT;
+            brickPosRow += calibration.projectionSeparatorHeight;
         brickIdx++;
     }
 }
@@ -138,8 +138,8 @@ void Projection::showMoveBaseplateWarning()
     stepcolor.rgb888_pixel.r = 255;
     stepcolor.rgb888_pixel.g = 64;
     stepcolor.rgb888_pixel.b = 64;
-    int32_t steppos[] = { static_cast<int>(image->cols * PROJECTION_MOVE_BASEPLATE_WARNING_ORIGIN.col), static_cast<int>(image->rows * PROJECTION_MOVE_BASEPLATE_WARNING_ORIGIN.row) };
-    uint8_t stepscale = static_cast<uint8_t>(image->cols * PROJECTION_MOVE_BASEPLATE_WARNING_FONT_SCALE);
+    int32_t steppos[] = { static_cast<int>(image->cols * calibration.projectionMoveBaseplateWarningOrigin.col), static_cast<int>(image->rows * calibration.projectionMoveBaseplateWarningOrigin.row) };
+    uint8_t stepscale = static_cast<uint8_t>(image->cols * calibration.projectionMoveBaseplateWarningFontScale);
     drawText(image, "ALIGN THE\nBASEPLATE WITH\nTHE OUTLINE", font_simple6pt, steppos, stepscale, stepcolor);
 }
 

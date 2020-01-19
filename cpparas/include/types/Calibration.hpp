@@ -1,6 +1,8 @@
 #ifndef CALIBRATION_HPP
 #define CALIBRATION_HPP
 
+#include "types/Point.hpp"
+#include "types/Rect.hpp"
 #include <cstdint>
 
 #define constructS(T, ...) \
@@ -47,6 +49,30 @@ struct Calibration {
     float blockHeight;
     /** Length of one block unit (width or length) in meters */
     float blockUnitLength;
+
+    // The following calibration is not represented in pixels;
+    // it's represented in a factor (percentage) of the projection image.
+    // For example: (0.8, 0.2) is at the right-top of the projection image.
+    /** Size of the baseplate on the projection image */
+    Rect<float> projectionOutline;
+
+    // The following calibration is not represented in pixels;
+    // it's represented in a factor (percentage) of the projection image.
+    // For example: (0.8, 0.2) is at the right-top of the projection image.
+    Point<float> projectionInfoOrigin;
+    Point<float> projectionStepInfoOrigin;
+    Point<float> projectionMoveBaseplateWarningOrigin;
+    // This is a factor of the projection image width.
+    float projectionStepFontScale;
+    float projectionMoveBaseplateWarningFontScale;
+    // These are factors of the projection image height.
+    float projectionSeparatorHeight;
+    float projectionStudSize;
+    float projectionStudInnerSize;
+    float projectionBrickDistance;
+    float projectionNextFactor;
+    // This is a factor of the projection image width.
+    float projectionNextHorizOffset;
 };
 
 const Calibration DEFAULT_CALIBRATION = constructS(Calibration,
@@ -69,7 +95,23 @@ const Calibration DEFAULT_CALIBRATION = constructS(Calibration,
     _.baseplateRows = 48,
 
     _.blockHeight = 0.0096,
-    _.blockUnitLength = 0.008);
+    _.blockUnitLength = 0.008,
+
+    _.projectionOutline = { { 0.08f, -0.18f }, 0.76f, 1.34f },
+
+    _.projectionInfoOrigin = { 0.87f, 0.2f },
+    _.projectionStepInfoOrigin = { 0.87f, 0.07f },
+    _.projectionMoveBaseplateWarningOrigin = { 0.77f, 0.1f },
+
+    _.projectionStepFontScale = 0.004f,
+    _.projectionMoveBaseplateWarningFontScale = 0.0033f,
+
+    _.projectionSeparatorHeight = 0.02f,
+    _.projectionStudSize = 0.04f,
+    _.projectionStudInnerSize = 0.035f,
+    _.projectionBrickDistance = 0.01f,
+    _.projectionNextFactor = 0.6f,
+    _.projectionNextHorizOffset = 0.01f);
 
 } // namespace cpparas
 
