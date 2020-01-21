@@ -24,6 +24,8 @@ namespace StudChecker {
     bool studMatch(const image_t* image, const CoordinateMatrix& coordinateMatrix, const Point<uint32_t> studCoordinates, uint32_t layer, Color expectedColor){
         //calculate distance between studs
         int halfDistance = (coordinateMatrix.getMatrix()[layer][0][1].col - coordinateMatrix.getMatrix()[layer][0][0].col) / 2;
+        int pix_c = coordinateMatrix.getMatrix()[layer][studCoordinates.col][studCoordinates.row].col;
+        int pix_r = coordinateMatrix.getMatrix()[layer][studCoordinates.col][studCoordinates.row].col;
 
         long int sum_h = 0;
         long int sum_s = 0;
@@ -37,7 +39,7 @@ namespace StudChecker {
         //Calculate average HSV around stud
         for (int r = -halfDistance; r < halfDistance; r++) {
             for (int c = -halfDistance; c < halfDistance; c++) {
-                pixelHSV = getHSVPixel(image, c + studCoordinates.col, r + studCoordinates.row);
+                pixelHSV = getHSVPixel(image, c + pix_c, r + pix_r);
                 sum_h = sum_h + pixelHSV.h;
                 sum_s = sum_s + pixelHSV.s;
                 sum_v = sum_v + pixelHSV.v;
