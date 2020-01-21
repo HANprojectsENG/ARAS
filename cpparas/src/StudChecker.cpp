@@ -10,7 +10,7 @@ namespace StudChecker {
         convertToHSVImage(image,hsv_image);
         //get coordinates in image
         Point<uint32_t> pixelCoordinates;       
-        for (uint32_t i = 0; i < sizeof(studCoordinates); i++) {
+        for (uint32_t i = 0; i < studCoordinates.size(); i++) {
             pixelCoordinates = studCoordinates[i];
             if(!studMatch(hsv_image, coordinateMatrix, pixelCoordinates, layer, expectedColor)){
                 deleteImage(hsv_image);
