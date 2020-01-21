@@ -65,6 +65,17 @@ namespace StudChecker {
             + std::string("\n Average: (H=") + std::to_string(average.h) + std::string(", S=") + std::to_string(average.s) + std::string(", V=") + std::to_string(average.v) + std::string(")")
             + std::string("\n Min threshold: (H=") + std::to_string(min.h) + std::string(", S=") + std::to_string(min.s) + std::string(", V=") + std::to_string(min.v) + std::string(")")
             + std::string("\n Max threshold: (H=") + std::to_string(max.h) + std::string(", S=") + std::to_string(max.s) + std::string(", V=") + std::to_string(max.v) + std::string(")"));
+
+        image_t* debugImage = newRGB888Image(image->cols, image->rows);
+        convertToRGB888Image(image, debugImage);
+        int32_t rectTopLeft[2] = { pix_c - halfDistance, pix_r - halfDistance };
+        int32_t rectSize[2] = { halfDistance * 2, halfDistance * 2 };
+        pixel_t rectColor;
+        rectColor.rgb888_pixel = COLOR_DISPLAY_VALUES.at(expectedColor);
+        drawRect(debugImage, rectTopLeft, rectSize, rectColor, SHAPE_BORDER, 3);
+        Debug::showImage(debugImage);
+        deleteImage(debugImage);
+
         return false;
     }
 
