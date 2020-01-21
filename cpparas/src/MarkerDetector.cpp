@@ -20,13 +20,15 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
 
 std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, const uint8_t thresh_val){
 
-    image_t* dst_thresh = newBasicImage(img->cols, img->rows);
-    image_t* src_basic = newRGB888Image(img->cols, img->rows);
-    copy(img, src_basic);
-    src_basic = toBasicImage(src_basic);
-    image_t* dst_scaled = newBasicImage((img->cols) / 8, (img->rows) / 8);
+    image_t* img_basic = newRGB888Image(img->cols, img->rows);
+    image_t* src_basic = newBasicImage(img->cols / 2, img->rows / 2);
+    copy(img, img_basic);
+    img_basic = toBasicImage(img_basic);
+    scaleImage(img_basic, src_basic);
+    image_t* dst_thresh = newBasicImage(src_basic->cols, src_basic->rows);
+    image_t* dst_scaled = newBasicImage((src_basic->cols) / 4, (src_basic->rows) / 4);
     image_t* dst_harris = newBasicImage(dst_scaled->cols, dst_scaled->rows);
-    image_t* dst_eroded = newBasicImage(img->cols, img->rows);
+    image_t* dst_eroded = newBasicImage(src_basic->cols, src_basic->rows);
 
     threshold(src_basic, dst_thresh, thresh_val, 255, 1);
     clear_center(dst_thresh);
