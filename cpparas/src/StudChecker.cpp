@@ -11,18 +11,25 @@ namespace StudChecker {
         convertToHSVImage(image, hsv_image);
         //get coordinates in image
         Point<uint32_t> pixelCoordinates;
+
+        image_t* debugImage = newRGB888Image(image->cols, image->rows);
+        copy(image, debugImage);
+
         for (uint32_t i = 0; i < studCoordinates.size(); i++) {
             pixelCoordinates = studCoordinates[i];
-            if (!studMatch(hsv_image, coordinateMatrix, pixelCoordinates, layer, expectedColor)) {
+            if (!studMatch(hsv_image, coordinateMatrix, pixelCoordinates, layer, expectedColor, debugImage)) {
+                Debug::showImage(debugImage);
+                deleteImage(debugImage);
                 deleteImage(hsv_image);
                 return false;
             }
         }
+        deleteImage(debugImage);
         deleteImage(hsv_image);
         return true;
     }
 
-    bool studMatch(const image_t* image, const CoordinateMatrix& coordinateMatrix, const Point<uint32_t> studCoordinates, uint32_t layer, Color expectedColor)
+    bool studMatch(const image_t* image, const CoordinateMatrix& coordinateMatrix, const Point<uint32_t> studCoordinates, uint32_t layer, Color expectedColor, image_t* debugImage)
     {
         //calculate distance between studs
         int halfDistance = (coordinateMatrix.getMatrix()[layer][0][1].col - coordinateMatrix.getMatrix()[layer][0][0].col) / 2;
@@ -66,15 +73,13 @@ namespace StudChecker {
             + std::string("\n Min threshold: (H=") + std::to_string(min.h) + std::string(", S=") + std::to_string(min.s) + std::string(", V=") + std::to_string(min.v) + std::string(")")
             + std::string("\n Max threshold: (H=") + std::to_string(max.h) + std::string(", S=") + std::to_string(max.s) + std::string(", V=") + std::to_string(max.v) + std::string(")"));
 
-        image_t* debugImage = newRGB888Image(image->cols, image->rows);
-        convertToRGB888Image(image, debugImage);
-        int32_t rectTopLeft[2] = { pix_c - halfDistance, pix_r - halfDistance };
-        int32_t rectSize[2] = { halfDistance * 2, halfDistance * 2 };
-        pixel_t rectColor;
-        rectColor.rgb888_pixel = COLOR_DISPLAY_VALUES.at(expectedColor);
-        drawRect(debugImage, rectTopLeft, rectSize, rectColor, SHAPE_BORDER, 3);
-        Debug::showImage(debugImage);
-        deleteImage(debugImage);
+        if (debugImage) {
+            int32_t rectTopLeft[2] = { pix_c - halfDistance, pix_r - halfDistance };
+            int32_t rectSize[2] = { halfDistance * 2, halfDistance * 2 };
+            pixel_t rectColor;
+            rectColor.rgb888_pixel = COLOR_DISPLAY_VALUES.at(expectedColor);
+            drawRect(debugImage, rectTopLeft, rectSize, rectColor, SHAPE_BORDER, 3);
+        }
 
         return false;
     }
