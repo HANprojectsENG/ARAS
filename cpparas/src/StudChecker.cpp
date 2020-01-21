@@ -1,4 +1,5 @@
 #include "StudChecker.hpp"
+#include "debug/Debug.hpp"
 
 namespace cpparas {
 
@@ -7,12 +8,12 @@ namespace StudChecker {
     bool matches(const image_t* image, const CoordinateMatrix& coordinateMatrix, const std::vector<Point<uint32_t>> studCoordinates, uint32_t layer, Color expectedColor)
     {
         image_t* hsv_image = newHSVImage((uint32_t)image->cols, (uint32_t)image->rows);
-        convertToHSVImage(image,hsv_image);
+        convertToHSVImage(image, hsv_image);
         //get coordinates in image
-        Point<uint32_t> pixelCoordinates;       
+        Point<uint32_t> pixelCoordinates;
         for (uint32_t i = 0; i < studCoordinates.size(); i++) {
             pixelCoordinates = studCoordinates[i];
-            if(!studMatch(hsv_image, coordinateMatrix, pixelCoordinates, layer, expectedColor)){
+            if (!studMatch(hsv_image, coordinateMatrix, pixelCoordinates, layer, expectedColor)) {
                 deleteImage(hsv_image);
                 return false;
             }
@@ -21,7 +22,8 @@ namespace StudChecker {
         return true;
     }
 
-    bool studMatch(const image_t* image, const CoordinateMatrix& coordinateMatrix, const Point<uint32_t> studCoordinates, uint32_t layer, Color expectedColor){
+    bool studMatch(const image_t* image, const CoordinateMatrix& coordinateMatrix, const Point<uint32_t> studCoordinates, uint32_t layer, Color expectedColor)
+    {
         //calculate distance between studs
         int halfDistance = (coordinateMatrix.getMatrix()[layer][0][1].col - coordinateMatrix.getMatrix()[layer][0][0].col) / 2;
         int pix_c = coordinateMatrix.getMatrix()[layer][studCoordinates.col][studCoordinates.row].col;
@@ -31,7 +33,7 @@ namespace StudChecker {
         long int sum_s = 0;
         long int sum_v = 0;
         int num_pixels = 0;
-        std::vector<hsv_pixel_t> color_ranges = ColorClassifier::setColors(image,coordinateMatrix,expectedColor);
+        std::vector<hsv_pixel_t> color_ranges = ColorClassifier::setColors(image, coordinateMatrix, expectedColor);
         hsv_pixel_t max = color_ranges[1];
         hsv_pixel_t min = color_ranges[0];
         hsv_pixel_t pixelHSV;
@@ -59,6 +61,10 @@ namespace StudChecker {
                 }
             }
         }
+        Debug::println(std::string("Stud color did not match. Stud: ") + studCoordinates.to_string()
+            + std::string("\n Average: (H=") + std::to_string(average.h) + std::string(", S=") + std::to_string(average.s) + std::string(", V=") + std::to_string(average.v) + std::string(")")
+            + std::string("\n Min threshold: (H=") + std::to_string(min.h) + std::string(", S=") + std::to_string(min.s) + std::string(", V=") + std::to_string(min.v) + std::string(")")
+            + std::string("\n Max threshold: (H=") + std::to_string(max.h) + std::string(", S=") + std::to_string(max.s) + std::string(", V=") + std::to_string(max.v) + std::string(")"));
         return false;
     }
 
