@@ -147,8 +147,7 @@ void StateMachine::INIT_entry()
 }
 void StateMachine::INIT_do()
 {
-    if(locator->First_frame_received())
-    {
+    if (locator->First_frame_received()) {
         if (stateStep.layer != -1 && stateStep.step != -1) {
             switchState(State::CHECK_NEXT_STEP);
         } else {
@@ -249,10 +248,16 @@ void StateMachine::PROJECT_OFF_entry()
     // Turn off projector
     projection->clear();
     projection->complete();
+
+    // Start timer.
+    projectOffStartTime = std::chrono::system_clock::now();
 }
 void StateMachine::PROJECT_OFF_do()
 {
-    switchState(State::CHECK_CURRENT_STEP);
+    std::chrono::duration<double> projectOffElapsed = std::chrono::system_clock::now() - projectOffStartTime;
+    if (projectOffElapsed.count() >= PROJECT_OFF_DELAY) {
+        switchState(State::CHECK_CURRENT_STEP);
+    }
 }
 void StateMachine::PROJECT_OFF_exit() {}
 

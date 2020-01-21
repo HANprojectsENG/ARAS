@@ -11,9 +11,12 @@
 #include "StudChecker.hpp"
 #include "util/GenericStateMachine.hpp"
 #include "util/StateStep.hpp"
+#include <chrono>
 #include <map>
 
 namespace cpparas {
+
+const float PROJECT_OFF_DELAY = 1.0f; // Seconds
 
 enum class State {
     NOT_STARTED,
@@ -104,6 +107,7 @@ private:
     void FINAL_STEP_exit();
 
     bool simulatedBaseplateShifted;
+    std::chrono::time_point<std::chrono::system_clock> projectOffStartTime;
     StateStep stateStep;
     LSFParser::LSFData lsfData;
     CoordinateMatrix coordinateMatrix;
