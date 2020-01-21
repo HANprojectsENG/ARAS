@@ -62,9 +62,9 @@ namespace StudChecker {
         average.v = sum_v / num_pixels;
 
         //compare average with expected color
-        if (average.h > min.h && average.h < max.h) {
-            if (average.s > min.s && average.s < max.s) {
-                if (average.v > min.v && average.v < max.v) {
+        if (average.h >= min.h && average.h <= max.h) {
+            if (average.s >= min.s && average.s <= max.s) {
+                if (average.v >= min.v && average.v <= max.v) {
                     return true;
                 }
             }
