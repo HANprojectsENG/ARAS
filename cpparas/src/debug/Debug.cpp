@@ -9,6 +9,7 @@ namespace cpparas {
 
 std::shared_ptr<std::deque<std::string>> lines;
 image_t* image = nullptr;
+image_t* oldImage = nullptr;
 
 void Debug::println(const std::string& message)
 {
@@ -35,11 +36,14 @@ void Debug::println(const std::string& message)
 
 void Debug::showImage(const image_t* newImage)
 {
-    if (image) {
-        deleteImage(image);
+    if (oldImage) {
+        deleteImage(oldImage);
     }
-    image = newRGB888Image(newImage->cols, newImage->rows);
-    convertToRGB888Image(newImage, image);
+    // Keep a copy of the previous image so the DebugUI has time to catch up.
+    oldImage = image;
+    image_t* newDebugImage = newRGB888Image(newImage->cols, newImage->rows);
+    convertToRGB888Image(newImage, newDebugImage);
+    image = newDebugImage;
 }
 
 const std::shared_ptr<std::deque<std::string>>& Debug::getLines()
