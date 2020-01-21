@@ -237,7 +237,6 @@ void StateMachine::WAIT_HAND_EXIT_do()
     handDetection.update(axne);
     locator->Send_frame_to_ui(axne);
     if (!handDetection.containsHand()) {
-        locator->Active_corner_detection(true);
         switchState(State::PROJECT_OFF);
     }
 }
@@ -256,6 +255,7 @@ void StateMachine::PROJECT_OFF_do()
 {
     std::chrono::duration<double> projectOffElapsed = std::chrono::system_clock::now() - projectOffStartTime;
     if (projectOffElapsed.count() >= PROJECT_OFF_DELAY) {
+        locator->Active_corner_detection(true);
         switchState(State::CHECK_CURRENT_STEP);
     }
 }
