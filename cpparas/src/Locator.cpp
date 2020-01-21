@@ -76,6 +76,7 @@ void Locator::Locator_thread()
         Central_camera_point.row = new_full_frame->rows / 2;
 
         //find corners
+        std::vector<Point<int32_t>> corner_points;
         if(active_corner_detection){
             corner_points = RegExtractor.updateImage(new_full_frame);
         }
