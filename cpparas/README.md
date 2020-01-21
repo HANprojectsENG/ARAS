@@ -3,8 +3,9 @@
 ## Build
 
 The following dependencies are required to build this project:
-- CMake
-- GTKmm 3
+
+- CMake (`cmake`)
+- GTKmm 3 (`libgtkmm-3.0-dev`)
 
 Build the project with the following commands:
 ```
@@ -29,8 +30,8 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 ## Unit tests
 
-The testing framework used is GoogleTest. This needs to be installed in order
-to compile the unit tests.
+The testing framework used is GoogleTest (`googletest`). This needs to be
+installed in order to compile the unit tests.
 To build the project with unit tests enabled, the cmake flag
 `BUILD_TESTS` needs to be enabled.
 Replace the `cmake` invocation with:
@@ -47,8 +48,9 @@ After compiling, the unit tests can be executed with
 
 The following dependencies are required to build the Doxygen documentation for
 this project:
-- Doxygen
-- GraphViz
+
+- Doxygen (`doxygen`)
+- GraphViz (`graphviz`)
 
 To generate the documentation, the CMake BUILD_DOC flag needs to be enabled.
 Replace the `cmake` invocation with:
