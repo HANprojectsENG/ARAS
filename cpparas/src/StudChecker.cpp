@@ -33,8 +33,9 @@ namespace StudChecker {
     {
         //calculate distance between studs
         int halfDistance = (coordinateMatrix.getMatrix()[layer][0][1].col - coordinateMatrix.getMatrix()[layer][0][0].col) / 2;
-        int pix_c = coordinateMatrix.getMatrix()[layer][studCoordinates.col][studCoordinates.row].col;
-        int pix_r = coordinateMatrix.getMatrix()[layer][studCoordinates.col][studCoordinates.row].row;
+        Point<int32_t> pix_coord = coordinateMatrix.getMatrix()[layer][studCoordinates.row][studCoordinates.col];
+        int pix_c = pix_coord.col;
+        int pix_r = pix_coord.row;
 
         long int sum_h = 0;
         long int sum_s = 0;
