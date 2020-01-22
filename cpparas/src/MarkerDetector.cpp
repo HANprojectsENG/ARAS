@@ -1,6 +1,6 @@
 #include "MarkerDetector.hpp"
 #include "debug/Debug.hpp"
-#include <algorithm>  
+#include <algorithm>
 
 namespace cpparas {
 
@@ -8,17 +8,20 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
 {
     std::vector<Point<int32_t>> points;
     uint8_t increment = 5;
-    for (uint8_t thresh = 180; thresh < 220; thresh += increment ){
-        points = detectPoints(img,thresh);
-        if (points.size() == 3){
-            printf("thresh:%d\n",thresh);
+    uint8_t steps = 0;
+    for (uint8_t thresh = 180; thresh < 220; thresh += increment) {
+        points = detectPoints(img, thresh);
+        steps++;
+        if (points.size() == 3) {
+            printf("Marker detector threshold: %d after %d steps\n", thresh, steps);
             return points;
         }
     }
     return points;
 }
 
-std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, const uint8_t thresh_val){
+std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, const uint8_t thresh_val)
+{
 
     image_t* img_basic = newRGB888Image(img->cols, img->rows);
     image_t* src_basic = newBasicImage(img->cols / 2, img->rows / 2);
@@ -73,9 +76,15 @@ std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, con
         point2.col = pos_x[2];
         point2.row = pos_y[2];
 
-        if ((point0.col + point0.row) > (point1.col + point1.row)){ std::swap(point0,point1);}
-        if ((point1.col + point1.row) > (point2.col + point2.row)){ std::swap(point1,point2);}
-        if ((point0.col + point0.row) > (point1.col + point1.row)){ std::swap(point0,point1);}
+        if ((point0.col + point0.row) > (point1.col + point1.row)) {
+            std::swap(point0, point1);
+        }
+        if ((point1.col + point1.row) > (point2.col + point2.row)) {
+            std::swap(point1, point2);
+        }
+        if ((point0.col + point0.row) > (point1.col + point1.row)) {
+            std::swap(point0, point1);
+        }
 
         //Check distance between points are correct distance
         int distance_x;
@@ -96,9 +105,7 @@ std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, con
         distance_y = (point2.row - point0.row) * (point2.row - point0.row);
         distance_02 = sqrt(distance_x + distance_y);
 
-        if(distance_01 > 500 && distance_01 < 1100 &&
-           distance_12 > 500 && distance_12 < 1100 &&
-           distance_02 > 700 && distance_02 < 1300){
+        if (distance_01 > 500 && distance_01 < 1100 && distance_12 > 500 && distance_12 < 1100 && distance_02 > 700 && distance_02 < 1300) {
             points.push_back(point0);
             points.push_back(point1);
             points.push_back(point2);
@@ -111,6 +118,5 @@ std::vector<Point<int32_t>> MarkerDetector::detectPoints(const image_t* img, con
     deleteImage(dst_harris);
     return points;
 }
-
 
 } // namespace cpparas
