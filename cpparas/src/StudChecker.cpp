@@ -47,8 +47,8 @@ namespace StudChecker {
         hsv_pixel_t pixelHSV;
         hsv_pixel_t average;
         //Calculate average HSV around stud
-        for (int r = -halfDistance; r < halfDistance; r++) {
-            for (int c = -halfDistance; c < halfDistance; c++) {
+        for (int r = -halfDistance / 2; r < halfDistance / 2; r++) {
+            for (int c = -halfDistance / 2; c < halfDistance / 2; c++) {
                 pixelHSV = getHSVPixel(image, c + pix_c, r + pix_r);
                 sum_h = sum_h + pixelHSV.h;
                 sum_s = sum_s + pixelHSV.s;
