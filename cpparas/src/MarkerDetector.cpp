@@ -27,7 +27,7 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
         uint8_t thresh = thresholds[step];
         points = detectPoints(img, thresh);
         if (points.size() == 3) {
-            printf("Marker detector threshold: %d after %lu steps\n", thresh, step + 1);
+            printf("Marker detector threshold: %d after %u steps\n", thresh, (unsigned int)(step + 1));
             return points;
         }
     }
