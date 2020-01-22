@@ -10,11 +10,11 @@ std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
     // try to get the least iterations possible.
     const std::vector<uint8_t> thresholds = {
         180,
+        185,
         190,
         200,
         210,
         220,
-        185,
         195,
         205,
         215,
