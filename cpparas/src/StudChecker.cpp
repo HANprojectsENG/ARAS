@@ -62,13 +62,25 @@ namespace StudChecker {
         average.v = sum_v / num_pixels;
 
         //compare average with expected color
-        if (average.h >= min.h && average.h <= max.h) {
-            if (average.s >= min.s && average.s <= max.s) {
-                if (average.v >= min.v && average.v <= max.v) {
-                    return true;
+
+        //Normal HSV range is from 0-360
+        //Red can overlap range and go from 250-10. Needs special case. 
+        if(expectedColor == cpparas::Color::RED && min.h < 20){ 
+            if (average.h <= min.h || average.h >= 200) {
+                if (average.s >= min.s && average.s <= max.s) {
+                    if (average.v >= min.v && average.v <= max.v) {
+                        return true;
+                    }
                 }
             }
-        }
+        }  
+        else if (average.h >= min.h && average.h <= max.h) {
+                if (average.s >= min.s && average.s <= max.s) {
+                    if (average.v >= min.v && average.v <= max.v) {
+                        return true;
+                    }
+                }
+            }
         Debug::println(std::string("Stud color did not match. Stud: ") + studCoordinates.to_string()
             + std::string("\n Average: (H=") + std::to_string(average.h) + std::string(", S=") + std::to_string(average.s) + std::string(", V=") + std::to_string(average.v) + std::string(")")
             + std::string("\n Min threshold: (H=") + std::to_string(min.h) + std::string(", S=") + std::to_string(min.s) + std::string(", V=") + std::to_string(min.v) + std::string(")")
