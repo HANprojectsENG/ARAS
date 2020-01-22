@@ -12,7 +12,8 @@ Projection::Projection(Calibration calibration_)
     , calibration(calibration_)
 {
     image = newRGB888Image(calibration.projectorResolutionCols, calibration.projectorResolutionRows);
-    erase(image);
+    clear();
+    complete();
 }
 
 Projection::~Projection()

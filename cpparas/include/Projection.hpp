@@ -55,6 +55,7 @@ public:
 
     /**
      * @brief Returns the projection image revision. Can be used to determine whether the image has changed.
+     * @note Starts at 1 with a clear image.
      */
     uint32_t getImageRevision() const;
 
