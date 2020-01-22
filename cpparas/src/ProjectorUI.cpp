@@ -5,6 +5,7 @@ namespace cpparas {
 
 ProjectorUI::ProjectorUI(std::shared_ptr<Projection> projection_)
     : projection(projection_)
+    , currentImageRevision(0)
     , imageArea()
 {
     set_title("ProjectorUI");
@@ -26,8 +27,10 @@ ProjectorUI::~ProjectorUI()
 bool ProjectorUI::update()
 {
     const image_t* image = projection->getImage();
-    if (image) {
+    const uint32_t imageRevision = projection->getImageRevision();
+    if (image && currentImageRevision != imageRevision) {
         imageArea.setImage(image);
+        currentImageRevision = imageRevision;
     }
     return true;
 }

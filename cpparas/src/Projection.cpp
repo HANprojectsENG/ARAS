@@ -7,7 +7,8 @@
 namespace cpparas {
 
 Projection::Projection(Calibration calibration_)
-    : isAvailable(true)
+    : imageRevision(0)
+    , isAvailable(true)
     , calibration(calibration_)
 {
     image = newRGB888Image(calibration.projectorResolutionCols, calibration.projectorResolutionRows);
@@ -146,6 +147,7 @@ void Projection::showMoveBaseplateWarning()
 void Projection::complete()
 {
     isAvailable = true;
+    imageRevision++;
 }
 
 const image_t* Projection::getImage() const
@@ -155,6 +157,11 @@ const image_t* Projection::getImage() const
     } else {
         return image;
     }
+}
+
+uint32_t Projection::getImageRevision() const
+{
+    return imageRevision;
 }
 
 } // namespace cpparas

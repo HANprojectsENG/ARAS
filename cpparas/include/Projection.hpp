@@ -53,8 +53,14 @@ public:
      */
     const image_t* getImage() const;
 
+    /**
+     * @brief Returns the projection image revision. Can be used to determine whether the image has changed.
+     */
+    uint32_t getImageRevision() const;
+
 private:
     image_t* image;
+    uint32_t imageRevision;
     bool isAvailable;
     Calibration calibration;
 };

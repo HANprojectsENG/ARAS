@@ -16,6 +16,7 @@ private:
     bool update();
 
     std::shared_ptr<Projection> projection;
+    uint32_t currentImageRevision;
     ImageArea imageArea;
 };
 
