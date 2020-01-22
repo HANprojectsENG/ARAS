@@ -1,0 +1,29 @@
+@startuml
+
+(*) -down-> "Acquisition" as s1
+note right
+	Camera above still baseplate
+	Any lighting condition that is sufficiently bright
+	Fetch camera frame or load image
+end note
+s1 -down-> "Enhancement" as s2
+note right
+	No enhancement
+end note
+s2 -down-> "Segmentation" as s3
+note right
+	Segment corners based on brightness
+	Segment studs based on calibrated HSV thresholds
+end note
+s3 -down-> "Feature Extraction" as s4
+note right
+	Perform Harris corner detection transform
+end note
+s4 -down-> "Classification" as s5
+note right
+	Remove outstanding values
+	Compare stud color against expected color
+end note
+s5 -down-> (*)
+
+@enduml
