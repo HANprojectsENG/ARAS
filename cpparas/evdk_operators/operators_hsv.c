@@ -137,12 +137,12 @@ void convertToHSVImage(const image_t* src, image_t* dst)
             unsigned char g = s->g;
             unsigned char b = s->b;
 
-            double min, max, delta;
+            float min, max, delta;
 
             //Change R,G,B ranges from 0-255 to 0-1
-            double r_ = (double)r / 255;
-            double g_ = (double)g / 255;
-            double b_ = (double)b / 255;
+            float r_ = (float)r / 255.0f;
+            float g_ = (float)g / 255.0f;
+            float b_ = (float)b / 255.0f;
 
             //find max and min values between R,G,B
             max = ((r_ > g_ ? r_ : g_) > b_ ? (r_ > g_ ? r_ : g_) : b_);
@@ -151,11 +151,11 @@ void convertToHSVImage(const image_t* src, image_t* dst)
 
             //Calculate Hue
             if (max == r_) {
-                d->h = (fmod(((g_ - b_) / delta), 6.0)) * 60;
+                d->h = (fmod(((g_ - b_) / delta), 6.0f)) * 60.0f;
             } else if (max == g_) {
-                d->h = (((b_ - r_) / delta) + 2.0) * 60;
+                d->h = (((b_ - r_) / delta) + 2.0f) * 60.0f;
             } else {
-                d->h = (((r_ - g_) / delta) + 4.0) * 60;
+                d->h = (((r_ - g_) / delta) + 4.0f) * 60.0f;
             }
 
             if (d->h > 360) {
@@ -163,14 +163,14 @@ void convertToHSVImage(const image_t* src, image_t* dst)
             }
 
             //Calculate Saturation
-            if (max == 0.0) {
+            if (max == 0.0f) {
                 d->s = 0;
             } else {
-                d->s = ((delta / max) * 100);
+                d->s = ((delta / max) * 100.0f);
             }
 
             //Calculate Value
-            d->v = (max * 100);
+            d->v = (max * 100.0f);
 
             d++;
             s++;
