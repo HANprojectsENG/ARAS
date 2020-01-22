@@ -13,7 +13,7 @@ const hsv_pixel_t HAND_THRESHOLD_LOW = {
 const hsv_pixel_t HAND_THRESHOLD_HIGH = {
     25, // H
     50, // S
-    80 // V
+    90 // V
 };
 const uint32_t HAND_THRESHOLD_AREA = 10000;
 
