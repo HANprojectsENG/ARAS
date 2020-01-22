@@ -41,7 +41,7 @@ namespace StudChecker {
         long int sum_s = 0;
         long int sum_v = 0;
         int num_pixels = 0;
-        std::vector<hsv_pixel_t> color_ranges = ColorClassifier::setColors(image, coordinateMatrix, expectedColor);
+        std::vector<hsv_pixel_t> color_ranges = ColorClassifier::setColors(image, coordinateMatrix, expectedColor, debugImage);
         hsv_pixel_t max = color_ranges[1];
         hsv_pixel_t min = color_ranges[0];
         hsv_pixel_t pixelHSV;
