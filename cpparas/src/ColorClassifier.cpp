@@ -33,6 +33,8 @@ namespace ColorClassifier {
                 min.v = pixelHSV.v < min.v ? pixelHSV.v : min.v;
             }
         }
+        //Green has high H value in certain lighting condition, increasing range fixes issue
+        if(expectedColor == cpparas::Color::GREEN){ max.h = max.h + 20;}            
         range.push_back(min);
         range.push_back(max);
         return range;
