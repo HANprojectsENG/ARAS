@@ -66,7 +66,7 @@ namespace StudChecker {
         //Normal HSV range is from 0-360
         //Red can overlap range and go from 250-10. Needs special case. 
         if(expectedColor == cpparas::Color::RED && min.h < 20){ 
-            if (average.h <= min.h && average.h >= max.h) {
+            if (average.h <= min.h || average.h >= 200) {
                 if (average.s >= min.s && average.s <= max.s) {
                     if (average.v >= min.v && average.v <= max.v) {
                         return true;
