@@ -1,19 +1,33 @@
 #include "MarkerDetector.hpp"
 #include "debug/Debug.hpp"
 #include <algorithm>
+#include <iostream>
 
 namespace cpparas {
 
 std::vector<Point<int32_t>> MarkerDetector::detectMarkers(const image_t* img)
 {
+    // Do multiple sweeps with different intervals to
+    // try to get the least iterations possible.
+    const std::vector<uint8_t> thresholds = {
+        180,
+        200,
+        220,
+        190,
+        210,
+        185,
+        195,
+        205,
+        215,
+        170
+    };
+
     std::vector<Point<int32_t>> points;
-    uint8_t increment = 5;
-    uint8_t steps = 0;
-    for (uint8_t thresh = 180; thresh < 220; thresh += increment) {
+    for (std::size_t step = 0; step < thresholds.size(); step++) {
+        uint8_t thresh = thresholds[step];
         points = detectPoints(img, thresh);
-        steps++;
         if (points.size() == 3) {
-            printf("Marker detector threshold: %d after %d steps\n", thresh, steps);
+            printf("Marker detector threshold: %d after %lu steps\n", thresh, step + 1);
             return points;
         }
     }
