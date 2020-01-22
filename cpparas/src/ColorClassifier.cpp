@@ -46,7 +46,7 @@ namespace ColorClassifier {
             }
         }
         //Green has high H value in certain lighting condition, increasing range fixes issue
-        if(expectedColor == cpparas::Color::GREEN){ max.h = max.h + 20;}            
+        if(expectedColor == cpparas::Color::GREEN){ max.h = max.h + 20; max.s = max.s + 15;}            
         range.push_back(min);
         range.push_back(max);
         return range;
