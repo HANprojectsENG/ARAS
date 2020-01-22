@@ -7,7 +7,7 @@ namespace cpparas {
 
 const hsv_pixel_t HAND_THRESHOLD_LOW = {
     0, // H
-    30, // S
+    25, // S
     50 // V
 };
 const hsv_pixel_t HAND_THRESHOLD_HIGH = {
