@@ -132,6 +132,7 @@ void StateMachine::doHook()
     State currentState = getCurrentState();
     if (currentState != State::INIT && currentState != State::STARTING && currentState != State::FINAL_STEP && currentState != State::MOVE_BASEPLATE) {
         if (simulatedBaseplateShifted || locator->Location_checker()) {
+            locator->Active_corner_detection(true);
             switchState(State::MOVE_BASEPLATE);
         }
     }
