@@ -25,6 +25,9 @@ theme:
 - Hand detection
 - Automatic calibration
 
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+![](img/controlui.png){ height=180px }
+
 # Rewrite to C and C++
 
 - C++ platform (CMake, GTKmm)
@@ -35,12 +38,20 @@ theme:
   - Drawing functions
 - UI development
 
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+![](img/componentdiagram.png){ height=130px }
+
 # Comparison
 
 - Program does not crash
 - Colour detection is more robust
 - Baseplate has to be in a more specific position
 - User interface is much improved
+
+\ 
+
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+![](img/projectionui.png){ height=150px }
 
 # Testing
 
