@@ -18,7 +18,7 @@ Camera::Camera(uint32_t w, uint32_t h)
     //compose final parameter string for raspivid
     width = w;
     height = h;
-    raspi_parameters = " -md 2 --width " + std::to_string(width) + " --height " + std::to_string(height) + " --metering matrix" + " --ISO 100" + " --ev -3" + " --flush" + " --framerate 15" + " --initial pause" + " --timeout 0" + " --nopreview" + " --raw -" + " --raw-format rgb";
+    raspi_parameters = " -md 2 --width " + std::to_string(width) + " --height " + std::to_string(height) + " --metering matrix" + " --ISO 100" + " --ev -5" + " --flush" + " --framerate 15" + " --initial pause" + " --timeout 0" + " --nopreview" + " --raw -" + " --raw-format rgb";
 }
 
 Camera::~Camera()
