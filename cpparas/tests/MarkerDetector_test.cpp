@@ -18,10 +18,10 @@ TEST(MarkerDetectorSuite, DetectMarkers)
     }
 
     const std::vector<std::vector<Point<int32_t>>> expectedResults = {
-        { { 176, 280 },
+        { { 178, 282 },
             { 968, 320 },
             { 944, 1080 } },
-        { { 360, 216 },
+        { { 362, 218 },
             { 1160, 232 },
             { 1120, 1016 } }
     };
